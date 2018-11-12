@@ -24,27 +24,21 @@ init:
   - ps: if($env:Platform -eq "x86"){Start-FileDownload 'http://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86.exe' C:\Miniconda.exe; echo "Done"}
   - cmd: C:\Miniconda.exe /S /D=C:\xtensor-conda
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%MINICONDA%\\Library\\bin;%PATH%"
+  - set MINGW_PATH=%MINICONDA%\\Library\\mingw-w64\\bin
+  - "set PATH=%PATH%;%MINGW_PATH%"
 
 install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  - conda install gtest=1.8.0 cmake -c conda-forge
+  - conda install gtest=1.8.1 cmake -c conda-forge
   - conda install xtl==0.4.16 -c QuantStack
+  - conda install m2w64-gcc m2w64-make m2w64-toolchain m2-libbz2 posix
   - conda install xsimd -c QuantStack
   - conda install nlohmann_json -c QuantStack
-    #- cmake -G "NMake Makefiles" -D CMAKE_INSTALL_PREFIX=%MINICONDA%\\LIBRARY -DBUILD_TESTS=ON -DXTENSOR_USE_XSIMD=ON -DDISABLE_VS2017=ON .
-    #- cmake -G "NMake Makefiles" -D CMAKE_INSTALL_PREFIX=%MINICONDA%\\LIBRARY -DBUILD_TESTS=ON -DDISABLE_VS2017=ON .
-    #- if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2015" if "%PLATFORM%" == "x64" cmake -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX=%MINICONDA%\\LIBRARY -DBUILD_TESTS=ON -DXTENSOR_USE_XSIMD=ON .
-    #- if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Visual Studio 2015" if "%PLATFORM%" == "x86" cmake -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX=%MINICONDA%\\LIBRARY -DBUILD_TESTS=ON .
-    #- if "%APPVEYOR_BUILD_WORKER_IMAGE%" == "Previous Visual Studio 2017" cmake -G "NMake Makefiles" -D CMAKE_INSTALL_PREFIX=%MINICONDA%\\LIBRARY -DBUILD_TESTS=ON -DDISABLE_VS2017=ON .
-  - ps: if($env:APPVEYOR_BUILD_WORKER_IMAGE -eq "Visual Studio 2015" -And $env:Platform -eq "x64") {
-        cmake -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX=%MINICONDA%\\LIBRARY -DBUILD_TESTS=ON -DXTENSOR_USE_XSIMD=ON .
-        }
-        else {
-        cmake -G "NMake Makefiles" -D CMAKE_INSTALL_PREFIX=%MINICONDA%\\LIBRARY -DBUILD_TESTS=ON -DDISABLE_VS2017=ON .
-        }
-  - nmake test_xtensor_lib
+  - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+  - cmake -G "MinGW Makefiles" -D CMAKE_INSTALL_PREFIX=%MINICONDA%\\LIBRARY -DCMAKE_PREFIX_PATH=%MINGW_PATH% -DDOWNLOAD_GTEST=ON -DDISABLE_VS2017=ON .
+  - cmake --build .
   - cd test
 
 build_script:
