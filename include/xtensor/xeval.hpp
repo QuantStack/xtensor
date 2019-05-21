@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_EVAL_HPP
 #define XTENSOR_EVAL_HPP
@@ -14,7 +14,6 @@
 
 namespace xt
 {
-
     namespace detail
     {
         template <class T>
@@ -32,30 +31,37 @@ namespace xt
      * \endcode
      */
     template <class T>
-    inline auto eval(T&& t)
-        -> std::enable_if_t<detail::is_container<std::decay_t<T>>::value, T&&>
+    inline auto eval(T&& t) -> std::enable_if_t<detail::is_container<std::decay_t<T>>::value, T&&>
     {
         return std::forward<T>(t);
     }
 
     /// @cond DOXYGEN_INCLUDE_SFINAE
     template <class T, class I = std::decay_t<T>>
-    inline auto eval(T&& t)
-        -> std::enable_if_t<!detail::is_container<I>::value && detail::is_array<typename I::shape_type>::value && !detail::is_fixed<typename I::shape_type>::value, xtensor<typename I::value_type, std::tuple_size<typename I::shape_type>::value>>
+    inline auto eval(T&& t) -> std::enable_if_t<
+        !detail::is_container<I>::value && detail::is_array<typename I::shape_type>::value
+            && !detail::is_fixed<typename I::shape_type>::value,
+        xtensor<typename I::value_type, std::tuple_size<typename I::shape_type>::value>>
     {
-        return xtensor<typename I::value_type, std::tuple_size<typename I::shape_type>::value>(std::forward<T>(t));
+        return xtensor<typename I::value_type, std::tuple_size<typename I::shape_type>::value>(
+            std::forward<T>(t));
     }
 
     template <class T, class I = std::decay_t<T>>
     inline auto eval(T&& t)
-        -> std::enable_if_t<!detail::is_container<I>::value && !detail::is_array<typename I::shape_type>::value && !detail::is_fixed<typename I::shape_type>::value, xt::xarray<typename I::value_type>>
+        -> std::enable_if_t<!detail::is_container<I>::value
+                                && !detail::is_array<typename I::shape_type>::value
+                                && !detail::is_fixed<typename I::shape_type>::value,
+                            xt::xarray<typename I::value_type>>
     {
         return xarray<typename I::value_type>(std::forward<T>(t));
     }
 
     template <class T, class I = std::decay_t<T>>
     inline auto eval(T&& t)
-        -> std::enable_if_t<!detail::is_container<I>::value && detail::is_fixed<typename I::shape_type>::value && !detail::is_array<typename I::shape_type>::value,
+        -> std::enable_if_t<!detail::is_container<I>::value
+                                && detail::is_fixed<typename I::shape_type>::value
+                                && !detail::is_array<typename I::shape_type>::value,
                             xt::xtensor_fixed<typename I::value_type, typename I::shape_type>>
     {
         return xtensor_fixed<typename I::value_type, typename I::shape_type>(std::forward<T>(t));

@@ -1,11 +1,11 @@
-/***************************************************************************
-* Copyright (c) 2016, Leon Merten Lohse, Johan Mabille, Sylvain Corlay and *
-*                     Wolf Vollprecht                                      *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Leon Merten Lohse, Johan Mabille, Sylvain Corlay and *
+ *                     Wolf Vollprecht                                      *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_NPY_HPP
 #define XTENSOR_NPY_HPP
@@ -38,14 +38,13 @@ namespace xt
 
     namespace detail
     {
-
     /* Compile-time test for byte order.
        If your compiler does not define these per default, you may want to define
        one of these constants manually.
        Defaults to little endian order. */
-#if defined(__BYTE_ORDER) && __BYTE_ORDER == __BIG_ENDIAN || defined(__BIG_ENDIAN__) || \
-    defined(__ARMEB__) || defined(__THUMBEB__) || defined(__AARCH64EB__) ||             \
-    defined(_MIBSEB) || defined(__MIBSEB) || defined(__MIBSEB__)
+#if defined(__BYTE_ORDER) && __BYTE_ORDER == __BIG_ENDIAN || defined(__BIG_ENDIAN__)               \
+    || defined(__ARMEB__) || defined(__THUMBEB__) || defined(__AARCH64EB__) || defined(_MIBSEB)    \
+    || defined(__MIBSEB) || defined(__MIBSEB__)
         const bool big_endian = true;
 #else
         const bool big_endian = false;
@@ -61,9 +60,7 @@ namespace xt
         constexpr char host_endian_char = (big_endian ? big_endian_char : little_endian_char);
 
         template <class O>
-        inline void write_magic(O& ostream,
-                                unsigned char v_major = 1,
-                                unsigned char v_minor = 0)
+        inline void write_magic(O& ostream, unsigned char v_major = 1, unsigned char v_minor = 0)
         {
             ostream.write(magic_string, magic_string_length);
             ostream.put(char(v_major));
@@ -98,28 +95,46 @@ namespace xt
         template <class T>
         inline char map_type()
         {
-            if (std::is_same<T, float>::value) return 'f';
-            if (std::is_same<T, double>::value) return 'f';
-            if (std::is_same<T, long double>::value) return 'f';
+            if (std::is_same<T, float>::value)
+                return 'f';
+            if (std::is_same<T, double>::value)
+                return 'f';
+            if (std::is_same<T, long double>::value)
+                return 'f';
 
-            if (std::is_same<T, char>::value) return 'i';
-            if (std::is_same<T, signed char>::value) return 'i';
-            if (std::is_same<T, short>::value) return 'i';
-            if (std::is_same<T, int>::value) return 'i';
-            if (std::is_same<T, long>::value) return 'i';
-            if (std::is_same<T, long long>::value) return 'i';
+            if (std::is_same<T, char>::value)
+                return 'i';
+            if (std::is_same<T, signed char>::value)
+                return 'i';
+            if (std::is_same<T, short>::value)
+                return 'i';
+            if (std::is_same<T, int>::value)
+                return 'i';
+            if (std::is_same<T, long>::value)
+                return 'i';
+            if (std::is_same<T, long long>::value)
+                return 'i';
 
-            if (std::is_same<T, unsigned char>::value) return 'u';
-            if (std::is_same<T, unsigned short>::value) return 'u';
-            if (std::is_same<T, unsigned int>::value) return 'u';
-            if (std::is_same<T, unsigned long>::value) return 'u';
-            if (std::is_same<T, unsigned long long>::value) return 'u';
+            if (std::is_same<T, unsigned char>::value)
+                return 'u';
+            if (std::is_same<T, unsigned short>::value)
+                return 'u';
+            if (std::is_same<T, unsigned int>::value)
+                return 'u';
+            if (std::is_same<T, unsigned long>::value)
+                return 'u';
+            if (std::is_same<T, unsigned long long>::value)
+                return 'u';
 
-            if (std::is_same<T, bool>::value) return 'b';
+            if (std::is_same<T, bool>::value)
+                return 'b';
 
-            if (std::is_same<T, std::complex<float>>::value) return 'c';
-            if (std::is_same<T, std::complex<double>>::value) return 'c';
-            if (std::is_same<T, std::complex<long double>>::value) return 'c';
+            if (std::is_same<T, std::complex<float>>::value)
+                return 'c';
+            if (std::is_same<T, std::complex<double>>::value)
+                return 'c';
+            if (std::is_same<T, std::complex<long double>>::value)
+                return 'c';
 
             throw std::runtime_error("Type not known.");
         }
@@ -183,7 +198,8 @@ namespace xt
             }
         }
 
-        inline void parse_header(std::string header, std::string& descr,
+        inline void parse_header(std::string header,
+                                 std::string& descr,
                                  bool* fortran_order,
                                  std::vector<std::size_t>& shape)
         {
@@ -347,8 +363,10 @@ namespace xt
         }
 
         template <class O, class S>
-        inline void write_header(O& out, const std::string& descr,
-                                 bool fortran_order, const S& shape)
+        inline void write_header(O& out,
+                                 const std::string& descr,
+                                 bool fortran_order,
+                                 const S& shape)
         {
             std::ostringstream ss_header;
             std::string s_fortran_order;
@@ -379,14 +397,13 @@ namespace xt
             }
             s_shape += ")";
 
-            ss_header << "{'descr': '" << descr
-                      << "', 'fortran_order': " << s_fortran_order
+            ss_header << "{'descr': '" << descr << "', 'fortran_order': " << s_fortran_order
                       << ", 'shape': " << s_shape << ", }";
 
             std::size_t header_len_pre = ss_header.str().length() + 1;
             std::size_t metadata_len = magic_string_length + 2 + 2 + header_len_pre;
 
-            unsigned char version[2] = {1, 0};
+            unsigned char version[2] = { 1, 0 };
             if (metadata_len >= 255 * 255)
             {
                 metadata_len = magic_string_length + 2 + 4 + header_len_pre;
@@ -434,7 +451,8 @@ namespace xt
             char header_len_le16[2];
             istream.read(header_len_le16, 2);
 
-            uint16_t header_length = uint16_t(header_len_le16[0] << 0) | uint16_t(header_len_le16[1] << 8);
+            uint16_t header_length
+                = uint16_t(header_len_le16[0] << 0) | uint16_t(header_len_le16[1] << 8);
 
             if ((magic_string_length + 2 + 2 + header_length) % 16 != 0)
             {
@@ -455,8 +473,9 @@ namespace xt
             char header_len_le32[4];
             istream.read(header_len_le32, 4);
 
-            uint32_t header_length = uint32_t(header_len_le32[0] << 0) | uint32_t(header_len_le32[1] << 8) |
-                uint32_t(header_len_le32[2] << 16) | uint32_t(header_len_le32[3] << 24);
+            uint32_t header_length
+                = uint32_t(header_len_le32[0] << 0) | uint32_t(header_len_le32[1] << 8)
+                  | uint32_t(header_len_le32[2] << 16) | uint32_t(header_len_le32[3] << 24);
 
             if ((magic_string_length + 2 + 4 + header_length) % 16 != 0)
             {
@@ -475,9 +494,10 @@ namespace xt
         {
             npy_file() = default;
 
-            npy_file(std::vector<std::size_t>& shape, bool fortran_order,
-                     std::string typestring)
-                : m_shape(shape), m_fortran_order(fortran_order), m_typestring(typestring)
+            npy_file(std::vector<std::size_t>& shape, bool fortran_order, std::string typestring)
+                : m_shape(shape)
+                , m_fortran_order(fortran_order)
+                , m_typestring(typestring)
             {
                 // Allocate memory
                 m_word_size = std::size_t(atoi(&typestring[2]));
@@ -499,12 +519,12 @@ namespace xt
 
             // implement move constructor and assignment
             npy_file(npy_file&& rhs)
-                : m_shape(std::move(rhs.m_shape)),
-                  m_fortran_order(std::move(rhs.m_fortran_order)),
-                  m_word_size(std::move(rhs.m_word_size)),
-                  m_n_bytes(std::move(rhs.m_n_bytes)),
-                  m_typestring(std::move(rhs.m_typestring)),
-                  m_buffer(rhs.m_buffer)
+                : m_shape(std::move(rhs.m_shape))
+                , m_fortran_order(std::move(rhs.m_fortran_order))
+                , m_word_size(std::move(rhs.m_word_size))
+                , m_n_bytes(std::move(rhs.m_n_bytes))
+                , m_typestring(std::move(rhs.m_typestring))
+                , m_buffer(rhs.m_buffer)
             {
                 rhs.m_buffer = nullptr;
             }
@@ -538,18 +558,20 @@ namespace xt
                 // check if the typestring matches the given one
                 if (check_type && m_typestring != detail::build_typestring<T>())
                 {
-                    throw std::runtime_error("Cast error: formats not matching "s + m_typestring +
-                                             " vs "s + detail::build_typestring<T>());
+                    throw std::runtime_error("Cast error: formats not matching "s + m_typestring
+                                             + " vs "s + detail::build_typestring<T>());
                 }
 
-                if ((L == layout_type::column_major && !m_fortran_order) ||
-                    (L == layout_type::row_major && m_fortran_order))
+                if ((L == layout_type::column_major && !m_fortran_order)
+                    || (L == layout_type::row_major && m_fortran_order))
                 {
-                    throw std::runtime_error("Cast error: layout mismatch between npy file and requested layout.");
+                    throw std::runtime_error(
+                        "Cast error: layout mismatch between npy file and requested layout.");
                 }
 
                 compute_strides(m_shape,
-                                m_fortran_order ? layout_type::column_major : layout_type::row_major,
+                                m_fortran_order ? layout_type::column_major
+                                                : layout_type::row_major,
                                 strides);
                 std::vector<std::size_t> shape(m_shape);
 
@@ -561,24 +583,33 @@ namespace xt
             {
                 auto cast_elems = cast_impl<T, L>(check_type);
                 m_buffer = nullptr;
-                return adapt(std::move(std::get<0>(cast_elems)), std::get<1>(cast_elems),
-                             acquire_ownership(), std::get<2>(cast_elems), std::get<3>(cast_elems));
+                return adapt(std::move(std::get<0>(cast_elems)),
+                             std::get<1>(cast_elems),
+                             acquire_ownership(),
+                             std::get<2>(cast_elems),
+                             std::get<3>(cast_elems));
             }
 
             template <class T, layout_type L = layout_type::dynamic>
             auto cast(bool check_type = true) const &
             {
                 auto cast_elems = cast_impl<T, L>(check_type);
-                return adapt(std::get<0>(cast_elems), std::get<1>(cast_elems),
-                             no_ownership(), std::get<2>(cast_elems), std::get<3>(cast_elems));
+                return adapt(std::get<0>(cast_elems),
+                             std::get<1>(cast_elems),
+                             no_ownership(),
+                             std::get<2>(cast_elems),
+                             std::get<3>(cast_elems));
             }
 
             template <class T, layout_type L = layout_type::dynamic>
             auto cast(bool check_type = true) &
             {
                 auto cast_elems = cast_impl<T, L>(check_type);
-                return adapt(std::get<0>(cast_elems), std::get<1>(cast_elems),
-                             no_ownership(), std::get<2>(cast_elems), std::get<3>(cast_elems));
+                return adapt(std::get<0>(cast_elems),
+                             std::get<1>(cast_elems),
+                             no_ownership(),
+                             std::get<2>(cast_elems),
+                             std::get<3>(cast_elems));
             }
 
             char* ptr()
@@ -700,4 +731,3 @@ namespace xt
 }  // namespace xt
 
 #endif
-

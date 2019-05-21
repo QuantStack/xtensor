@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_OPTIONAL_HPP
 #define XTENSOR_OPTIONAL_HPP
@@ -29,14 +29,12 @@
 
 namespace xt
 {
-
     /****************************************************
      * Metafunction for splitting xoptional expressions *
      ****************************************************/
 
     namespace extension
     {
-
         /**************************************
          * get_expression_tag specializations *
          **************************************/
@@ -174,7 +172,7 @@ namespace xt
             using result_type = T;
             using simd_value_type = bool;
             using simd_result_type = bool;
-            
+
             template <class... Args>
             constexpr result_type operator()(const Args&... args) const
             {
@@ -241,7 +239,7 @@ namespace xt
 
     namespace extension
     {
-       template <class CT>
+        template <class CT>
         struct xscalar_optional_traits
         {
             using closure_type = CT;
@@ -261,15 +259,19 @@ namespace xt
             using flag_closure = std::conditional_t<is_ref,
                                                     std::add_lvalue_reference_t<raw_flag_closure>,
                                                     raw_flag_closure>;
-            using const_value_closure = std::conditional_t<is_ref,
-                                                           std::add_lvalue_reference_t<const_raw_value_closure>,
-                                                           raw_value_closure>;
-            using const_flag_closure = std::conditional_t<is_ref,
-                                                          std::add_lvalue_reference_t<const_raw_flag_closure>,
-                                                          raw_flag_closure>;
+            using const_value_closure
+                = std::conditional_t<is_ref,
+                                     std::add_lvalue_reference_t<const_raw_value_closure>,
+                                     raw_value_closure>;
+            using const_flag_closure
+                = std::conditional_t<is_ref,
+                                     std::add_lvalue_reference_t<const_raw_flag_closure>,
+                                     raw_flag_closure>;
 
-            using value_expression = xscalar<std::conditional_t<is_const, const_value_closure, value_closure>>;
-            using flag_expression = xscalar<std::conditional_t<is_const, const_flag_closure, flag_closure>>;
+            using value_expression
+                = xscalar<std::conditional_t<is_const, const_value_closure, value_closure>>;
+            using flag_expression
+                = xscalar<std::conditional_t<is_const, const_flag_closure, flag_closure>>;
             using const_value_expression = xscalar<const_value_closure>;
             using const_flag_expression = xscalar<const_flag_closure>;
         };
@@ -442,15 +444,16 @@ namespace xt
             using expression_tag = xoptional_expression_tag;
             using value_functor = F;
             using flag_functor = xt::detail::optional_bitwise<bool>;
-        
-            using value_expression = xfunction<value_functor, xt::detail::value_expression_t<CT>...>;
+
+            using value_expression
+                = xfunction<value_functor, xt::detail::value_expression_t<CT>...>;
             using flag_expression = xfunction<flag_functor, xt::detail::flag_expression_t<CT>...>;
             using const_value_expression = value_expression;
             using const_flag_expression = flag_expression;
 
             const_value_expression value() const;
             const_flag_expression has_value() const;
-            
+
         private:
 
             template <std::size_t... I>
@@ -485,8 +488,10 @@ namespace xt
             using ucft = typename std::decay_t<CT>::const_flag_expression;
             using value_expression = xdynamic_view<uvt, S, L, typename FST::template rebind_t<uvt>>;
             using flag_expression = xdynamic_view<uft, S, L, typename FST::template rebind_t<uft>>;
-            using const_value_expression = xdynamic_view<ucvt, S, L, typename FST::template rebind_t<ucvt>>;
-            using const_flag_expression = xdynamic_view<ucft, S, L, typename FST::template rebind_t<ucft>>;
+            using const_value_expression
+                = xdynamic_view<ucvt, S, L, typename FST::template rebind_t<ucvt>>;
+            using const_flag_expression
+                = xdynamic_view<ucft, S, L, typename FST::template rebind_t<ucft>>;
 
             value_expression value();
             const_value_expression value() const;
@@ -613,9 +618,13 @@ namespace xt
 
             using expression_tag = xoptional_expression_tag;
             using value_expression = xreducer<F, xt::detail::value_expression_t<CT>, X, O>;
-            using flag_reducer = xreducer_functors<xt::detail::optional_bitwise<bool>, xt::const_value<bool>>;
+            using flag_reducer
+                = xreducer_functors<xt::detail::optional_bitwise<bool>, xt::const_value<bool>>;
             using rebound_flag_reduce_options = typename O::template rebind_t<bool>;
-            using flag_expression = xreducer<flag_reducer, xt::detail::flag_expression_t<CT>, X, rebound_flag_reduce_options>;
+            using flag_expression = xreducer<flag_reducer,
+                                             xt::detail::flag_expression_t<CT>,
+                                             X,
+                                             rebound_flag_reduce_options>;
             using const_value_expression = value_expression;
             using const_flag_expression = flag_expression;
 
@@ -648,8 +657,10 @@ namespace xt
             using ucft = typename std::decay_t<CT>::const_flag_expression;
             using value_expression = xstrided_view<uvt, S, L, typename FST::template rebind_t<uvt>>;
             using flag_expression = xstrided_view<uft, S, L, typename FST::template rebind_t<uft>>;
-            using const_value_expression = xstrided_view<ucvt, S, L, typename FST::template rebind_t<ucvt>>;
-            using const_flag_expression = xstrided_view<ucft, S, L, typename FST::template rebind_t<ucft>>;
+            using const_value_expression
+                = xstrided_view<ucvt, S, L, typename FST::template rebind_t<ucvt>>;
+            using const_flag_expression
+                = xstrided_view<ucft, S, L, typename FST::template rebind_t<ucft>>;
 
             value_expression value();
             const_value_expression value() const;
@@ -853,25 +864,29 @@ namespace xt
         template <class T>
         inline auto xcontainer_optional_base<T>::value() -> value_expression
         {
-            return value_expression(this->derived_cast().storage().value(), this->derived_cast().shape());
+            return value_expression(this->derived_cast().storage().value(),
+                                    this->derived_cast().shape());
         }
 
         template <class T>
         inline auto xcontainer_optional_base<T>::value() const -> const_value_expression
         {
-            return const_value_expression(this->derived_cast().storage().value(), this->derived_cast().shape());
+            return const_value_expression(this->derived_cast().storage().value(),
+                                          this->derived_cast().shape());
         }
 
         template <class T>
         inline auto xcontainer_optional_base<T>::has_value() -> flag_expression
         {
-            return flag_expression(this->derived_cast().storage().has_value(), this->derived_cast().shape());
+            return flag_expression(this->derived_cast().storage().has_value(),
+                                   this->derived_cast().shape());
         }
 
         template <class T>
         inline auto xcontainer_optional_base<T>::has_value() const -> const_flag_expression
         {
-            return const_flag_expression(this->derived_cast().storage().has_value(), this->derived_cast().shape());
+            return const_flag_expression(this->derived_cast().storage().has_value(),
+                                         this->derived_cast().shape());
         }
     }
 
@@ -895,18 +910,22 @@ namespace xt
 
         template <class F, class... CT>
         template <std::size_t... I>
-        inline auto xfunction_optional_base<F, CT...>::value_impl(std::index_sequence<I...>) const -> const_value_expression
+        inline auto xfunction_optional_base<F, CT...>::value_impl(std::index_sequence<I...>) const
+            -> const_value_expression
         {
             return value_expression(value_functor(),
-                xt::detail::split_optional_expression<CT>::value(std::get<I>(this->derived_cast().arguments()))...);
+                                    xt::detail::split_optional_expression<CT>::value(
+                                        std::get<I>(this->derived_cast().arguments()))...);
         }
 
         template <class F, class... CT>
         template <std::size_t... I>
-        inline auto xfunction_optional_base<F, CT...>::has_value_impl(std::index_sequence<I...>) const -> const_flag_expression
+        inline auto xfunction_optional_base<F, CT...>::has_value_impl(
+            std::index_sequence<I...>) const -> const_flag_expression
         {
             return flag_expression(flag_functor(),
-                xt::detail::split_optional_expression<CT>::has_value(std::get<I>(this->derived_cast().arguments()))...);
+                                   xt::detail::split_optional_expression<CT>::has_value(
+                                       std::get<I>(this->derived_cast().arguments()))...);
         }
     }
 
@@ -923,19 +942,20 @@ namespace xt
         }
 
         template <class CT, class S, layout_type L, class FST>
-        inline auto xdynamic_view_optional<CT, S, L, FST>::value() const -> const_value_expression 
+        inline auto xdynamic_view_optional<CT, S, L, FST>::value() const -> const_value_expression
         {
             return this->derived_cast().build_view(this->derived_cast().expression().value());
         }
 
         template <class CT, class S, layout_type L, class FST>
-        inline auto xdynamic_view_optional<CT, S, L, FST>::has_value() -> flag_expression 
+        inline auto xdynamic_view_optional<CT, S, L, FST>::has_value() -> flag_expression
         {
             return this->derived_cast().build_view(this->derived_cast().expression().has_value());
         }
 
         template <class CT, class S, layout_type L, class FST>
-        inline auto xdynamic_view_optional<CT, S, L, FST>::has_value() const -> const_flag_expression 
+        inline auto xdynamic_view_optional<CT, S, L, FST>::has_value() const
+            -> const_flag_expression
         {
             return this->derived_cast().build_view(this->derived_cast().expression().has_value());
         }
@@ -956,7 +976,8 @@ namespace xt
         template <class CT, class X>
         inline auto xbroadcast_optional<CT, X>::has_value() const -> const_flag_expression
         {
-            return this->derived_cast().build_broadcast(this->derived_cast().expression().has_value());
+            return this->derived_cast().build_broadcast(
+                this->derived_cast().expression().has_value());
         }
     }
 
@@ -969,13 +990,15 @@ namespace xt
         template <class F, class CT>
         inline auto xfunctor_view_optional<F, CT>::value() -> value_expression
         {
-            return this->derived_cast().build_functor_view(this->derived_cast().expression().value());
+            return this->derived_cast().build_functor_view(
+                this->derived_cast().expression().value());
         }
 
         template <class F, class CT>
         inline auto xfunctor_view_optional<F, CT>::value() const -> const_value_expression
         {
-            return this->derived_cast().build_functor_view(this->derived_cast().expression().value());
+            return this->derived_cast().build_functor_view(
+                this->derived_cast().expression().value());
         }
 
         template <class F, class CT>
@@ -1012,13 +1035,15 @@ namespace xt
         template <class CT, class I>
         inline auto xindex_view_optional<CT, I>::has_value() -> flag_expression
         {
-            return this->derived_cast().build_index_view(this->derived_cast().expression().has_value());
+            return this->derived_cast().build_index_view(
+                this->derived_cast().expression().has_value());
         };
 
         template <class CT, class I>
         inline auto xindex_view_optional<CT, I>::has_value() const -> const_flag_expression
         {
-            return this->derived_cast().build_index_view(this->derived_cast().expression().has_value());
+            return this->derived_cast().build_index_view(
+                this->derived_cast().expression().has_value());
         };
     }
 
@@ -1037,12 +1062,15 @@ namespace xt
         template <class F, class CT, class X, class O>
         inline auto xreducer_optional<F, CT, X, O>::has_value() const -> const_flag_expression
         {
-            auto opts = this->derived_cast().options().rebind(this->derived_cast().options().initial_value.has_value(),
-                                                              this->derived_cast().options());
+            auto opts = this->derived_cast().options().rebind(
+                this->derived_cast().options().initial_value.has_value(),
+                this->derived_cast().options());
 
-            return this->derived_cast().build_reducer(this->derived_cast().expression().has_value(),
-                                                        make_xreducer_functor(xt::detail::optional_bitwise<bool>(),
-                                                                              xt::const_value<bool>(true)), std::move(opts));
+            return this->derived_cast().build_reducer(
+                this->derived_cast().expression().has_value(),
+                make_xreducer_functor(xt::detail::optional_bitwise<bool>(),
+                                      xt::const_value<bool>(true)),
+                std::move(opts));
         }
     }
 
@@ -1059,19 +1087,20 @@ namespace xt
         }
 
         template <class CT, class S, layout_type L, class FST>
-        inline auto xstrided_view_optional<CT, S, L, FST>::value() const -> const_value_expression 
+        inline auto xstrided_view_optional<CT, S, L, FST>::value() const -> const_value_expression
         {
             return this->derived_cast().build_view(this->derived_cast().expression().value());
         }
 
         template <class CT, class S, layout_type L, class FST>
-        inline auto xstrided_view_optional<CT, S, L, FST>::has_value() -> flag_expression 
+        inline auto xstrided_view_optional<CT, S, L, FST>::has_value() -> flag_expression
         {
             return this->derived_cast().build_view(this->derived_cast().expression().has_value());
         }
 
         template <class CT, class S, layout_type L, class FST>
-        inline auto xstrided_view_optional<CT, S, L, FST>::has_value() const -> const_flag_expression 
+        inline auto xstrided_view_optional<CT, S, L, FST>::has_value() const
+            -> const_flag_expression
         {
             return this->derived_cast().build_view(this->derived_cast().expression().has_value());
         }
@@ -1118,14 +1147,14 @@ namespace xt
         inline auto xgenerator_optional<F, R, S>::value() const -> const_value_expression
         {
             return this->derived_cast().template build_generator<value_closure>(
-                    detail::value_functor<F>::get(this->derived_cast().functor()));
+                detail::value_functor<F>::get(this->derived_cast().functor()));
         }
 
         template <class F, class R, class S>
         inline auto xgenerator_optional<F, R, S>::has_value() const -> const_flag_expression
         {
             return this->derived_cast().template build_generator<flag_closure>(
-                    detail::flag_functor<F>::get(this->derived_cast().functor()));
+                detail::flag_functor<F>::get(this->derived_cast().functor()));
         }
     }
 
@@ -1140,7 +1169,7 @@ namespace xt
         {
             static constexpr auto run(const xtl::xoptional<T, B>& x)
             {
-                return sign(x); // use overload declared above
+                return sign(x);  // use overload declared above
             }
         };
     }
@@ -1149,7 +1178,8 @@ namespace xt
     inline auto sign(const xtl::xoptional<T, B>& e)
     {
         using value_type = std::decay_t<T>;
-        return e.has_value() ? math::sign_impl<value_type>::run(e.value()) : xtl::missing<value_type>();
+        return e.has_value() ? math::sign_impl<value_type>::run(e.value())
+                             : xtl::missing<value_type>();
     }
 
     /******************************************
@@ -1169,15 +1199,18 @@ namespace xt
     }
 
     template <class E1, class E2>
-    inline void xexpression_assigner_base<xoptional_expression_tag>::assign_data(xexpression<E1>& e1, const xexpression<E2>& e2, bool trivial)
+    inline void xexpression_assigner_base<xoptional_expression_tag>::assign_data(
+        xexpression<E1>& e1, const xexpression<E2>& e2, bool trivial)
     {
         E1& de1 = e1.derived_cast();
         const E2& de2 = e2.derived_cast();
 
         decltype(auto) bde1 = xt::value(de1);
         decltype(auto) hde1 = xt::has_value(de1);
-        xexpression_assigner_base<xtensor_expression_tag>::assign_data(bde1, xt::value(de2), trivial);
-        xexpression_assigner_base<xtensor_expression_tag>::assign_data(hde1, xt::has_value(de2), trivial);
+        xexpression_assigner_base<xtensor_expression_tag>::assign_data(
+            bde1, xt::value(de2), trivial);
+        xexpression_assigner_base<xtensor_expression_tag>::assign_data(
+            hde1, xt::has_value(de2), trivial);
     }
 }
 

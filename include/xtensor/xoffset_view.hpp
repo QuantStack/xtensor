@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_OFFSET_VIEW_HPP
 #define XTENSOR_OFFSET_VIEW_HPP
@@ -37,8 +37,14 @@ namespace xt
                 return xtl::forward_offset<M, I>(std::forward<T>(t));
             }
 
-            template <class align, class requested_type, std::size_t N, class E,
-                      class = std::enable_if_t<(std::is_same<M, double>::value || std::is_same<M, float>::value) && I <= sizeof(M), int>>
+            template <class align,
+                      class requested_type,
+                      std::size_t N,
+                      class E,
+                      class = std::enable_if_t<(std::is_same<M, double>::value
+                                                || std::is_same<M, float>::value)
+                                                   && I <= sizeof(M),
+                                               int>>
             auto proxy_simd_load(const E& expr, std::size_t n) const
             {
                 // TODO refactor using shuffle only
@@ -53,8 +59,13 @@ namespace xt
                 }
             }
 
-            template <class align, class simd, class E,
-                      class = std::enable_if_t<(std::is_same<M, double>::value || std::is_same<M, float>::value) && I <= sizeof(M), int>>
+            template <class align,
+                      class simd,
+                      class E,
+                      class = std::enable_if_t<(std::is_same<M, double>::value
+                                                || std::is_same<M, float>::value)
+                                                   && I <= sizeof(M),
+                                               int>>
             auto proxy_simd_store(E& expr, std::size_t n, const simd& batch) const
             {
                 auto x = expr.template load_simd<align, double, simd::size>(n);
@@ -79,4 +90,3 @@ namespace xt
 }
 
 #endif
-

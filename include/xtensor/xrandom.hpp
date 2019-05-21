@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 /**
  * @brief functions to obtain xgenerators generating random numbers with given shape
@@ -37,41 +37,58 @@ namespace xt
         void seed(seed_type seed);
 
         template <class T, class S, class E = random::default_engine_type>
-        auto rand(const S& shape, T lower = 0, T upper = 1,
+        auto rand(const S& shape,
+                  T lower = 0,
+                  T upper = 1,
                   E& engine = random::get_default_random_engine());
 
         template <class T, class S, class E = random::default_engine_type>
-        auto randint(const S& shape, T lower = 0, T upper = (std::numeric_limits<T>::max)(),
+        auto randint(const S& shape,
+                     T lower = 0,
+                     T upper = (std::numeric_limits<T>::max)(),
                      E& engine = random::get_default_random_engine());
 
         template <class T, class S, class E = random::default_engine_type>
-        auto randn(const S& shape, T mean = 0, T std_dev = 1,
+        auto randn(const S& shape,
+                   T mean = 0,
+                   T std_dev = 1,
                    E& engine = random::get_default_random_engine());
 
 #ifdef X_OLD_CLANG
         template <class T, class I, class E = random::default_engine_type>
-        auto rand(std::initializer_list<I> shape, T lower = 0, T upper = 1,
+        auto rand(std::initializer_list<I> shape,
+                  T lower = 0,
+                  T upper = 1,
                   E& engine = random::get_default_random_engine());
 
         template <class T, class I, class E = random::default_engine_type>
         auto randint(std::initializer_list<I> shape,
-                     T lower = 0, T upper = (std::numeric_limits<T>::max)(),
+                     T lower = 0,
+                     T upper = (std::numeric_limits<T>::max)(),
                      E& engine = random::get_default_random_engine());
 
         template <class T, class I, class E = random::default_engine_type>
-        auto randn(std::initializer_list<I>, T mean = 0, T std_dev = 1,
+        auto randn(std::initializer_list<I>,
+                   T mean = 0,
+                   T std_dev = 1,
                    E& engine = random::get_default_random_engine());
 #else
         template <class T, class I, std::size_t L, class E = random::default_engine_type>
-        auto rand(const I (&shape)[L], T lower = 0, T upper = 1,
+        auto rand(const I (&shape)[L],
+                  T lower = 0,
+                  T upper = 1,
                   E& engine = random::get_default_random_engine());
 
         template <class T, class I, std::size_t L, class E = random::default_engine_type>
-        auto randint(const I (&shape)[L], T lower = 0, T upper = (std::numeric_limits<T>::max)(),
+        auto randint(const I (&shape)[L],
+                     T lower = 0,
+                     T upper = (std::numeric_limits<T>::max)(),
                      E& engine = random::get_default_random_engine());
 
         template <class T, class I, std::size_t L, class E = random::default_engine_type>
-        auto randn(const I (&shape)[L], T mean = 0, T std_dev = 1,
+        auto randn(const I (&shape)[L],
+                   T mean = 0,
+                   T std_dev = 1,
                    E& engine = random::get_default_random_engine());
 #endif
 
@@ -79,15 +96,17 @@ namespace xt
         void shuffle(xexpression<T>& e, E& engine = random::get_default_random_engine());
 
         template <class T, class E = random::default_engine_type>
-        std::enable_if_t<std::is_integral<T>::value, xtensor<T, 1>>
-        permutation(T e, E& engine = random::get_default_random_engine());
+        std::enable_if_t<std::is_integral<T>::value, xtensor<T, 1>> permutation(
+            T e, E& engine = random::get_default_random_engine());
 
         template <class T, class E = random::default_engine_type>
-        std::enable_if_t<is_xexpression<std::decay_t<T>>::value, std::decay_t<T>>
-        permutation(T&& e, E& engine = random::get_default_random_engine());
+        std::enable_if_t<is_xexpression<std::decay_t<T>>::value, std::decay_t<T>> permutation(
+            T&& e, E& engine = random::get_default_random_engine());
 
         template <class T, class E = random::default_engine_type>
-        xtensor<typename T::value_type, 1> choice(const xexpression<T>& e, std::size_t n, bool replace = true,
+        xtensor<typename T::value_type, 1> choice(const xexpression<T>& e,
+                                                  std::size_t n,
+                                                  bool replace = true,
                                                   E& engine = random::get_default_random_engine());
     }
 
@@ -99,7 +118,8 @@ namespace xt
             using value_type = T;
 
             random_impl(E& engine, D&& dist)
-                : m_engine(engine), m_dist(std::move(dist))
+                : m_engine(engine)
+                , m_dist(std::move(dist))
             {
             }
 
@@ -169,7 +189,8 @@ namespace xt
         inline auto rand(const S& shape, T lower, T upper, E& engine)
         {
             std::uniform_real_distribution<T> dist(lower, upper);
-            return detail::make_xgenerator(detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
+            return detail::make_xgenerator(
+                detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
         }
 
         /**
@@ -188,7 +209,8 @@ namespace xt
         inline auto randint(const S& shape, T lower, T upper, E& engine)
         {
             std::uniform_int_distribution<T> dist(lower, T(upper - 1));
-            return detail::make_xgenerator(detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
+            return detail::make_xgenerator(
+                detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
         }
 
         /**
@@ -208,7 +230,8 @@ namespace xt
         inline auto randn(const S& shape, T mean, T std_dev, E& engine)
         {
             std::normal_distribution<T> dist(mean, std_dev);
-            return detail::make_xgenerator(detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
+            return detail::make_xgenerator(
+                detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
         }
 
 #ifdef X_OLD_CLANG
@@ -216,42 +239,48 @@ namespace xt
         inline auto rand(std::initializer_list<I> shape, T lower, T upper, E& engine)
         {
             std::uniform_real_distribution<T> dist(lower, upper);
-            return detail::make_xgenerator(detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
+            return detail::make_xgenerator(
+                detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
         }
 
         template <class T, class I, class E>
         inline auto randint(std::initializer_list<I> shape, T lower, T upper, E& engine)
         {
             std::uniform_int_distribution<T> dist(lower, T(upper - 1));
-            return detail::make_xgenerator(detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
+            return detail::make_xgenerator(
+                detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
         }
 
         template <class T, class I, class E>
         inline auto randn(std::initializer_list<I> shape, T mean, T std_dev, E& engine)
         {
             std::normal_distribution<T> dist(mean, std_dev);
-            return detail::make_xgenerator(detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
+            return detail::make_xgenerator(
+                detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
         }
 #else
         template <class T, class I, std::size_t L, class E>
         inline auto rand(const I (&shape)[L], T lower, T upper, E& engine)
         {
             std::uniform_real_distribution<T> dist(lower, upper);
-            return detail::make_xgenerator(detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
+            return detail::make_xgenerator(
+                detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
         }
 
         template <class T, class I, std::size_t L, class E>
         inline auto randint(const I (&shape)[L], T lower, T upper, E& engine)
         {
             std::uniform_int_distribution<T> dist(lower, T(upper - 1));
-            return detail::make_xgenerator(detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
+            return detail::make_xgenerator(
+                detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
         }
 
         template <class T, class I, std::size_t L, class E>
         inline auto randn(const I (&shape)[L], T mean, T std_dev, E& engine)
         {
             std::normal_distribution<T> dist(mean, std_dev);
-            return detail::make_xgenerator(detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
+            return detail::make_xgenerator(
+                detail::random_impl<T, E, decltype(dist)>(engine, std::move(dist)), shape);
         }
 #endif
 
@@ -312,8 +341,7 @@ namespace xt
          * @return randomly permuted copy of container or arange.
          */
         template <class T, class E>
-        std::enable_if_t<std::is_integral<T>::value, xtensor<T, 1>>
-        permutation(T e, E& engine)
+        std::enable_if_t<std::is_integral<T>::value, xtensor<T, 1>> permutation(T e, E& engine)
         {
             xt::xtensor<T, 1> res = xt::arange<T>(e);
             shuffle(res, engine);
@@ -322,8 +350,8 @@ namespace xt
 
         /// @cond DOXYGEN_INCLUDE_SFINAE
         template <class T, class E>
-        std::enable_if_t<is_xexpression<std::decay_t<T>>::value, std::decay_t<T>>
-        permutation(T&& e, E& engine)
+        std::enable_if_t<is_xexpression<std::decay_t<T>>::value, std::decay_t<T>> permutation(
+            T&& e, E& engine)
         {
             using copy_type = std::decay_t<T>;
             copy_type res = e;
@@ -344,7 +372,10 @@ namespace xt
          * @return xtensor containing 1D container of sampled elements
          */
         template <class T, class E>
-        xtensor<typename T::value_type, 1> choice(const xexpression<T>& e, std::size_t n, bool replace, E& engine)
+        xtensor<typename T::value_type, 1> choice(const xexpression<T>& e,
+                                                  std::size_t n,
+                                                  bool replace,
+                                                  E& engine)
         {
             const auto& de = e.derived_cast();
             if (de.dimension() != 1)
@@ -353,12 +384,13 @@ namespace xt
             }
             if (de.size() < n && !replace)
             {
-                throw std::runtime_error("If replace is false, then the sample expression's size must be > n");
+                throw std::runtime_error(
+                    "If replace is false, then the sample expression's size must be > n");
             }
             using result_type = xtensor<typename T::value_type, 1>;
             using size_type = typename result_type::size_type;
             result_type result;
-            result.resize({n});
+            result.resize({ n });
 
             if (replace)
             {
@@ -373,7 +405,7 @@ namespace xt
                 // Naive resevoir sampling without weighting:
                 std::copy(de.storage().begin(), de.storage().begin() + n, result.begin());
                 size_type i = n;
-                for(auto it = de.storage().begin() + n; it != de.storage().end(); ++it, ++i)
+                for (auto it = de.storage().begin() + n; it != de.storage().end(); ++it, ++i)
                 {
                     auto idx = std::uniform_int_distribution<size_type>(0, i)(engine);
                     if (idx < n)

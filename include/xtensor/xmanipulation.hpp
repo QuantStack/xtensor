@@ -1,11 +1,11 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay,  Wolf Vollprecht and  *
-* Martin Renou                                                             *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay,  Wolf Vollprecht and  *
+ * Martin Renou                                                             *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_MANIPULATION_HPP
 #define XTENSOR_MANIPULATION_HPP
@@ -43,7 +43,10 @@ namespace xt
     template <class E>
     auto squeeze(E&& e);
 
-    template <class E, class S, class Tag = check_policy::none, std::enable_if_t<!std::is_integral<S>::value, int> = 0>
+    template <class E,
+              class S,
+              class Tag = check_policy::none,
+              std::enable_if_t<!std::is_integral<S>::value, int> = 0>
     auto squeeze(E&& e, S&& axis, Tag check_policy = Tag());
 
     /****************************
@@ -110,12 +113,17 @@ namespace xt
                 // keep old layout
                 new_layout = e.layout();
             }
-            else if (std::is_sorted(std::begin(permutation), std::end(permutation), std::greater<>()))
+            else if (std::is_sorted(
+                         std::begin(permutation), std::end(permutation), std::greater<>()))
             {
                 new_layout = transpose_layout_noexcept(e.layout());
             }
 
-            return strided_view(std::forward<E>(e), std::move(temp_shape), std::move(temp_strides), get_offset<XTENSOR_DEFAULT_LAYOUT>(e), new_layout);
+            return strided_view(std::forward<E>(e),
+                                std::move(temp_shape),
+                                std::move(temp_strides),
+                                get_offset<XTENSOR_DEFAULT_LAYOUT>(e),
+                                new_layout);
         }
 
         template <class E, class S>
@@ -132,16 +140,23 @@ namespace xt
                     }
                 }
             }
-            return transpose_impl(std::forward<E>(e), std::forward<S>(permutation), check_policy::none());
+            return transpose_impl(
+                std::forward<E>(e), std::forward<S>(permutation), check_policy::none());
         }
 
-        template <class E, class S, class X, std::enable_if_t<has_data_interface<std::decay_t<E>>::value>* = nullptr>
+        template <class E,
+                  class S,
+                  class X,
+                  std::enable_if_t<has_data_interface<std::decay_t<E>>::value>* = nullptr>
         inline void compute_transposed_strides(E&& e, const S&, X& strides)
         {
             std::copy(e.strides().crbegin(), e.strides().crend(), strides.begin());
         }
 
-        template <class E, class S, class X, std::enable_if_t<!has_data_interface<std::decay_t<E>>::value>* = nullptr>
+        template <class E,
+                  class S,
+                  class X,
+                  std::enable_if_t<!has_data_interface<std::decay_t<E>>::value>* = nullptr>
         inline void compute_transposed_strides(E&&, const S& shape, X& strides)
         {
             // In the case where E does not have a data interface, the transposition
@@ -170,7 +185,11 @@ namespace xt
 
         layout_type new_layout = detail::transpose_layout_noexcept(e.layout());
 
-        return strided_view(std::forward<E>(e), std::move(shape), std::move(strides), detail::get_offset<XTENSOR_DEFAULT_TRAVERSAL>(e), new_layout);
+        return strided_view(std::forward<E>(e),
+                            std::move(shape),
+                            std::move(strides),
+                            detail::get_offset<XTENSOR_DEFAULT_TRAVERSAL>(e),
+                            new_layout);
     }
 
     /**
@@ -178,15 +197,17 @@ namespace xt
      * @param e the input expression
      * @param permutation the sequence containing permutation
      * @param check_policy the check level (check_policy::full() or check_policy::none())
-     * @tparam Tag selects the level of error checking on permutation vector defaults to check_policy::none.
+     * @tparam Tag selects the level of error checking on permutation vector defaults to
+     * check_policy::none.
      */
     template <class E, class S, class Tag>
     inline auto transpose(E&& e, S&& permutation, Tag check_policy)
     {
-        return detail::transpose_impl(std::forward<E>(e), std::forward<S>(permutation), check_policy);
+        return detail::transpose_impl(
+            std::forward<E>(e), std::forward<S>(permutation), check_policy);
     }
 
-    /// @cond DOXYGEN_INCLUDE_SFINAE
+        /// @cond DOXYGEN_INCLUDE_SFINAE
 #ifdef X_OLD_CLANG
     template <class E, class I, class Tag = check_policy::none>
     inline auto transpose(E&& e, std::initializer_list<I> permutation, Tag check_policy = Tag())
@@ -196,7 +217,7 @@ namespace xt
     }
 #else
     template <class E, class I, std::size_t N, class Tag = check_policy::none>
-    inline auto transpose(E&& e, const I(&permutation)[N], Tag check_policy = Tag())
+    inline auto transpose(E&& e, const I (&permutation)[N], Tag check_policy = Tag())
     {
         return detail::transpose_impl(std::forward<E>(e), permutation, check_policy);
     }
@@ -225,7 +246,8 @@ namespace xt
         using adaptor_type = xiterator_adaptor<iterator, const_iterator>;
         constexpr layout_type layout = std::is_pointer<iterator>::value ? L : layout_type::dynamic;
         using type = xtensor_adaptor<adaptor_type, 1, layout, extension::get_expression_tag_t<E>>;
-        return type(adaptor_type(e.template begin<L>(), e.template cbegin<L>(), e.size()), { e.size() });
+        return type(adaptor_type(e.template begin<L>(), e.template cbegin<L>(), e.size()),
+                    { e.size() });
     }
 
     /**
@@ -259,9 +281,7 @@ namespace xt
 
         std::ptrdiff_t begin = 0, end = static_cast<std::ptrdiff_t>(e.size());
 
-        auto find_fun = [](const auto& i) {
-            return i != 0;
-        };
+        auto find_fun = [](const auto& i) { return i != 0; };
 
         if (direction.find("f") != std::string::npos)
         {
@@ -288,13 +308,18 @@ namespace xt
     {
         dynamic_shape<std::size_t> new_shape;
         dynamic_shape<std::ptrdiff_t> new_strides;
-        std::copy_if(e.shape().cbegin(), e.shape().cend(), std::back_inserter(new_shape),
+        std::copy_if(e.shape().cbegin(),
+                     e.shape().cend(),
+                     std::back_inserter(new_shape),
                      [](std::size_t i) { return i != 1; });
         decltype(auto) old_strides = detail::get_strides<XTENSOR_DEFAULT_LAYOUT>(e);
-        std::copy_if(old_strides.cbegin(), old_strides.cend(), std::back_inserter(new_strides),
+        std::copy_if(old_strides.cbegin(),
+                     old_strides.cend(),
+                     std::back_inserter(new_strides),
                      [](std::ptrdiff_t i) { return i != 0; });
 
-        return strided_view(std::forward<E>(e), std::move(new_shape), std::move(new_strides), 0, e.layout());
+        return strided_view(
+            std::forward<E>(e), std::move(new_shape), std::move(new_strides), 0, e.layout());
     }
 
     namespace detail
@@ -317,7 +342,8 @@ namespace xt
                 }
             }
 
-            return strided_view(std::forward<E>(e), std::move(new_shape), std::move(new_strides), 0, e.layout());
+            return strided_view(
+                std::forward<E>(e), std::move(new_shape), std::move(new_strides), 0, e.layout());
         }
 
         template <class E, class S>
@@ -353,7 +379,7 @@ namespace xt
         return detail::squeeze_impl(std::forward<E>(e), std::forward<S>(axis), check_policy);
     }
 
-    /// @cond DOXYGEN_INCLUDE_SFINAE
+        /// @cond DOXYGEN_INCLUDE_SFINAE
 #ifdef X_OLD_CLANG
     template <class E, class I, class Tag = check_policy::none>
     inline auto squeeze(E&& e, std::initializer_list<I> axis, Tag check_policy = Tag())
@@ -363,10 +389,11 @@ namespace xt
     }
 #else
     template <class E, class I, std::size_t N, class Tag = check_policy::none>
-    inline auto squeeze(E&& e, const I(&axis)[N], Tag check_policy = Tag())
+    inline auto squeeze(E&& e, const I (&axis)[N], Tag check_policy = Tag())
     {
         using arr_t = std::array<I, N>;
-        return detail::squeeze_impl(std::forward<E>(e), xtl::forward_sequence<arr_t, decltype(axis)>(axis), check_policy);
+        return detail::squeeze_impl(
+            std::forward<E>(e), xtl::forward_sequence<arr_t, decltype(axis)>(axis), check_policy);
     }
 #endif
 
@@ -414,7 +441,8 @@ namespace xt
         if (e.dimension() < N)
         {
             std::size_t i = 0;
-            std::size_t end = static_cast<std::size_t>(std::round(double(N - e.dimension()) / double(N)));
+            std::size_t end
+                = static_cast<std::size_t>(std::round(double(N - e.dimension()) / double(N)));
             for (; i < end; ++i)
             {
                 sv[i] = newaxis();
@@ -522,7 +550,9 @@ namespace xt
         std::copy(old_strides.cbegin(), old_strides.cend(), strides.begin());
 
         strides[axis] *= -1;
-        std::size_t offset = static_cast<std::size_t>(static_cast<std::ptrdiff_t>(e.data_offset()) + old_strides[axis] * (static_cast<std::ptrdiff_t>(e.shape()[axis]) - 1));
+        std::size_t offset = static_cast<std::size_t>(
+            static_cast<std::ptrdiff_t>(e.data_offset())
+            + old_strides[axis] * (static_cast<std::ptrdiff_t>(e.shape()[axis]) - 1));
 
         return strided_view(std::forward<E>(e), std::move(shape), std::move(strides), offset);
     }
@@ -593,7 +623,7 @@ namespace xt
      * @return returns a view with the result of the rotation
      */
     template <std::ptrdiff_t N = 1, class E>
-    inline auto rot90(E&& e, const std::array<std::ptrdiff_t, 2>& axes = {0, 1})
+    inline auto rot90(E&& e, const std::array<std::ptrdiff_t, 2>& axes = { 0, 1 })
     {
         auto ndim = std::ptrdiff_t(e.shape().size());
 

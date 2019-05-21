@@ -1,11 +1,11 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay,  Wolf Vollprecht and  *
-* Martin Renou                                                             *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay,  Wolf Vollprecht and  *
+ * Martin Renou                                                             *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_PAD_HPP
 #define XTENSOR_PAD_HPP
@@ -93,20 +93,20 @@ namespace xt
                 {
                     XTENSOR_ASSERT(nb <= out.shape()[axis]);
                     XTENSOR_ASSERT(ne <= out.shape()[axis]);
-                    sv_bgn[axis] = xt::range(out.shape()[axis]-nb, out.shape()[axis]);
+                    sv_bgn[axis] = xt::range(out.shape()[axis] - nb, out.shape()[axis]);
                     sv_end[axis] = xt::range(0, ne);
                 }
                 else if (mode == pad_mode::symmetric)
                 {
                     XTENSOR_ASSERT(nb <= out.shape()[axis]);
                     XTENSOR_ASSERT(ne <= out.shape()[axis]);
-                    if (nb == (size_type)0)
+                    if (nb == (size_type) 0)
                     {
                         sv_bgn[axis] = xt::range(0, 0, -1);
                     }
                     else
                     {
-                        sv_bgn[axis] = xt::range(nb-1, _, -1);
+                        sv_bgn[axis] = xt::range(nb - 1, _, -1);
                     }
                     if (ne == out.shape()[axis])
                     {
@@ -114,7 +114,7 @@ namespace xt
                     }
                     else
                     {
-                        sv_end[axis] = xt::range(out.shape()[axis], out.shape()[axis]-ne-1, -1);
+                        sv_end[axis] = xt::range(out.shape()[axis], out.shape()[axis] - ne - 1, -1);
                     }
                 }
 
@@ -165,12 +165,9 @@ namespace xt
     template <class E,
               class S = typename std::decay_t<E>::size_type,
               class V = typename std::decay_t<E>::value_type>
-    inline auto pad(E&& e,
-                    S pad_width,
-                    pad_mode mode = pad_mode::constant,
-                    V constant_value = 0)
+    inline auto pad(E&& e, S pad_width, pad_mode mode = pad_mode::constant, V constant_value = 0)
     {
-        std::vector<std::vector<S>> pw(e.shape().size(), {pad_width, pad_width});
+        std::vector<std::vector<S>> pw(e.shape().size(), { pad_width, pad_width });
 
         return pad(e, pw, mode, constant_value);
     }

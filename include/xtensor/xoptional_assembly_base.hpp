@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XOPTIONAL_ASSEMBLY_BASE_HPP
 #define XOPTIONAL_ASSEMBLY_BASE_HPP
@@ -38,7 +38,6 @@ namespace xt
     class xoptional_assembly_base : private xiterable<D>
     {
     public:
-
         using self_type = xoptional_assembly_base<D>;
         using derived_type = D;
         using inner_types = xcontainer_inner_types<D>;
@@ -92,16 +91,20 @@ namespace xt
         template <layout_type L>
         using reverse_layout_iterator = typename iterable_base::template reverse_layout_iterator<L>;
         template <layout_type L>
-        using const_reverse_layout_iterator = typename iterable_base::template const_reverse_layout_iterator<L>;
+        using const_reverse_layout_iterator =
+            typename iterable_base::template const_reverse_layout_iterator<L>;
 
         template <class S, layout_type L>
         using broadcast_iterator = typename iterable_base::template broadcast_iterator<S, L>;
         template <class S, layout_type L>
-        using const_broadcast_iterator = typename iterable_base::template const_broadcast_iterator<S, L>;
+        using const_broadcast_iterator =
+            typename iterable_base::template const_broadcast_iterator<S, L>;
         template <class S, layout_type L>
-        using reverse_broadcast_iterator = typename iterable_base::template reverse_broadcast_iterator<S, L>;
+        using reverse_broadcast_iterator =
+            typename iterable_base::template reverse_broadcast_iterator<S, L>;
         template <class S, layout_type L>
-        using const_reverse_broadcast_iterator = typename iterable_base::template const_reverse_broadcast_iterator<S, L>;
+        using const_reverse_broadcast_iterator =
+            typename iterable_base::template const_reverse_broadcast_iterator<S, L>;
 
         using storage_iterator = typename storage_type::iterator;
         using const_storage_iterator = typename storage_type::const_iterator;
@@ -196,13 +199,13 @@ namespace xt
         bool has_linear_assign(const S& strides) const noexcept;
 
         using iterable_base::begin;
-        using iterable_base::end;
         using iterable_base::cbegin;
         using iterable_base::cend;
-        using iterable_base::rbegin;
-        using iterable_base::rend;
         using iterable_base::crbegin;
         using iterable_base::crend;
+        using iterable_base::end;
+        using iterable_base::rbegin;
+        using iterable_base::rend;
 
         storage_iterator storage_begin() noexcept;
         storage_iterator storage_end() noexcept;
@@ -363,7 +366,8 @@ namespace xt
      * Returns the backstrides of the optional assembly.
      */
     template <class D>
-    inline auto xoptional_assembly_base<D>::backstrides() const noexcept -> const inner_backstrides_type&
+    inline auto xoptional_assembly_base<D>::backstrides() const noexcept
+        -> const inner_backstrides_type&
     {
         return value().backstrides();
     }
@@ -423,7 +427,8 @@ namespace xt
 
     template <class D>
     template <class T>
-    inline void xoptional_assembly_base<D>::reshape(std::initializer_list<T> shape, layout_type layout)
+    inline void xoptional_assembly_base<D>::reshape(std::initializer_list<T> shape,
+                                                    layout_type layout)
     {
         value().reshape(shape, layout);
         has_value().reshape(shape, layout);
@@ -468,7 +473,8 @@ namespace xt
     }
 
     /**
-     * Returns a constant reference to the element at the specified position in the optional assembly.
+     * Returns a constant reference to the element at the specified position in the optional
+     * assembly.
      * @param args a list of indices specifying the position in the optional assembly. Indices
      * must be unsigned integers, the number of indices should be equal or greater than
      * the number of dimensions of the optional assembly.
@@ -486,8 +492,8 @@ namespace xt
      * @param args a list of indices specifying the position in the optional assembly. Indices
      * must be unsigned integers, the number of indices should be equal to the number of dimensions
      * of the optional assembly.
-     * @exception std::out_of_range if the number of argument is greater than the number of dimensions
-     * or if indices are out of bounds.
+     * @exception std::out_of_range if the number of argument is greater than the number of
+     * dimensions or if indices are out of bounds.
      */
     template <class D>
     template <class... Args>
@@ -497,13 +503,13 @@ namespace xt
     }
 
     /**
-     * Returns a constant reference to the element at the specified position in the optional assembly,
-     * after dimension and bounds checking.
+     * Returns a constant reference to the element at the specified position in the optional
+     * assembly, after dimension and bounds checking.
      * @param args a list of indices specifying the position in the optional assembly. Indices
      * must be unsigned integers, the number of indices should be equal to the number of dimensions
      * of the optional assembly.
-     * @exception std::out_of_range if the number of argument is greater than the number of dimensions
-     * or if indices are out of bounds.
+     * @exception std::out_of_range if the number of argument is greater than the number of
+     * dimensions or if indices are out of bounds.
      */
     template <class D>
     template <class... Args>
@@ -539,7 +545,8 @@ namespace xt
     }
 
     /**
-     * Returns a constant reference to the element at the specified position in the  optional assembly.
+     * Returns a constant reference to the element at the specified position in the  optional
+     * assembly.
      * @param args a list of indices specifying the position in the  optional assembly. Indices
      * must be unsigned integers, the number of indices must be equal to the number of
      * dimensions of the  optional assembly, else the behavior is undefined.
@@ -580,8 +587,7 @@ namespace xt
 
     template <class D>
     template <class I>
-    inline auto xoptional_assembly_base<D>::operator[](std::initializer_list<I> index)
-        -> reference
+    inline auto xoptional_assembly_base<D>::operator[](std::initializer_list<I> index) -> reference
     {
         return reference(value()[index], has_value()[index]);
     }
@@ -593,7 +599,8 @@ namespace xt
     }
 
     /**
-     * Returns a constant reference to the element at the specified position in the optional assembly.
+     * Returns a constant reference to the element at the specified position in the optional
+     * assembly.
      * @param index a sequence of indices specifying the position in the optional assembly. Indices
      * must be unsigned integers, the number of indices in the list should be equal or greater
      * than the number of dimensions of the optional assembly.
@@ -635,8 +642,9 @@ namespace xt
     }
 
     /**
-     * Returns a constant reference to the element at the specified position in the optional assembly,
-     * after applying periodicity to the indices (negative and 'overflowing' indices are changed).
+     * Returns a constant reference to the element at the specified position in the optional
+     * assembly, after applying periodicity to the indices (negative and 'overflowing' indices are
+     * changed).
      * @param args a list of indices specifying the position in the optional assembly. Indices
      * must be unsigned integers, the number of indices should be equal to the number of dimensions
      * of the optional assembly.
@@ -663,7 +671,8 @@ namespace xt
     }
 
     /**
-     * Returns a constant reference to the element at the specified position in the optional assembly.
+     * Returns a constant reference to the element at the specified position in the optional
+     * assembly.
      * @param first iterator starting the sequence of indices
      * @param last iterator ending the sequence of indices
      * The number of indices in the sequence should be equal to or greater
@@ -753,15 +762,13 @@ namespace xt
     template <class D>
     inline auto xoptional_assembly_base<D>::storage_begin() noexcept -> storage_iterator
     {
-        return storage_iterator(value().storage_begin(),
-                                has_value().storage_begin());
+        return storage_iterator(value().storage_begin(), has_value().storage_begin());
     }
 
     template <class D>
     inline auto xoptional_assembly_base<D>::storage_end() noexcept -> storage_iterator
     {
-        return storage_iterator(value().storage_end(),
-                                has_value().storage_end());
+        return storage_iterator(value().storage_end(), has_value().storage_end());
     }
 
     template <class D>
@@ -777,17 +784,16 @@ namespace xt
     }
 
     template <class D>
-    inline auto xoptional_assembly_base<D>::storage_cbegin() const noexcept -> const_storage_iterator
+    inline auto xoptional_assembly_base<D>::storage_cbegin() const noexcept
+        -> const_storage_iterator
     {
-        return const_storage_iterator(value().storage_cbegin(),
-                                      has_value().storage_cbegin());
+        return const_storage_iterator(value().storage_cbegin(), has_value().storage_cbegin());
     }
 
     template <class D>
     inline auto xoptional_assembly_base<D>::storage_cend() const noexcept -> const_storage_iterator
     {
-        return const_storage_iterator(value().storage_cend(),
-                                      has_value().storage_cend());
+        return const_storage_iterator(value().storage_cend(), has_value().storage_cend());
     }
 
     template <class D>
@@ -803,25 +809,29 @@ namespace xt
     }
 
     template <class D>
-    inline auto xoptional_assembly_base<D>::storage_rbegin() const noexcept -> const_reverse_storage_iterator
+    inline auto xoptional_assembly_base<D>::storage_rbegin() const noexcept
+        -> const_reverse_storage_iterator
     {
         return storage_crbegin();
     }
 
     template <class D>
-    inline auto xoptional_assembly_base<D>::storage_rend() const noexcept -> const_reverse_storage_iterator
+    inline auto xoptional_assembly_base<D>::storage_rend() const noexcept
+        -> const_reverse_storage_iterator
     {
         return storage_crend();
     }
 
     template <class D>
-    inline auto xoptional_assembly_base<D>::storage_crbegin() const noexcept -> const_reverse_storage_iterator
+    inline auto xoptional_assembly_base<D>::storage_crbegin() const noexcept
+        -> const_reverse_storage_iterator
     {
         return const_reverse_storage_iterator(storage_cend());
     }
 
     template <class D>
-    inline auto xoptional_assembly_base<D>::storage_crend() const noexcept -> const_reverse_storage_iterator
+    inline auto xoptional_assembly_base<D>::storage_crend() const noexcept
+        -> const_reverse_storage_iterator
     {
         return const_reverse_storage_iterator(storage_cbegin());
     }
@@ -835,21 +845,24 @@ namespace xt
 
     template <class D>
     template <class S>
-    inline auto xoptional_assembly_base<D>::stepper_end(const S& shape, layout_type l) noexcept -> stepper
+    inline auto xoptional_assembly_base<D>::stepper_end(const S& shape, layout_type l) noexcept
+        -> stepper
     {
         return stepper(value().stepper_end(shape, l), has_value().stepper_end(shape, l));
     }
 
     template <class D>
     template <class S>
-    inline auto xoptional_assembly_base<D>::stepper_begin(const S& shape) const noexcept -> const_stepper
+    inline auto xoptional_assembly_base<D>::stepper_begin(const S& shape) const noexcept
+        -> const_stepper
     {
         return const_stepper(value().stepper_begin(shape), has_value().stepper_begin(shape));
     }
 
     template <class D>
     template <class S>
-    inline auto xoptional_assembly_base<D>::stepper_end(const S& shape, layout_type l) const noexcept -> const_stepper
+    inline auto xoptional_assembly_base<D>::stepper_end(const S& shape, layout_type l) const
+        noexcept -> const_stepper
     {
         return const_stepper(value().stepper_end(shape, l), has_value().stepper_end(shape, l));
     }
@@ -907,8 +920,10 @@ namespace xt
      *********************************************/
 
     template <class D, bool C>
-    inline xoptional_assembly_stepper<D, C>::xoptional_assembly_stepper(value_stepper vs, flag_stepper fs) noexcept
-        : m_vs(vs), m_fs(fs)
+    inline xoptional_assembly_stepper<D, C>::xoptional_assembly_stepper(value_stepper vs,
+                                                                        flag_stepper fs) noexcept
+        : m_vs(vs)
+        , m_fs(fs)
     {
     }
 

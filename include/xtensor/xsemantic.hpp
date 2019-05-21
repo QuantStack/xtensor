@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_SEMANTIC_HPP
 #define XTENSOR_SEMANTIC_HPP
@@ -177,10 +177,12 @@ namespace xt
     using has_container_semantics = is_crtp_base_of<xcontainer_semantic, E>;
 
     template <class E, class R = void>
-    using enable_xcontainer_semantics = typename std::enable_if<has_container_semantics<E>::value, R>::type;
+    using enable_xcontainer_semantics =
+        typename std::enable_if<has_container_semantics<E>::value, R>::type;
 
     template <class E, class R = void>
-    using disable_xcontainer_semantics = typename std::enable_if<!has_container_semantics<E>::value, R>::type;
+    using disable_xcontainer_semantics =
+        typename std::enable_if<!has_container_semantics<E>::value, R>::type;
 
     /**
      * @class xview_semantic
@@ -687,7 +689,8 @@ namespace xt
         D& d = this->derived_cast();
 
         using size_type = typename D::size_type;
-        auto dst = xview_semantic_detail::get_begin(d, std::integral_constant<bool, D::contiguous_layout>());
+        auto dst = xview_semantic_detail::get_begin(
+            d, std::integral_constant<bool, D::contiguous_layout>());
         for (size_type i = d.size(); i > 0; --i)
         {
             *dst = f(*dst, e);
@@ -700,10 +703,10 @@ namespace xt
     template <class E>
     inline auto xview_semantic<D>::operator=(const xexpression<E>& rhs) -> derived_type&
     {
-        bool cond = (rhs.derived_cast().shape().size() == this->derived_cast().dimension()) &&
-            std::equal(this->derived_cast().shape().begin(),
-                       this->derived_cast().shape().end(),
-                       rhs.derived_cast().shape().begin());
+        bool cond = (rhs.derived_cast().shape().size() == this->derived_cast().dimension())
+                    && std::equal(this->derived_cast().shape().begin(),
+                                  this->derived_cast().shape().end(),
+                                  rhs.derived_cast().shape().begin());
 
         if (!cond)
         {

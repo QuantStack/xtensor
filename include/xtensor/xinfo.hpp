@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_INFO_HPP
 #define XTENSOR_INFO_HPP
@@ -48,12 +48,14 @@ namespace xt
     {
         template <std::size_t N>
         explicit CONSTEXPR11_TN static_string(const char (&a)[N]) NOEXCEPT_TN
-            : data(a), size(N - 1)
+            : data(a)
+            , size(N - 1)
         {
         }
 
         CONSTEXPR11_TN static_string(const char* a, const std::size_t sz) NOEXCEPT_TN
-            : data(a), size(sz)
+            : data(a)
+            , size(sz)
         {
         }
 

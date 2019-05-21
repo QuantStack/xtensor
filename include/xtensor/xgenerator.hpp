@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_GENERATOR_HPP
 #define XTENSOR_GENERATOR_HPP
@@ -27,7 +27,6 @@
 
 namespace xt
 {
-
     /************************
      * xgenerator extension *
      ************************/
@@ -87,10 +86,11 @@ namespace xt
      * @tparam S the shape type of the generator
      */
     template <class F, class R, class S>
-    class xgenerator : public xexpression<xgenerator<F, R, S>>,
-                       public xconst_iterable<xgenerator<F, R, S>>,
-                       public xconst_accessible<xgenerator<F, R, S>>,
-                       public extension::xgenerator_base_t<F, R, S>
+    class xgenerator
+        : public xexpression<xgenerator<F, R, S>>
+        , public xconst_iterable<xgenerator<F, R, S>>
+        , public xconst_accessible<xgenerator<F, R, S>>
+        , public extension::xgenerator_base_t<F, R, S>
     {
     public:
 
@@ -205,7 +205,8 @@ namespace xt
     template <class F, class R, class S>
     template <class Func>
     inline xgenerator<F, R, S>::xgenerator(Func&& f, const S& shape) noexcept
-        : m_f(std::forward<Func>(f)), m_shape(shape)
+        : m_f(std::forward<Func>(f))
+        , m_shape(shape)
     {
     }
     //@}
@@ -288,7 +289,8 @@ namespace xt
     {
         using bounded_iterator = xbounded_iterator<It, typename shape_type::const_iterator>;
         XTENSOR_TRY(check_element_index(shape(), first, last));
-        return m_f.element(bounded_iterator(first, shape().cbegin()), bounded_iterator(last, shape().cend()));
+        return m_f.element(bounded_iterator(first, shape().cbegin()),
+                           bounded_iterator(last, shape().cend()));
     }
     //@}
 
@@ -332,7 +334,8 @@ namespace xt
 
     template <class F, class R, class S>
     template <class O>
-    inline auto xgenerator<F, R, S>::stepper_end(const O& shape, layout_type) const noexcept -> const_stepper
+    inline auto xgenerator<F, R, S>::stepper_end(const O& shape, layout_type) const noexcept
+        -> const_stepper
     {
         size_type offset = shape.size() - this->dimension();
         return const_stepper(this, offset, true);
@@ -361,10 +364,9 @@ namespace xt
 
     /**
      * Reshapes the generator and keeps old elements. The `shape` argument can have one of its value
-     * equal to `-1`, in this case the value is inferred from the number of elements in the generator
-     * and the remaining values in the `shape`.
-     * \code{.cpp}
-     * auto a = xt::arange<double>(50).reshape({-1, 10});
+     * equal to `-1`, in this case the value is inferred from the number of elements in the
+     * generator and the remaining values in the `shape`. \code{.cpp} auto a =
+     * xt::arange<double>(50).reshape({-1, 10});
      * //a.shape() is {5, 10}
      * \endcode
      * @param shape the new shape (has to have same number of elements as the original genrator)
@@ -373,14 +375,17 @@ namespace xt
     template <class O>
     inline auto xgenerator<F, R, S>::reshape(O&& shape) const &
     {
-        return reshape_view(*this, compute_shape(shape, std::is_signed<typename std::decay_t<O>::value_type>()));
+        return reshape_view(
+            *this, compute_shape(shape, std::is_signed<typename std::decay_t<O>::value_type>()));
     }
 
     template <class F, class R, class S>
     template <class O>
     inline auto xgenerator<F, R, S>::reshape(O&& shape) &&
     {
-        return reshape_view(std::move(*this), compute_shape(shape, std::is_signed<typename std::decay_t<O>::value_type>()));
+        return reshape_view(
+            std::move(*this),
+            compute_shape(shape, std::is_signed<typename std::decay_t<O>::value_type>()));
     }
 
     template <class F, class R, class S>
@@ -414,10 +419,10 @@ namespace xt
         int_type accumulator(1);
         std::size_t neg_idx = 0;
         std::size_t i = 0;
-        for(std::size_t j = 0; j != shape.size(); ++j, ++i)
+        for (std::size_t j = 0; j != shape.size(); ++j, ++i)
         {
             auto dim = shape[j];
-            if(dim < 0)
+            if (dim < 0)
             {
                 XTENSOR_ASSERT(dim == -1 && !neg_idx);
                 neg_idx = i;
@@ -428,9 +433,11 @@ namespace xt
             }
             accumulator *= dim;
         }
-        if(accumulator < 0)
+        if (accumulator < 0)
         {
-            sh[neg_idx] = this->size() / static_cast<size_type>(std::make_unsigned_t<int_type>(std::abs(accumulator)));
+            sh[neg_idx]
+                = this->size()
+                  / static_cast<size_type>(std::make_unsigned_t<int_type>(std::abs(accumulator)));
         }
         return sh;
     }
@@ -478,7 +485,8 @@ namespace xt
         {
             using shape_type = std::vector<std::size_t>;
             using type = xgenerator<Functor, typename Functor::value_type, shape_type>;
-            return type(std::forward<Functor>(f), xtl::forward_sequence<shape_type, decltype(shape)>(shape));
+            return type(std::forward<Functor>(f),
+                        xtl::forward_sequence<shape_type, decltype(shape)>(shape));
         }
 #else
         template <class Functor, class I, std::size_t L>
@@ -486,7 +494,8 @@ namespace xt
         {
             using shape_type = std::array<std::size_t, L>;
             using type = xgenerator<Functor, typename Functor::value_type, shape_type>;
-            return type(std::forward<Functor>(f), xtl::forward_sequence<shape_type, decltype(shape)>(shape));
+            return type(std::forward<Functor>(f),
+                        xtl::forward_sequence<shape_type, decltype(shape)>(shape));
         }
 #endif
 

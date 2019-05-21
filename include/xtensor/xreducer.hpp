@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_REDUCER_HPP
 #define XTENSOR_REDUCER_HPP
@@ -35,14 +35,18 @@
 
 namespace xt
 {
-    template <template <class...> class A, class... AX, class X,
+    template <template <class...> class A,
+              class... AX,
+              class X,
               XTL_REQUIRES(is_evaluation_strategy<AX>..., is_evaluation_strategy<X>)>
     auto operator|(const A<AX...>& args, const A<X>& rhs)
     {
         return std::tuple_cat(args, rhs);
     }
 
-    struct keep_dims_type : xt::detail::option_base {};
+    struct keep_dims_type : xt::detail::option_base
+    {
+    };
     constexpr auto keep_dims = std::tuple<keep_dims_type>{};
 
     template <class T = double>
@@ -53,7 +57,10 @@ namespace xt
         {
         }
 
-        constexpr T value() const { return m_val; }
+        constexpr T value() const
+        {
+            return m_val;
+        }
         T m_val;
     };
 
@@ -81,7 +88,8 @@ namespace xt
     template <std::ptrdiff_t I, class T, class U, class... Types>
     struct tuple_idx_of_impl<I, T, std::tuple<U, Types...>>
     {
-        static constexpr std::ptrdiff_t value = tuple_idx_of_impl<I + 1, T, std::tuple<Types...>>::value;
+        static constexpr std::ptrdiff_t value
+            = tuple_idx_of_impl<I + 1, T, std::tuple<Types...>>::value;
     };
 
     template <class S, class... X>
@@ -96,40 +104,54 @@ namespace xt
     template <class T, class Tuple>
     struct tuple_idx_of
     {
-        static constexpr std::ptrdiff_t value = tuple_idx_of_impl<0, std::decay_t<T>, typename decay_all<Tuple>::type>::value;
+        static constexpr std::ptrdiff_t value
+            = tuple_idx_of_impl<0, std::decay_t<T>, typename decay_all<Tuple>::type>::value;
     };
 
     template <class R, class T>
     struct reducer_options
     {
         template <class X>
-        struct initial_tester : std::false_type {};
+        struct initial_tester : std::false_type
+        {
+        };
 
         template <class X>
-        struct initial_tester<xinitial<X>> : std::true_type {};
+        struct initial_tester<xinitial<X>> : std::true_type
+        {
+        };
 
         // Workaround for Apple because tuple_cat is buggy!
         template <class X>
-        struct initial_tester<const xinitial<X>> : std::true_type {};
+        struct initial_tester<const xinitial<X>> : std::true_type
+        {
+        };
 
         using d_t = std::decay_t<T>;
 
-        static constexpr std::size_t initial_val_idx = xtl::mpl::find_if<initial_tester, d_t>::value;
+        static constexpr std::size_t initial_val_idx
+            = xtl::mpl::find_if<initial_tester, d_t>::value;
         reducer_options() = default;
 
         reducer_options(const T& tpl)
         {
-            xtl::mpl::static_if<initial_val_idx != std::tuple_size<T>::value>([this, &tpl](auto no_compile) {
+            xtl::mpl::static_if<initial_val_idx != std::tuple_size<T>::value>(
+                [this, &tpl](auto no_compile) {
                     // use no_compile to prevent compilation if initial_val_idx is out of bounds!
-                    this->initial_value = no_compile(std::get<initial_val_idx != std::tuple_size<T>::value ? initial_val_idx : 0>(tpl)).value();
+                    this->initial_value
+                        = no_compile(std::get < initial_val_idx != std::tuple_size<T>::value
+                                         ? initial_val_idx
+                                         : 0 > (tpl))
+                              .value();
                 },
-                [](auto /*np_compile*/){}
-            );
+                [](auto /*np_compile*/) {});
         }
 
-        using evaluation_strategy = std::conditional_t<tuple_idx_of<xt::evaluation_strategy::immediate_type, d_t>::value != -1,
-                                                                    xt::evaluation_strategy::immediate_type,
-                                                                    xt::evaluation_strategy::lazy_type>;
+        using evaluation_strategy
+            = std::conditional_t<tuple_idx_of<xt::evaluation_strategy::immediate_type, d_t>::value
+                                     != -1,
+                                 xt::evaluation_strategy::immediate_type,
+                                 xt::evaluation_strategy::lazy_type>;
 
         using keep_dims = std::conditional_t<tuple_idx_of<xt::keep_dims_type, d_t>::value != -1,
                                              std::true_type,
@@ -181,8 +203,11 @@ namespace xt
     namespace detail
     {
         template <class O, class RS, class R, class E, class AX>
-        inline void shape_computation(RS& result_shape, R& result, E& expr,
-                                      const AX& axes, std::enable_if_t<!detail::is_fixed<RS>::value, int> = 0)
+        inline void shape_computation(RS& result_shape,
+                                      R& result,
+                                      E& expr,
+                                      const AX& axes,
+                                      std::enable_if_t<!detail::is_fixed<RS>::value, int> = 0)
         {
             if (typename O::keep_dims())
             {
@@ -217,14 +242,16 @@ namespace xt
         }
 
         // skip shape computation if already done at compile time
-        template <class O, class RS, class R,class S, class AX>
-        inline void shape_computation(RS&, R&, const S&,
-                                      const AX&, std::enable_if_t<detail::is_fixed<RS>::value, int> = 0)
+        template <class O, class RS, class R, class S, class AX>
+        inline void shape_computation(
+            RS&, R&, const S&, const AX&, std::enable_if_t<detail::is_fixed<RS>::value, int> = 0)
         {
         }
     }
 
-    template <class F, class E, class R,
+    template <class F,
+              class E,
+              class R,
               XTL_REQUIRES(std::is_convertible<typename E::value_type, typename R::value_type>)>
     inline void copy_to_reduced(F&, const E& e, R& result)
     {
@@ -242,8 +269,11 @@ namespace xt
         }
     }
 
-    template <class F, class E, class R,
-              XTL_REQUIRES(xtl::negation<std::is_convertible<typename E::value_type, typename R::value_type>>)>
+    template <class F,
+              class E,
+              class R,
+              XTL_REQUIRES(xtl::negation<
+                           std::is_convertible<typename E::value_type, typename R::value_type>>)>
     inline void copy_to_reduced(F& f, const E& e, R& result)
     {
         if (e.layout() == layout_type::row_major)
@@ -268,13 +298,17 @@ namespace xt
         using reduce_functor_type = typename std::decay_t<F>::reduce_functor_type;
         using init_functor_type = typename std::decay_t<F>::init_functor_type;
         using expr_value_type = typename std::decay_t<E>::value_type;
-        using result_type = std::decay_t<decltype(std::declval<reduce_functor_type>()(std::declval<init_functor_type>()(), std::declval<expr_value_type>()))>;
+        using result_type = std::decay_t<decltype(std::declval<reduce_functor_type>()(
+            std::declval<init_functor_type>()(), std::declval<expr_value_type>()))>;
 
         using options_t = reducer_options<result_type, std::decay_t<O>>;
         options_t options(raw_options);
 
-        using shape_type = typename xreducer_shape_type<typename std::decay_t<E>::shape_type, std::decay_t<X>, typename options_t::keep_dims>::type;
-        using result_container_type = typename detail::xtype_for_shape<shape_type>::template type<result_type, std::decay_t<E>::static_layout>;
+        using shape_type = typename xreducer_shape_type<typename std::decay_t<E>::shape_type,
+                                                        std::decay_t<X>,
+                                                        typename options_t::keep_dims>::type;
+        using result_container_type = typename detail::xtype_for_shape<
+            shape_type>::template type<result_type, std::decay_t<E>::static_layout>;
         result_container_type result;
 
         // retrieve functors from triple struct
@@ -285,13 +319,16 @@ namespace xt
         if (axes.size() == 0)
         {
             result.resize(e.shape(), e.layout());
-            auto cpf = [&reduce_fct, &init_fct](const auto& v) {return reduce_fct(static_cast<result_type>(init_fct()), v); };
+            auto cpf = [&reduce_fct, &init_fct](const auto& v) {
+                return reduce_fct(static_cast<result_type>(init_fct()), v);
+            };
             copy_to_reduced(cpf, e, result);
             return result;
         }
 
         shape_type result_shape{};
-        dynamic_shape<std::size_t> iter_shape = xtl::forward_sequence<dynamic_shape<std::size_t>, decltype(e.shape())>(e.shape());
+        dynamic_shape<std::size_t> iter_shape
+            = xtl::forward_sequence<dynamic_shape<std::size_t>, decltype(e.shape())>(e.shape());
         dynamic_shape<std::size_t> iter_strides(e.dimension());
 
         if (!std::is_sorted(axes.cbegin(), axes.cend()))
@@ -300,7 +337,8 @@ namespace xt
         }
         if (axes.size() != 0 && axes[axes.size() - 1] > e.dimension() - 1)
         {
-            throw std::runtime_error("Axis " + std::to_string(axes[axes.size() - 1]) + " out of bounds for reduction.");
+            throw std::runtime_error("Axis " + std::to_string(axes[axes.size() - 1])
+                                     + " out of bounds for reduction.");
         }
 
         detail::shape_computation<options_t>(result_shape, result, e, axes);
@@ -309,15 +347,18 @@ namespace xt
         if (e.dimension() == axes.size())
         {
             result_type tmp = options_t::has_initial_value ? options.initial_value : init_fct();
-            result.data()[0] = std::accumulate(e.storage().begin(), e.storage().end(), tmp, reduce_fct);
+            result.data()[0]
+                = std::accumulate(e.storage().begin(), e.storage().end(), tmp, reduce_fct);
             return result;
         }
 
         std::size_t leading_ax = axes[(e.layout() == layout_type::row_major) ? axes.size() - 1 : 0];
         auto strides_finder = e.strides().begin() + static_cast<std::ptrdiff_t>(leading_ax);
-        // The computed strides contain "0" where the shape is 1 -- therefore find the next none-zero number
+        // The computed strides contain "0" where the shape is 1 -- therefore find the next
+        // none-zero number
         std::size_t inner_stride = static_cast<std::size_t>(*strides_finder);
-        auto iter_bound = e.layout() == layout_type::row_major ? e.strides().begin() : (e.strides().end() - 1);
+        auto iter_bound
+            = e.layout() == layout_type::row_major ? e.strides().begin() : (e.strides().end() - 1);
         while (inner_stride == 0 && strides_finder != iter_bound)
         {
             (e.layout() == layout_type::row_major) ? --strides_finder : ++strides_finder;
@@ -326,7 +367,9 @@ namespace xt
 
         if (inner_stride == 0)
         {
-            auto cpf = [&reduce_fct, &init_fct](const auto& v) {return reduce_fct(static_cast<result_type>(init_fct()), v); };
+            auto cpf = [&reduce_fct, &init_fct](const auto& v) {
+                return reduce_fct(static_cast<result_type>(init_fct()), v);
+            };
             copy_to_reduced(cpf, e, result);
             return result;
         }
@@ -356,7 +399,8 @@ namespace xt
             if (std::find(axes.begin(), axes.end(), i) == axes.end())
             {
                 // i not in axes!
-                iter_strides[i] = static_cast<std::size_t>(result.strides()[typename options_t::keep_dims() ? i : idx]);
+                iter_strides[i] = static_cast<std::size_t>(
+                    result.strides()[typename options_t::keep_dims() ? i : idx]);
                 ++idx;
             }
         }
@@ -375,7 +419,8 @@ namespace xt
 
             // erasing the front vs the back
             iter_shape.erase(iter_shape.begin(), iter_shape.begin() + std::ptrdiff_t(last_ax + 1));
-            iter_strides.erase(iter_strides.begin(), iter_strides.begin() + std::ptrdiff_t(last_ax + 1));
+            iter_strides.erase(iter_strides.begin(),
+                               iter_strides.begin() + std::ptrdiff_t(last_ax + 1));
 
             // and reversing, to make it work with the same next_idx function
             std::reverse(iter_shape.begin(), iter_shape.end());
@@ -402,9 +447,10 @@ namespace xt
                 }
             }
 
-            return std::make_pair(i == 0,
-                                  std::inner_product(temp_idx.begin(), temp_idx.end(),
-                                                     iter_strides.begin(), std::ptrdiff_t(0)));
+            return std::make_pair(
+                i == 0,
+                std::inner_product(
+                    temp_idx.begin(), temp_idx.end(), iter_strides.begin(), std::ptrdiff_t(0)));
         };
 
         auto begin = e.data();
@@ -415,15 +461,17 @@ namespace xt
 
         std::pair<bool, std::ptrdiff_t> idx_res(false, 0);
 
-        // Remark: eventually some modifications here to make conditions faster where merge + accumulate is the
-        // same function (e.g. check std::is_same<decltype(merge_fct), decltype(reduce_fct)>::value) ...
+        // Remark: eventually some modifications here to make conditions faster where merge +
+        // accumulate is the same function (e.g. check std::is_same<decltype(merge_fct),
+        // decltype(reduce_fct)>::value) ...
 
         auto merge_border = out;
         bool merge = false;
 
         // TODO there could be some performance gain by removing merge checking
-        //      when axes.size() == 1 and even next_idx could be removed for something simpler (next_stride always the same)
-        //      best way to do this would be to create a function that takes (begin, out, outer_loop_size, inner_loop_size, next_idx_lambda)
+        //      when axes.size() == 1 and even next_idx could be removed for something simpler
+        //      (next_stride always the same) best way to do this would be to create a function that
+        //      takes (begin, out, outer_loop_size, inner_loop_size, next_idx_lambda)
         // Decide if going about it row-wise or col-wise
         if (inner_stride == 1)
         {
@@ -432,7 +480,7 @@ namespace xt
                 // for unknown reasons it's much faster to use a temporary variable and
                 // std::accumulate here -- probably some cache behavior
                 result_type tmp = init_fct();
-                tmp = std::accumulate(begin , begin + outer_loop_size, tmp, reduce_fct);
+                tmp = std::accumulate(begin, begin + outer_loop_size, tmp, reduce_fct);
 
                 // use merge function if necessary
                 *out = merge ? merge_fct(*out, tmp) : tmp;
@@ -459,13 +507,18 @@ namespace xt
         {
             while (idx_res.first != true)
             {
-                std::transform(out, out + inner_loop_size, begin, out,
-                               [merge, &init_fct, &reduce_fct](auto&& v1, auto&& v2) {
-                                    return merge ?
-                                        reduce_fct(v1, v2) :
-                                        // cast because return type of identity function is not upcasted
-                                        reduce_fct(static_cast<result_type>(init_fct()), v2);
-                               });
+                std::transform(
+                    out,
+                    out + inner_loop_size,
+                    begin,
+                    out,
+                    [merge, &init_fct, &reduce_fct](auto&& v1, auto&& v2) {
+                        return merge
+                                   ? reduce_fct(v1, v2)
+                                   :
+                                   // cast because return type of identity function is not upcasted
+                                   reduce_fct(static_cast<result_type>(init_fct()), v2);
+                    });
 
                 begin += inner_stride;
                 for (std::size_t i = 1; i < outer_loop_size; ++i)
@@ -492,8 +545,11 @@ namespace xt
         }
         if (options_t::has_initial_value)
         {
-            std::transform(result.data(), result.data() + result.size(), result.data(),
-                           [&merge_fct, &options](auto&& v) { return merge_fct(v, options.initial_value); });
+            std::transform(
+                result.data(),
+                result.data() + result.size(),
+                result.data(),
+                [&merge_fct, &options](auto&& v) { return merge_fct(v, options.initial_value); });
         }
         return result;
     }
@@ -521,9 +577,10 @@ namespace xt
         T m_value;
     };
 
-    template <class REDUCE_FUNC, class INIT_FUNC = const_value<long int>, class MERGE_FUNC = REDUCE_FUNC>
-    struct xreducer_functors
-        : public std::tuple<REDUCE_FUNC, INIT_FUNC, MERGE_FUNC>
+    template <class REDUCE_FUNC,
+              class INIT_FUNC = const_value<long int>,
+              class MERGE_FUNC = REDUCE_FUNC>
+    struct xreducer_functors : public std::tuple<REDUCE_FUNC, INIT_FUNC, MERGE_FUNC>
     {
         using self_type = xreducer_functors<REDUCE_FUNC, INIT_FUNC, MERGE_FUNC>;
         using base_type = std::tuple<REDUCE_FUNC, INIT_FUNC, MERGE_FUNC>;
@@ -550,7 +607,9 @@ namespace xt
 
         template <class RF, class IF, class MF>
         xreducer_functors(RF&& reduce_func, IF&& init_func, MF&& merge_func)
-            : base_type(std::forward<RF>(reduce_func), std::forward<IF>(init_func), std::forward<MF>(merge_func))
+            : base_type(std::forward<RF>(reduce_func),
+                        std::forward<IF>(init_func),
+                        std::forward<MF>(merge_func))
         {
         }
     };
@@ -565,7 +624,8 @@ namespace xt
     template <class RF, class IF>
     auto make_xreducer_functor(RF&& reduce_func, IF&& init_func)
     {
-        using reducer_type = xreducer_functors<std::remove_reference_t<RF>, std::remove_reference_t<IF>>;
+        using reducer_type
+            = xreducer_functors<std::remove_reference_t<RF>, std::remove_reference_t<IF>>;
         return reducer_type(std::forward<RF>(reduce_func), std::forward<IF>(init_func));
     }
 
@@ -575,7 +635,9 @@ namespace xt
         using reducer_type = xreducer_functors<std::remove_reference_t<RF>,
                                                std::remove_reference_t<IF>,
                                                std::remove_reference_t<MF>>;
-        return reducer_type(std::forward<RF>(reduce_func), std::forward<IF>(init_func), std::forward<MF>(merge_func));
+        return reducer_type(std::forward<RF>(reduce_func),
+                            std::forward<IF>(init_func),
+                            std::forward<MF>(merge_func));
     }
 
     /**********************
@@ -594,8 +656,7 @@ namespace xt
         };
 
         template <class F, class CT, class X, class O>
-        struct xreducer_base
-            : xreducer_base_impl<xexpression_tag_t<CT>, F, CT, X, O>
+        struct xreducer_base : xreducer_base_impl<xexpression_tag_t<CT>, F, CT, X, O>
         {
         };
 
@@ -617,7 +678,9 @@ namespace xt
     struct xiterable_inner_types<xreducer<F, CT, X, O>>
     {
         using xexpression_type = std::decay_t<CT>;
-        using inner_shape_type = typename xreducer_shape_type<typename xexpression_type::shape_type, std::decay_t<X>, typename O::keep_dims>::type;
+        using inner_shape_type = typename xreducer_shape_type<typename xexpression_type::shape_type,
+                                                              std::decay_t<X>,
+                                                              typename O::keep_dims>::type;
         using const_stepper = xreducer_stepper<F, CT, X, O>;
         using stepper = const_stepper;
     };
@@ -667,10 +730,11 @@ namespace xt
      * @sa reduce
      */
     template <class F, class CT, class X, class O>
-    class xreducer : public xexpression<xreducer<F, CT, X, O>>,
-                     public xconst_iterable<xreducer<F, CT, X, O>>,
-                     public xaccessible<xreducer<F, CT, X, O>>,
-                     public extension::xreducer_base_t<F, CT, X, O>
+    class xreducer
+        : public xexpression<xreducer<F, CT, X, O>>
+        , public xconst_iterable<xreducer<F, CT, X, O>>
+        , public xaccessible<xreducer<F, CT, X, O>>
+        , public extension::xreducer_base_t<F, CT, X, O>
     {
     public:
 
@@ -747,6 +811,7 @@ namespace xt
         {
             return m_options;
         }
+
     private:
 
         CT m_e;
@@ -778,20 +843,26 @@ namespace xt
                 std::declval<init_functor_type>()(),
                 *std::declval<typename std::decay_t<E>::const_stepper>()))>;
 
-            using reducer_type = xreducer<F, const_xclosure_t<E>, xtl::const_closure_type_t<decltype(normalized_axes)>, reducer_options<value_type, std::decay_t<O>>>;
-            return reducer_type(std::forward<F>(f), std::forward<E>(e), std::forward<decltype(normalized_axes)>(normalized_axes), std::forward<O>(options));
+            using reducer_type = xreducer<F,
+                                          const_xclosure_t<E>,
+                                          xtl::const_closure_type_t<decltype(normalized_axes)>,
+                                          reducer_options<value_type, std::decay_t<O>>>;
+            return reducer_type(std::forward<F>(f),
+                                std::forward<E>(e),
+                                std::forward<decltype(normalized_axes)>(normalized_axes),
+                                std::forward<O>(options));
         }
 
 
         template <class F, class E, class X, class O>
-        inline auto reduce_impl(F&& f, E&& e, X&& axes, evaluation_strategy::immediate_type, O&& options)
+        inline auto reduce_impl(
+            F&& f, E&& e, X&& axes, evaluation_strategy::immediate_type, O&& options)
         {
             decltype(auto) normalized_axes = normalize_axis(e, std::forward<X>(axes));
             return reduce_immediate(std::forward<F>(f),
                                     eval(std::forward<E>(e)),
                                     std::forward<decltype(normalized_axes)>(normalized_axes),
-                                    std::forward<O>(options)
-            );
+                                    std::forward<O>(options));
         }
     }
 
@@ -805,8 +876,7 @@ namespace xt
         };
 
         template <class RF, class IF, class MF>
-        struct is_xreducer_functors_impl<xreducer_functors<RF, IF, MF>>
-            : std::true_type
+        struct is_xreducer_functors_impl<xreducer_functors<RF, IF, MF>> : std::true_type
         {
         };
 
@@ -827,82 +897,109 @@ namespace xt
      * depending on whether \p e is an lvalue or an rvalue.
      */
 
-    template <class F, class E, class X, class EVS = DEFAULT_STRATEGY_REDUCERS,
-              XTL_REQUIRES(xtl::negation<is_reducer_options<X>>,
-                           detail::is_xreducer_functors<F>)>
+    template <class F,
+              class E,
+              class X,
+              class EVS = DEFAULT_STRATEGY_REDUCERS,
+              XTL_REQUIRES(xtl::negation<is_reducer_options<X>>, detail::is_xreducer_functors<F>)>
     inline auto reduce(F&& f, E&& e, X&& axes, EVS&& options = EVS())
     {
-
         return detail::reduce_impl(std::forward<F>(f),
                                    std::forward<E>(e),
                                    std::forward<X>(axes),
                                    typename reducer_options<int, EVS>::evaluation_strategy{},
-                                   std::forward<EVS>(options)
-        );
+                                   std::forward<EVS>(options));
     }
 
-    template <class F, class E, class X, class EVS = DEFAULT_STRATEGY_REDUCERS,
+    template <class F,
+              class E,
+              class X,
+              class EVS = DEFAULT_STRATEGY_REDUCERS,
               XTL_REQUIRES(xtl::negation<is_reducer_options<X>>,
                            xtl::negation<detail::is_xreducer_functors<F>>)>
     inline auto reduce(F&& f, E&& e, X&& axes, EVS&& options = EVS())
     {
-        return reduce(make_xreducer_functor(std::forward<F>(f)), std::forward<E>(e),
-                      std::forward<X>(axes), std::forward<EVS>(options));
+        return reduce(make_xreducer_functor(std::forward<F>(f)),
+                      std::forward<E>(e),
+                      std::forward<X>(axes),
+                      std::forward<EVS>(options));
     }
 
-    template <class F, class E, class EVS = DEFAULT_STRATEGY_REDUCERS,
-              XTL_REQUIRES(is_reducer_options<EVS>,
-                           detail::is_xreducer_functors<F>)>
+    template <class F,
+              class E,
+              class EVS = DEFAULT_STRATEGY_REDUCERS,
+              XTL_REQUIRES(is_reducer_options<EVS>, detail::is_xreducer_functors<F>)>
     inline auto reduce(F&& f, E&& e, EVS&& options = EVS())
     {
         xindex_type_t<typename std::decay_t<E>::shape_type> ar;
         resize_container(ar, e.dimension());
         std::iota(ar.begin(), ar.end(), 0);
-        return detail::reduce_impl(std::forward<F>(f),
-                                   std::forward<E>(e),
-                                   std::move(ar),
-                                   typename reducer_options<int, std::decay_t<EVS>>::evaluation_strategy{},
-                                   std::forward<EVS>(options)
-        );
+        return detail::reduce_impl(
+            std::forward<F>(f),
+            std::forward<E>(e),
+            std::move(ar),
+            typename reducer_options<int, std::decay_t<EVS>>::evaluation_strategy{},
+            std::forward<EVS>(options));
     }
 
-    template <class F, class E, class EVS = DEFAULT_STRATEGY_REDUCERS,
-              XTL_REQUIRES(is_reducer_options<EVS>,
-                           xtl::negation<detail::is_xreducer_functors<F>>)>
+    template <class F,
+              class E,
+              class EVS = DEFAULT_STRATEGY_REDUCERS,
+              XTL_REQUIRES(is_reducer_options<EVS>, xtl::negation<detail::is_xreducer_functors<F>>)>
     inline auto reduce(F&& f, E&& e, EVS&& options = EVS())
     {
-        return reduce(make_xreducer_functor(std::forward<F>(f)), std::forward<E>(e), std::forward<EVS>(options));
+        return reduce(make_xreducer_functor(std::forward<F>(f)),
+                      std::forward<E>(e),
+                      std::forward<EVS>(options));
     }
 
 #ifdef X_OLD_CLANG
-    template <class F, class E, class I, class EVS = DEFAULT_STRATEGY_REDUCERS,
+    template <class F,
+              class E,
+              class I,
+              class EVS = DEFAULT_STRATEGY_REDUCERS,
               XTL_REQUIRES(detail::is_xreducer_functors<F>)>
     inline auto reduce(F&& f, E&& e, std::initializer_list<I> axes, EVS options = EVS())
     {
         using axes_type = std::vector<std::size_t>;
         auto ax = xt::forward_normalize<axes_type>(e, axes);
-        return detail::reduce_impl(std::forward<F>(f), std::forward<E>(e), std::move(ax),
+        return detail::reduce_impl(std::forward<F>(f),
+                                   std::forward<E>(e),
+                                   std::move(ax),
                                    typename reducer_options<int, EVS>::evaluation_strategy{},
                                    options);
     }
-    template <class F, class E, class I, class EVS = DEFAULT_STRATEGY_REDUCERS,
+    template <class F,
+              class E,
+              class I,
+              class EVS = DEFAULT_STRATEGY_REDUCERS,
               XTL_REQUIRES(xtl::negation<detail::is_xreducer_functors<F>>)>
     inline auto reduce(F&& f, E&& e, std::initializer_list<I> axes, EVS options = EVS())
     {
         return reduce(make_xreducer_functor(std::forward<F>(f)), std::forward<E>(e), axes, options);
     }
 #else
-    template <class F, class E, class I, std::size_t N, class EVS = DEFAULT_STRATEGY_REDUCERS,
+    template <class F,
+              class E,
+              class I,
+              std::size_t N,
+              class EVS = DEFAULT_STRATEGY_REDUCERS,
               XTL_REQUIRES(detail::is_xreducer_functors<F>)>
     inline auto reduce(F&& f, E&& e, const I (&axes)[N], EVS options = EVS())
     {
         using axes_type = std::array<std::size_t, N>;
         auto ax = xt::forward_normalize<axes_type>(e, axes);
-        return detail::reduce_impl(std::forward<F>(f), std::forward<E>(e), std::move(ax),
+        return detail::reduce_impl(std::forward<F>(f),
+                                   std::forward<E>(e),
+                                   std::move(ax),
                                    typename reducer_options<int, EVS>::evaluation_strategy{},
                                    options);
     }
-    template <class F, class E, class I, std::size_t N, class EVS = DEFAULT_STRATEGY_REDUCERS,
+    template <class F,
+              class E,
+              class I,
+              std::size_t N,
+              class EVS = DEFAULT_STRATEGY_REDUCERS,
               XTL_REQUIRES(xtl::negation<detail::is_xreducer_functors<F>>)>
     inline auto reduce(F&& f, E&& e, const I (&axes)[N], EVS options = EVS())
     {
@@ -932,8 +1029,11 @@ namespace xt
         using substepper_type = typename xexpression_type::const_stepper;
         using shape_type = typename xreducer_type::shape_type;
 
-        xreducer_stepper(const xreducer_type& red, size_type offset, bool end = false,
-                         layout_type l = default_assignable_layout(xexpression_type::static_layout));
+        xreducer_stepper(const xreducer_type& red,
+                         size_type offset,
+                         bool end = false,
+                         layout_type l
+                         = default_assignable_layout(xexpression_type::static_layout));
 
         reference operator*() const;
 
@@ -950,8 +1050,8 @@ namespace xt
     private:
 
         reference aggregate(size_type dim) const;
-        reference aggregate_impl(size_type dim, /*keep_dims=*/ std::false_type) const;
-        reference aggregate_impl(size_type dim, /*keep_dims=*/ std::true_type) const;
+        reference aggregate_impl(size_type dim, /*keep_dims=*/std::false_type) const;
+        reference aggregate_impl(size_type dim, /*keep_dims=*/std::true_type) const;
 
         substepper_type get_substepper_begin() const;
         size_type get_dim(size_type dim) const noexcept;
@@ -972,24 +1072,37 @@ namespace xt
         template <std::size_t X, std::size_t... I>
         struct in
         {
-            constexpr static bool value = xtl::disjunction<std::integral_constant<bool, X == I>...>::value;
+            constexpr static bool value
+                = xtl::disjunction<std::integral_constant<bool, X == I>...>::value;
         };
 
         template <std::size_t Z, class S1, class S2, class R>
         struct fixed_xreducer_shape_type_impl;
 
         template <std::size_t Z, std::size_t... I, std::size_t... J, std::size_t... R>
-        struct fixed_xreducer_shape_type_impl<Z, fixed_shape<I...>, fixed_shape<J...>, fixed_shape<R...>>
+        struct fixed_xreducer_shape_type_impl<Z,
+                                              fixed_shape<I...>,
+                                              fixed_shape<J...>,
+                                              fixed_shape<R...>>
         {
-            using type = std::conditional_t<in<Z, J...>::value,
-                                            typename fixed_xreducer_shape_type_impl<Z - 1, fixed_shape<I...>, fixed_shape<J...>,
-                                                                                    fixed_shape<R...>>::type,
-                                            typename fixed_xreducer_shape_type_impl<Z - 1, fixed_shape<I...>, fixed_shape<J...>,
-                                                                                    fixed_shape<detail::at<Z, I...>::value, R...>>::type>;
+            using type = std::conditional_t<
+                in<Z, J...>::value,
+                typename fixed_xreducer_shape_type_impl<Z - 1,
+                                                        fixed_shape<I...>,
+                                                        fixed_shape<J...>,
+                                                        fixed_shape<R...>>::type,
+                typename fixed_xreducer_shape_type_impl<
+                    Z - 1,
+                    fixed_shape<I...>,
+                    fixed_shape<J...>,
+                    fixed_shape<detail::at<Z, I...>::value, R...>>::type>;
         };
 
         template <std::size_t... I, std::size_t... J, std::size_t... R>
-        struct fixed_xreducer_shape_type_impl<0, fixed_shape<I...>, fixed_shape<J...>, fixed_shape<R...>>
+        struct fixed_xreducer_shape_type_impl<0,
+                                              fixed_shape<I...>,
+                                              fixed_shape<J...>,
+                                              fixed_shape<R...>>
         {
             using type = std::conditional_t<in<0, J...>::value,
                                             fixed_shape<R...>,
@@ -1032,16 +1145,16 @@ namespace xt
     template <std::size_t... I, class I2, std::size_t N2>
     struct xreducer_shape_type<fixed_shape<I...>, std::array<I2, N2>, std::false_type>
     {
-        using type = std::conditional_t<sizeof...(I) == N2,
-                                        fixed_shape<>,
-                                        std::array<I2, sizeof...(I) - N2>>;
+        using type = std::
+            conditional_t<sizeof...(I) == N2, fixed_shape<>, std::array<I2, sizeof...(I) - N2>>;
     };
 
     namespace detail
     {
-        template <class S1, class S2> struct ixconcat;
+        template <class S1, class S2>
+        struct ixconcat;
 
-        template<class T, T... I1, T... I2>
+        template <class T, T... I1, T... I2>
         struct ixconcat<std::integer_sequence<T, I1...>, std::integer_sequence<T, I2...>>
         {
             using type = std::integer_sequence<T, I1..., I2...>;
@@ -1050,7 +1163,9 @@ namespace xt
         template <class T, T X, std::size_t N>
         struct repeat_integer_sequence
         {
-            using type = typename ixconcat<std::integer_sequence<T, X>, typename repeat_integer_sequence<T, X, N - 1>::type>::type;
+            using type =
+                typename ixconcat<std::integer_sequence<T, X>,
+                                  typename repeat_integer_sequence<T, X, N - 1>::type>::type;
         };
 
         template <class T, T X>
@@ -1076,14 +1191,17 @@ namespace xt
     struct xreducer_shape_type<fixed_shape<I...>, std::array<I2, N2>, std::true_type>
     {
         template <std::size_t... X>
-        constexpr static auto get_type(std::index_sequence<X...>) {
+        constexpr static auto get_type(std::index_sequence<X...>)
+        {
             return fixed_shape<X...>{};
         }
 
         // if all axes reduced
-        using type = std::conditional_t<sizeof...(I) == N2,
-                                        decltype(get_type(typename detail::repeat_integer_sequence<std::size_t, std::size_t(1), N2>::type{})),
-                                        std::array<I2, sizeof...(I)>>;
+        using type = std::conditional_t<
+            sizeof...(I) == N2,
+            decltype(get_type(
+                typename detail::repeat_integer_sequence<std::size_t, std::size_t(1), N2>::type{})),
+            std::array<I2, sizeof...(I)>>;
     };
 
     // Note adding "A" to prevent compilation in case nothing else matches
@@ -1096,10 +1214,9 @@ namespace xt
     namespace detail
     {
         template <class S, class E, class X, class M>
-        inline void shape_and_mapping_computation(S& shape, E& e, const X& axes, M& mapping,
-                                                  std::false_type)
+        inline void shape_and_mapping_computation(
+            S& shape, E& e, const X& axes, M& mapping, std::false_type)
         {
-
             auto first = e.shape().begin();
             auto last = e.shape().end();
             auto exclude_it = axes.begin();
@@ -1126,14 +1243,14 @@ namespace xt
             }
 
             auto diff = std::distance(first, iter);
-            auto end  = std::distance(iter, last);
+            auto end = std::distance(iter, last);
             std::iota(map_first, map_first + end, diff);
             std::copy(iter, last, d_first);
         }
 
         template <class S, class E, class X, class M>
-        inline void shape_and_mapping_computation_keep_dim(S& shape, E& e, const X& axes, M& mapping,
-                                                           std::false_type)
+        inline void shape_and_mapping_computation_keep_dim(
+            S& shape, E& e, const X& axes, M& mapping, std::false_type)
         {
             for (std::size_t i = 0; i < e.dimension(); ++i)
             {
@@ -1186,8 +1303,10 @@ namespace xt
         , m_init(xt::get<1>(func))
         , m_merge(xt::get<2>(func))
         , m_axes(std::forward<AX>(axes))
-        , m_shape(xtl::make_sequence<inner_shape_type>(typename O::keep_dims() ? m_e.dimension() : m_e.dimension() - m_axes.size(), 0))
-        , m_dim_mapping(xtl::make_sequence<dim_mapping_type>(typename O::keep_dims() ? m_e.dimension() : m_e.dimension() - m_axes.size(), 0))
+        , m_shape(xtl::make_sequence<inner_shape_type>(
+              typename O::keep_dims() ? m_e.dimension() : m_e.dimension() - m_axes.size(), 0))
+        , m_dim_mapping(xtl::make_sequence<dim_mapping_type>(
+              typename O::keep_dims() ? m_e.dimension() : m_e.dimension() - m_axes.size(), 0))
         , m_options(std::forward<OX>(options))
     {
         if (!std::is_sorted(m_axes.cbegin(), m_axes.cend()))
@@ -1196,16 +1315,19 @@ namespace xt
         }
         if (m_axes.size() != 0 && m_axes[m_axes.size() - 1] > m_e.dimension() - 1)
         {
-            throw std::runtime_error("Axis " + std::to_string(m_axes[m_axes.size() - 1]) + " out of bounds for reduction.");
+            throw std::runtime_error("Axis " + std::to_string(m_axes[m_axes.size() - 1])
+                                     + " out of bounds for reduction.");
         }
 
         if (!typename O::keep_dims())
         {
-            detail::shape_and_mapping_computation(m_shape, m_e, m_axes, m_dim_mapping, detail::is_fixed<shape_type>{});
+            detail::shape_and_mapping_computation(
+                m_shape, m_e, m_axes, m_dim_mapping, detail::is_fixed<shape_type>{});
         }
         else
         {
-            detail::shape_and_mapping_computation_keep_dim(m_shape, m_e, m_axes, m_dim_mapping, detail::is_fixed<shape_type>{});
+            detail::shape_and_mapping_computation_keep_dim(
+                m_shape, m_e, m_axes, m_dim_mapping, detail::is_fixed<shape_type>{});
         }
     }
     //@}
@@ -1248,7 +1370,8 @@ namespace xt
     {
         XTENSOR_TRY(check_index(shape(), args...));
         XTENSOR_CHECK_DIMENSION(shape(), args...);
-        std::array<std::size_t, sizeof...(Args)> arg_array = {{static_cast<std::size_t>(args)...}};
+        std::array<std::size_t, sizeof...(Args)> arg_array
+            = { { static_cast<std::size_t>(args)... } };
         return element(arg_array.cbegin(), arg_array.cend());
     }
 
@@ -1275,7 +1398,8 @@ namespace xt
     template <class... Args>
     inline auto xreducer<F, CT, X, O>::unchecked(Args... args) const -> const_reference
     {
-        std::array<std::size_t, sizeof...(Args)> arg_array = { { static_cast<std::size_t>(args)... } };
+        std::array<std::size_t, sizeof...(Args)> arg_array
+            = { { static_cast<std::size_t>(args)... } };
         return element(arg_array.cbegin(), arg_array.cend());
     }
 
@@ -1339,10 +1463,10 @@ namespace xt
     }
 
     /**
-    * Checks whether the xreducer can be linearly assigned to an expression
-    * with the specified strides.
-    * @return a boolean indicating whether a linear assign is possible
-    */
+     * Checks whether the xreducer can be linearly assigned to an expression
+     * with the specified strides.
+     * @return a boolean indicating whether a linear assign is possible
+     */
     template <class F, class CT, class X, class O>
     template <class S>
     inline bool xreducer<F, CT, X, O>::has_linear_assign(const S& /*strides*/) const noexcept
@@ -1361,7 +1485,8 @@ namespace xt
 
     template <class F, class CT, class X, class O>
     template <class S>
-    inline auto xreducer<F, CT, X, O>::stepper_end(const S& shape, layout_type l) const noexcept -> const_stepper
+    inline auto xreducer<F, CT, X, O>::stepper_end(const S& shape, layout_type l) const noexcept
+        -> const_stepper
     {
         size_type offset = shape.size() - this->dimension();
         return const_stepper(*this, offset, true, l);
@@ -1371,14 +1496,21 @@ namespace xt
     template <class E>
     inline auto xreducer<F, CT, X, O>::build_reducer(E&& e) const -> rebind_t<E>
     {
-        return rebind_t<E>(std::make_tuple(m_reduce, m_init, m_merge), std::forward<E>(e), axes_type(m_axes), m_options);
+        return rebind_t<E>(std::make_tuple(m_reduce, m_init, m_merge),
+                           std::forward<E>(e),
+                           axes_type(m_axes),
+                           m_options);
     }
 
     template <class F, class CT, class X, class O>
     template <class E, class Func, class Opts>
-    inline auto xreducer<F, CT, X, O>::build_reducer(E&& e, Func&& func, Opts&& opts) const -> rebind_t<E, Func, Opts>
+    inline auto xreducer<F, CT, X, O>::build_reducer(E&& e, Func&& func, Opts&& opts) const
+        -> rebind_t<E, Func, Opts>
     {
-        return rebind_t<E, Func, Opts>(std::forward<Func>(func), std::forward<E>(e), axes_type(m_axes), std::forward<Opts>(opts));
+        return rebind_t<E, Func, Opts>(std::forward<Func>(func),
+                                       std::forward<E>(e),
+                                       axes_type(m_axes),
+                                       std::forward<Opts>(opts));
     }
 
     /***********************************
@@ -1386,9 +1518,13 @@ namespace xt
      ***********************************/
 
     template <class F, class CT, class X, class O>
-    inline xreducer_stepper<F, CT, X, O>::xreducer_stepper(const xreducer_type& red, size_type offset, bool end, layout_type l)
-        : m_reducer(&red), m_offset(offset),
-          m_stepper(get_substepper_begin())
+    inline xreducer_stepper<F, CT, X, O>::xreducer_stepper(const xreducer_type& red,
+                                                           size_type offset,
+                                                           bool end,
+                                                           layout_type l)
+        : m_reducer(&red)
+        , m_offset(offset)
+        , m_stepper(get_substepper_begin())
     {
         if (end)
         {
@@ -1446,7 +1582,9 @@ namespace xt
         {
             // Because the reducer uses `reset` to reset the non-reducing axes,
             // we need to prevent that here for the KD case where.
-            if (typename O::keep_dims() && std::binary_search(m_reducer->m_axes.begin(), m_reducer->m_axes.end(), dim - m_offset))
+            if (typename O::keep_dims()
+                && std::binary_search(
+                       m_reducer->m_axes.begin(), m_reducer->m_axes.end(), dim - m_offset))
             {
                 // If keep dim activated, and dim is in the axes, do nothing!
                 return;
@@ -1461,7 +1599,9 @@ namespace xt
         if (dim >= m_offset)
         {
             // Note that for *not* KD this is not going to do anything
-            if (typename O::keep_dims() && std::binary_search(m_reducer->m_axes.begin(), m_reducer->m_axes.end(), dim - m_offset))
+            if (typename O::keep_dims()
+                && std::binary_search(
+                       m_reducer->m_axes.begin(), m_reducer->m_axes.end(), dim - m_offset))
             {
                 // If keep dim activated, and dim is in the axes, do nothing!
                 return;
@@ -1487,9 +1627,10 @@ namespace xt
     {
         if (m_reducer->m_e.shape().empty() || m_reducer->m_axes.size() == 0)
         {
-            reference res =
-                m_reducer->m_reduce(O::has_initial_value ? m_reducer->m_options.initial_value : static_cast<reference>(m_reducer->m_init()),
-                                    *m_stepper);
+            reference res = m_reducer->m_reduce(O::has_initial_value
+                                                    ? m_reducer->m_options.initial_value
+                                                    : static_cast<reference>(m_reducer->m_init()),
+                                                *m_stepper);
             return res;
         }
         else
@@ -1504,7 +1645,8 @@ namespace xt
     }
 
     template <class F, class CT, class X, class O>
-    inline auto xreducer_stepper<F, CT, X, O>::aggregate_impl(size_type dim, std::false_type) const -> reference
+    inline auto xreducer_stepper<F, CT, X, O>::aggregate_impl(size_type dim, std::false_type) const
+        -> reference
     {
         reference res;
         size_type index = axis(dim);
@@ -1532,7 +1674,8 @@ namespace xt
     }
 
     template <class F, class CT, class X, class O>
-    inline auto xreducer_stepper<F, CT, X, O>::aggregate_impl(size_type dim, std::true_type) const -> reference
+    inline auto xreducer_stepper<F, CT, X, O>::aggregate_impl(size_type dim, std::true_type) const
+        -> reference
     {
         reference res(0);
         auto ax_it = std::find(m_reducer->m_axes.begin(), m_reducer->m_axes.end(), dim);
@@ -1562,7 +1705,7 @@ namespace xt
         }
         else
         {
-            if  (dim < m_reducer->m_e.dimension())
+            if (dim < m_reducer->m_e.dimension())
             {
                 res = aggregate_impl(dim + 1, typename O::keep_dims());
             }

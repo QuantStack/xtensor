@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_COMPLEX_HPP
 #define XTENSOR_COMPLEX_HPP
@@ -50,7 +50,8 @@ namespace xt
             static inline auto imag(E&& e) noexcept
             {
                 using real_type = typename std::decay_t<E>::value_type::value_type;
-                return xoffset_view<xclosure_t<E>, real_type, sizeof(real_type)>(std::forward<E>(e));
+                return xoffset_view<xclosure_t<E>, real_type, sizeof(real_type)>(
+                    std::forward<E>(e));
             }
         };
 
@@ -76,13 +77,15 @@ namespace xt
             template <class E>
             static inline decltype(auto) real(E&& e) noexcept
             {
-                return detail::complex_helper<xtl::is_complex<typename std::decay_t<E>::value_type>::value>::real(std::forward<E>(e));
+                return detail::complex_helper<xtl::is_complex<
+                    typename std::decay_t<E>::value_type>::value>::real(std::forward<E>(e));
             }
 
             template <class E>
             static inline decltype(auto) imag(E&& e) noexcept
             {
-                return detail::complex_helper<xtl::is_complex<typename std::decay_t<E>::value_type>::value>::imag(std::forward<E>(e));
+                return detail::complex_helper<xtl::is_complex<
+                    typename std::decay_t<E>::value_type>::value>::imag(std::forward<E>(e));
             }
         };
 
@@ -114,7 +117,8 @@ namespace xt
     template <class E>
     inline decltype(auto) real(E&& e) noexcept
     {
-        return detail::complex_expression_helper<is_xexpression<std::decay_t<E>>::value>::real(std::forward<E>(e));
+        return detail::complex_expression_helper<is_xexpression<std::decay_t<E>>::value>::real(
+            std::forward<E>(e));
     }
 
     /**
@@ -128,25 +132,26 @@ namespace xt
     template <class E>
     inline decltype(auto) imag(E&& e) noexcept
     {
-        return detail::complex_expression_helper<is_xexpression<std::decay_t<E>>::value>::imag(std::forward<E>(e));
+        return detail::complex_expression_helper<is_xexpression<std::decay_t<E>>::value>::imag(
+            std::forward<E>(e));
     }
 
-#define UNARY_COMPLEX_FUNCTOR(NS, NAME)                             \
-    struct NAME##_fun                                               \
-    {                                                               \
-        template <class T>                                          \
-        constexpr auto operator()(const T& t) const                 \
-        {                                                           \
-            using NS::NAME;                                         \
-            return NAME(t);                                         \
-        }                                                           \
-                                                                    \
-        template <class B>                                          \
-        constexpr auto simd_apply(const B& t) const                 \
-        {                                                           \
-            using NS::NAME;                                         \
-            return NAME(t);                                         \
-        }                                                           \
+#define UNARY_COMPLEX_FUNCTOR(NS, NAME)                                                            \
+    struct NAME##_fun                                                                              \
+    {                                                                                              \
+        template <class T>                                                                         \
+        constexpr auto operator()(const T& t) const                                                \
+        {                                                                                          \
+            using NS::NAME;                                                                        \
+            return NAME(t);                                                                        \
+        }                                                                                          \
+                                                                                                   \
+        template <class B>                                                                         \
+        constexpr auto simd_apply(const B& t) const                                                \
+        {                                                                                          \
+            using NS::NAME;                                                                        \
+            return NAME(t);                                                                        \
+        }                                                                                          \
     }
 
     namespace math

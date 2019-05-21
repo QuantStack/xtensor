@@ -1,11 +1,11 @@
-/***************************************************************************
-* Copyright (c) 2017, Johan Mabille, Sylvain Corlay, Wolf Vollprecht and   *
-* Martin Renou                                                             *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2017, Johan Mabille, Sylvain Corlay, Wolf Vollprecht and   *
+ * Martin Renou                                                             *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_XMASKED_VIEW_HPP
 #define XTENSOR_XMASKED_VIEW_HPP
@@ -37,7 +37,7 @@ namespace xt
 
     template <class CTD, class CTM>
     struct xcontainer_inner_types<xmasked_view<CTD, CTM>>
-    {   
+    {
         using data_type = std::decay_t<CTD>;
         using mask_type = std::decay_t<CTM>;
         using base_value_type = typename data_type::value_type;
@@ -46,7 +46,8 @@ namespace xt
         using mask_reference = inner_reference_t<CTM>;
         using value_type = xtl::xmasked_value<base_value_type, flag_type>;
         using reference = xtl::xmasked_value<val_reference, mask_reference>;
-        using const_reference = xtl::xmasked_value<typename data_type::const_reference, typename mask_type::const_reference>;
+        using const_reference = xtl::xmasked_value<typename data_type::const_reference,
+                                                   typename mask_type::const_reference>;
         using size_type = typename data_type::size_type;
         using temporary_type = xarray<xtl::xmasked_value<base_value_type, flag_type>>;
     };
@@ -76,9 +77,10 @@ namespace xt
      * @tparam CTM The type of expression holding the mask.
      */
     template <class CTD, class CTM>
-    class xmasked_view : public xview_semantic<xmasked_view<CTD, CTM>>,
-                         private xaccessible<xmasked_view<CTD, CTM>>,
-                         private xiterable<xmasked_view<CTD, CTM>>
+    class xmasked_view
+        : public xview_semantic<xmasked_view<CTD, CTM>>
+        , private xaccessible<xmasked_view<CTD, CTM>>
+        , private xiterable<xmasked_view<CTD, CTM>>
     {
     public:
 
@@ -93,7 +95,8 @@ namespace xt
         using value_expression = CTD;
         using mask_expression = CTM;
 
-        static constexpr bool is_data_const = std::is_const<std::remove_reference_t<value_expression>>::value;
+        static constexpr bool is_data_const
+            = std::is_const<std::remove_reference_t<value_expression>>::value;
 
         using base_value_type = typename inner_types::base_value_type;
         using base_reference = typename data_type::reference;
@@ -139,16 +142,20 @@ namespace xt
         template <layout_type L>
         using reverse_layout_iterator = typename iterable_base::template reverse_layout_iterator<L>;
         template <layout_type L>
-        using const_reverse_layout_iterator = typename iterable_base::template const_reverse_layout_iterator<L>;
+        using const_reverse_layout_iterator =
+            typename iterable_base::template const_reverse_layout_iterator<L>;
 
         template <class S, layout_type L>
         using broadcast_iterator = typename iterable_base::template broadcast_iterator<S, L>;
         template <class S, layout_type L>
-        using const_broadcast_iterator = typename iterable_base::template const_broadcast_iterator<S, L>;
+        using const_broadcast_iterator =
+            typename iterable_base::template const_broadcast_iterator<S, L>;
         template <class S, layout_type L>
-        using reverse_broadcast_iterator = typename iterable_base::template reverse_broadcast_iterator<S, L>;
+        using reverse_broadcast_iterator =
+            typename iterable_base::template reverse_broadcast_iterator<S, L>;
         template <class S, layout_type L>
-        using const_reverse_broadcast_iterator = typename iterable_base::template const_reverse_broadcast_iterator<S, L>;
+        using const_reverse_broadcast_iterator =
+            typename iterable_base::template const_reverse_broadcast_iterator<S, L>;
 
         using iterator = typename iterable_base::iterator;
         using const_iterator = typename iterable_base::const_iterator;
@@ -184,8 +191,8 @@ namespace xt
 
         using accessible_base::at;
         using accessible_base::operator[];
-        using accessible_base::periodic;
         using accessible_base::in_bounds;
+        using accessible_base::periodic;
 
         template <class It>
         reference element(It first, It last);
@@ -200,13 +207,13 @@ namespace xt
         const mask_type& visible() const noexcept;
 
         using iterable_base::begin;
-        using iterable_base::end;
         using iterable_base::cbegin;
         using iterable_base::cend;
-        using iterable_base::rbegin;
-        using iterable_base::rend;
         using iterable_base::crbegin;
         using iterable_base::crend;
+        using iterable_base::end;
+        using iterable_base::rbegin;
+        using iterable_base::rend;
 
         template <class S>
         stepper stepper_begin(const S& shape) noexcept;
@@ -256,12 +263,10 @@ namespace xt
         using difference_type = typename masked_view_type::difference_type;
         using data_type = typename masked_view_type::data_type;
         using mask_type = typename masked_view_type::mask_type;
-        using value_stepper = std::conditional_t<is_const,
-                                                 typename data_type::const_stepper,
-                                                 typename data_type::stepper>;
-        using mask_stepper = std::conditional_t<is_const,
-                                                typename mask_type::const_stepper,
-                                                typename mask_type::stepper>;
+        using value_stepper = std::
+            conditional_t<is_const, typename data_type::const_stepper, typename data_type::stepper>;
+        using mask_stepper = std::
+            conditional_t<is_const, typename mask_type::const_stepper, typename mask_type::stepper>;
 
         xmasked_view_stepper(value_stepper vs, mask_stepper fs) noexcept;
 
@@ -302,8 +307,8 @@ namespace xt
     template <class CTD, class CTM>
     template <class D, class M>
     inline xmasked_view<CTD, CTM>::xmasked_view(D&& data, M&& mask)
-        : m_data(std::forward<D>(data)),
-          m_mask(std::forward<M>(mask))
+        : m_data(std::forward<D>(data))
+        , m_mask(std::forward<M>(mask))
     {
     }
 
@@ -342,7 +347,8 @@ namespace xt
      * Returns the backstrides of the xmasked_view.
      */
     template <class CTD, class CTM>
-    inline auto xmasked_view<CTD, CTM>::backstrides() const noexcept -> const inner_backstrides_type&
+    inline auto xmasked_view<CTD, CTM>::backstrides() const noexcept
+        -> const inner_backstrides_type&
     {
         return m_data.backstrides();
     }
@@ -525,21 +531,24 @@ namespace xt
 
     template <class CTD, class CTM>
     template <class S>
-    inline auto xmasked_view<CTD, CTM>::stepper_end(const S& shape, layout_type l) noexcept -> stepper
+    inline auto xmasked_view<CTD, CTM>::stepper_end(const S& shape, layout_type l) noexcept
+        -> stepper
     {
         return stepper(value().stepper_end(shape, l), visible().stepper_end(shape, l));
     }
 
     template <class CTD, class CTM>
     template <class S>
-    inline auto xmasked_view<CTD, CTM>::stepper_begin(const S& shape) const noexcept -> const_stepper
+    inline auto xmasked_view<CTD, CTM>::stepper_begin(const S& shape) const noexcept
+        -> const_stepper
     {
         return const_stepper(value().stepper_begin(shape), visible().stepper_begin(shape));
     }
 
     template <class CTD, class CTM>
     template <class S>
-    inline auto xmasked_view<CTD, CTM>::stepper_end(const S& shape, layout_type l) const noexcept -> const_stepper
+    inline auto xmasked_view<CTD, CTM>::stepper_end(const S& shape, layout_type l) const noexcept
+        -> const_stepper
     {
         return const_stepper(value().stepper_end(shape, l), visible().stepper_end(shape, l));
     }
@@ -576,8 +585,10 @@ namespace xt
      ***************************************/
 
     template <class D, bool C>
-    inline xmasked_view_stepper<D, C>::xmasked_view_stepper(value_stepper vs, mask_stepper ms) noexcept
-        : m_vs(vs), m_ms(ms)
+    inline xmasked_view_stepper<D, C>::xmasked_view_stepper(value_stepper vs,
+                                                            mask_stepper ms) noexcept
+        : m_vs(vs)
+        , m_ms(ms)
     {
     }
 

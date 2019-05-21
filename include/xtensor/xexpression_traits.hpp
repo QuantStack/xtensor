@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_EXPRESSION_TRAITS_HPP
 #define XTENSOR_EXPRESSION_TRAITS_HPP
@@ -50,7 +50,7 @@ namespace xt
 
     template <class... C>
     using common_value_type_t = typename common_value_type<C...>::type;
-    
+
     /********************
      * common_size_type *
      ********************/
@@ -88,7 +88,7 @@ namespace xt
 
     template <class... Args>
     using common_difference_type_t = typename common_difference_type<Args...>::type;
-    
+
     /******************
      * temporary_type *
      ******************/
@@ -103,15 +103,19 @@ namespace xt
         };
 
 #if defined(__GNUC__) && (__GNUC__ > 6)
-#if __cplusplus == 201703L 
-        template <template <class, std::size_t, class, bool> class S, class X, std::size_t N, class A, bool Init>
+#if __cplusplus == 201703L
+        template <template <class, std::size_t, class, bool> class S,
+                  class X,
+                  std::size_t N,
+                  class A,
+                  bool Init>
         struct xtype_for_shape<S<X, N, A, Init>>
         {
             template <class T, layout_type L>
             using type = xarray<T, L>;
         };
-#endif // __cplusplus == 201703L
-#endif // __GNUC__ && (__GNUC__ > 6)
+#endif  // __cplusplus == 201703L
+#endif  // __GNUC__ && (__GNUC__ > 6)
 
         template <template <class, std::size_t> class S, class X, std::size_t N>
         struct xtype_for_shape<S<X, N>>
@@ -127,7 +131,7 @@ namespace xt
             using type = xtensor_fixed<T, xshape<X...>, L>;
         };
     }
-    
+
     template <class T, class S, layout_type L>
     struct temporary_type
     {
@@ -146,7 +150,8 @@ namespace xt
         template <class... C>
         struct common_tensor_type_impl
         {
-            static constexpr layout_type static_layout = compute_layout(std::decay_t<C>::static_layout...);
+            static constexpr layout_type static_layout
+                = compute_layout(std::decay_t<C>::static_layout...);
             using type = temporary_type_t<common_value_type_t<C...>,
                                           promote_shape_t<typename C::shape_type...>,
                                           static_layout>;

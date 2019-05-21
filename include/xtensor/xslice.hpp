@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_SLICE_HPP
 #define XTENSOR_SLICE_HPP
@@ -20,13 +20,13 @@
 #include "xutils.hpp"
 
 #ifndef XTENSOR_CONSTEXPR
-    #if(defined(_MSC_VER) || __GNUC__ < 8)
-        #define XTENSOR_CONSTEXPR inline
-        #define XTENSOR_GLOBAL_CONSTEXPR static const
-    #else
-        #define XTENSOR_CONSTEXPR constexpr
-        #define XTENSOR_GLOBAL_CONSTEXPR constexpr
-    #endif
+#if (defined(_MSC_VER) || __GNUC__ < 8)
+#define XTENSOR_CONSTEXPR inline
+#define XTENSOR_GLOBAL_CONSTEXPR static const
+#else
+#define XTENSOR_CONSTEXPR constexpr
+#define XTENSOR_GLOBAL_CONSTEXPR constexpr
+#endif
 #endif
 
 namespace xt
@@ -71,16 +71,25 @@ namespace xt
      * slice tags *
      **************/
 
-#define DEFINE_TAG_CONVERSION(NAME)                 \
-    template <class T>                              \
-    XTENSOR_CONSTEXPR NAME convert() const noexcept \
-    {                                               \
-        return NAME();                              \
+#define DEFINE_TAG_CONVERSION(NAME)                                                                \
+    template <class T>                                                                             \
+    XTENSOR_CONSTEXPR NAME convert() const noexcept                                                \
+    {                                                                                              \
+        return NAME();                                                                             \
     }
 
-    struct xall_tag { DEFINE_TAG_CONVERSION(xall_tag) };
-    struct xnewaxis_tag { DEFINE_TAG_CONVERSION(xnewaxis_tag) };
-    struct xellipsis_tag { DEFINE_TAG_CONVERSION(xellipsis_tag) };
+    struct xall_tag
+    {
+        DEFINE_TAG_CONVERSION(xall_tag)
+    };
+    struct xnewaxis_tag
+    {
+        DEFINE_TAG_CONVERSION(xnewaxis_tag)
+    };
+    struct xellipsis_tag
+    {
+        DEFINE_TAG_CONVERSION(xellipsis_tag)
+    };
 
 #undef DEFINE_TAG_CONVERSION
 
@@ -309,7 +318,8 @@ namespace xt
         };
 
         template <class T>
-        using disable_xkeep_slice_t = std::enable_if_t<!is_xkeep_slice<std::decay_t<T>>::value, void>;
+        using disable_xkeep_slice_t
+            = std::enable_if_t<!is_xkeep_slice<std::decay_t<T>>::value, void>;
 
         template <class T>
         using enable_xkeep_slice_t = std::enable_if_t<is_xkeep_slice<std::decay_t<T>>::value, void>;
@@ -366,8 +376,9 @@ namespace xt
     namespace detail
     {
         template <class T>
-        using disable_integral_keep = std::enable_if_t<!std::is_integral<std::decay_t<T>>::value,
-            xkeep_slice<typename std::decay_t<T>::value_type>>;
+        using disable_integral_keep
+            = std::enable_if_t<!std::is_integral<std::decay_t<T>>::value,
+                               xkeep_slice<typename std::decay_t<T>::value_type>>;
 
         template <class T, class R>
         using enable_integral_keep = std::enable_if_t<std::is_integral<T>::value, xkeep_slice<R>>;
@@ -431,7 +442,8 @@ namespace xt
         };
 
         template <class T>
-        using disable_xdrop_slice_t = std::enable_if_t<!is_xdrop_slice<std::decay_t<T>>::value, void>;
+        using disable_xdrop_slice_t
+            = std::enable_if_t<!is_xdrop_slice<std::decay_t<T>>::value, void>;
 
         template <class T>
         using enable_xdrop_slice_t = std::enable_if_t<is_xdrop_slice<std::decay_t<T>>::value, void>;
@@ -490,8 +502,9 @@ namespace xt
     namespace detail
     {
         template <class T>
-        using disable_integral_drop = std::enable_if_t<!std::is_integral<std::decay_t<T>>::value,
-                                     xdrop_slice<typename std::decay_t<T>::value_type>>;
+        using disable_integral_drop
+            = std::enable_if_t<!std::is_integral<std::decay_t<T>>::value,
+                               xdrop_slice<typename std::decay_t<T>::value_type>>;
 
         template <class T, class R>
         using enable_integral_drop = std::enable_if_t<std::is_integral<T>::value, xdrop_slice<R>>;
@@ -542,14 +555,15 @@ namespace xt
     struct xrange_adaptor
     {
         xrange_adaptor(A start_val, B stop_val, C step)
-            : m_start(start_val), m_stop(stop_val), m_step(step)
+            : m_start(start_val)
+            , m_stop(stop_val)
+            , m_step(step)
         {
         }
 
         template <class MI = A, class MA = B, class STEP = C>
-        inline std::enable_if_t<std::is_integral<MI>::value &&
-                                std::is_integral<MA>::value &&
-                                std::is_integral<STEP>::value,
+        inline std::enable_if_t<std::is_integral<MI>::value && std::is_integral<MA>::value
+                                    && std::is_integral<STEP>::value,
                                 xstepped_range<std::ptrdiff_t>>
         get(std::size_t size) const
         {
@@ -557,19 +571,18 @@ namespace xt
         }
 
         template <class MI = A, class MA = B, class STEP = C>
-        inline std::enable_if_t<!std::is_integral<MI>::value &&
-                                std::is_integral<MA>::value &&
-                                std::is_integral<STEP>::value,
+        inline std::enable_if_t<!std::is_integral<MI>::value && std::is_integral<MA>::value
+                                    && std::is_integral<STEP>::value,
                                 xstepped_range<std::ptrdiff_t>>
         get(std::size_t size) const
         {
-            return get_stepped_range(m_step > 0 ? 0 : static_cast<std::ptrdiff_t>(size) - 1, m_stop, m_step, size);
+            return get_stepped_range(
+                m_step > 0 ? 0 : static_cast<std::ptrdiff_t>(size) - 1, m_stop, m_step, size);
         }
 
         template <class MI = A, class MA = B, class STEP = C>
-        inline std::enable_if_t<std::is_integral<MI>::value &&
-                                !std::is_integral<MA>::value &&
-                                std::is_integral<STEP>::value,
+        inline std::enable_if_t<std::is_integral<MI>::value && !std::is_integral<MA>::value
+                                    && std::is_integral<STEP>::value,
                                 xstepped_range<std::ptrdiff_t>>
         get(std::size_t size) const
         {
@@ -578,9 +591,8 @@ namespace xt
         }
 
         template <class MI = A, class MA = B, class STEP = C>
-        inline std::enable_if_t<std::is_integral<MI>::value &&
-                                std::is_integral<MA>::value &&
-                                !std::is_integral<STEP>::value,
+        inline std::enable_if_t<std::is_integral<MI>::value && std::is_integral<MA>::value
+                                    && !std::is_integral<STEP>::value,
                                 xrange<std::ptrdiff_t>>
         get(std::size_t size) const
         {
@@ -588,9 +600,8 @@ namespace xt
         }
 
         template <class MI = A, class MA = B, class STEP = C>
-        inline std::enable_if_t<!std::is_integral<MI>::value &&
-                                !std::is_integral<MA>::value &&
-                                std::is_integral<STEP>::value,
+        inline std::enable_if_t<!std::is_integral<MI>::value && !std::is_integral<MA>::value
+                                    && std::is_integral<STEP>::value,
                                 xstepped_range<std::ptrdiff_t>>
         get(std::size_t size) const
         {
@@ -600,19 +611,18 @@ namespace xt
         }
 
         template <class MI = A, class MA = B, class STEP = C>
-        inline std::enable_if_t<std::is_integral<MI>::value &&
-                                !std::is_integral<MA>::value &&
-                                !std::is_integral<STEP>::value,
+        inline std::enable_if_t<std::is_integral<MI>::value && !std::is_integral<MA>::value
+                                    && !std::is_integral<STEP>::value,
                                 xrange<std::ptrdiff_t>>
         get(std::size_t size) const
         {
-            return xrange<std::ptrdiff_t>(normalize(m_start, size), static_cast<std::ptrdiff_t>(size));
+            return xrange<std::ptrdiff_t>(normalize(m_start, size),
+                                          static_cast<std::ptrdiff_t>(size));
         }
 
         template <class MI = A, class MA = B, class STEP = C>
-        inline std::enable_if_t<!std::is_integral<MI>::value &&
-                                std::is_integral<MA>::value &&
-                                !std::is_integral<STEP>::value,
+        inline std::enable_if_t<!std::is_integral<MI>::value && std::is_integral<MA>::value
+                                    && !std::is_integral<STEP>::value,
                                 xrange<std::ptrdiff_t>>
         get(std::size_t size) const
         {
@@ -620,18 +630,26 @@ namespace xt
         }
 
         template <class MI = A, class MA = B, class STEP = C>
-        inline std::enable_if_t<!std::is_integral<MI>::value &&
-                                !std::is_integral<MA>::value &&
-                                !std::is_integral<STEP>::value,
+        inline std::enable_if_t<!std::is_integral<MI>::value && !std::is_integral<MA>::value
+                                    && !std::is_integral<STEP>::value,
                                 xall<std::ptrdiff_t>>
         get(std::size_t size) const
         {
             return xall<std::ptrdiff_t>(static_cast<std::ptrdiff_t>(size));
         }
 
-        A start() const { return m_start; }
-        B stop()  const { return m_stop;  }
-        C step()  const { return m_step;  }
+        A start() const
+        {
+            return m_start;
+        }
+        B stop() const
+        {
+            return m_stop;
+        }
+        C step() const
+        {
+            return m_step;
+        }
 
     private:
 
@@ -642,7 +660,10 @@ namespace xt
             return (std::max)(std::ptrdiff_t(0), (std::min)(size, val));
         }
 
-        static auto get_stepped_range(std::ptrdiff_t start, std::ptrdiff_t stop, std::ptrdiff_t step, std::size_t ssize)
+        static auto get_stepped_range(std::ptrdiff_t start,
+                                      std::ptrdiff_t stop,
+                                      std::ptrdiff_t step,
+                                      std::size_t ssize)
         {
             std::ptrdiff_t size = static_cast<std::ptrdiff_t>(ssize);
             start = (start >= 0) ? start : start + size;
@@ -651,12 +672,12 @@ namespace xt
             if (step > 0)
             {
                 start = (std::max)(std::ptrdiff_t(0), (std::min)(size, start));
-                stop  = (std::max)(std::ptrdiff_t(0), (std::min)(size, stop));
+                stop = (std::max)(std::ptrdiff_t(0), (std::min)(size, stop));
             }
             else
             {
                 start = (std::max)(std::ptrdiff_t(-1), (std::min)(size - 1, start));
-                stop  = (std::max)(std::ptrdiff_t(-1), (std::min)(size - 1, stop));
+                stop = (std::max)(std::ptrdiff_t(-1), (std::min)(size - 1, stop));
             }
 
             return xstepped_range<std::ptrdiff_t>(start, stop, step);
@@ -674,12 +695,14 @@ namespace xt
     namespace placeholders
     {
         // xtensor universal placeholder
-        struct xtuph {};
+        struct xtuph
+        {
+        };
 
         template <class... Args>
         struct rangemaker
         {
-            std::ptrdiff_t rng[3]; // = { 0, 0, 0 };
+            std::ptrdiff_t rng[3];  // = { 0, 0, 0 };
         };
 
         XTENSOR_CONSTEXPR xtuph get_tuph_or_val(std::ptrdiff_t /*val*/, std::true_type)
@@ -697,14 +720,13 @@ namespace xt
         {
             XTENSOR_CONSTEXPR operator xrange_adaptor<A, B, C>()
             {
-                return xrange_adaptor<A, B, C>({
-                    get_tuph_or_val(rng[0], std::is_same<A, xtuph>()),
-                    get_tuph_or_val(rng[1], std::is_same<B, xtuph>()),
-                    get_tuph_or_val(rng[2], std::is_same<C, xtuph>())
-                });
+                return xrange_adaptor<A, B, C>(
+                    { get_tuph_or_val(rng[0], std::is_same<A, xtuph>()),
+                      get_tuph_or_val(rng[1], std::is_same<B, xtuph>()),
+                      get_tuph_or_val(rng[2], std::is_same<C, xtuph>()) });
             }
 
-            std::ptrdiff_t rng[3];// = { 0, 0, 0 };
+            std::ptrdiff_t rng[3];  // = { 0, 0, 0 };
         };
 
         template <class A, class B>
@@ -712,11 +734,10 @@ namespace xt
         {
             XTENSOR_CONSTEXPR operator xrange_adaptor<A, B, xt::placeholders::xtuph>()
             {
-                return xrange_adaptor<A, B, xt::placeholders::xtuph>({
-                    get_tuph_or_val(rng[0], std::is_same<A, xtuph>()),
-                    get_tuph_or_val(rng[1], std::is_same<B, xtuph>()),
-                    xtuph()
-                });
+                return xrange_adaptor<A, B, xt::placeholders::xtuph>(
+                    { get_tuph_or_val(rng[0], std::is_same<A, xtuph>()),
+                      get_tuph_or_val(rng[1], std::is_same<B, xtuph>()),
+                      xtuph() });
             }
 
             std::ptrdiff_t rng[3];  // = { 0, 0, 0 };
@@ -731,9 +752,11 @@ namespace xt
         }
 
         template <class... OA>
-        XTENSOR_CONSTEXPR auto operator|(const rangemaker<OA...>& rng, const xt::placeholders::xtuph& /*t*/)
+        XTENSOR_CONSTEXPR auto operator|(const rangemaker<OA...>& rng,
+                                         const xt::placeholders::xtuph& /*t*/)
         {
-            auto nrng = rangemaker<OA..., xt::placeholders::xtuph>({ rng.rng[0], rng.rng[1], rng.rng[2] });
+            auto nrng = rangemaker<OA..., xt::placeholders::xtuph>(
+                { rng.rng[0], rng.rng[1], rng.rng[2] });
             return nrng;
         }
 
@@ -795,8 +818,11 @@ namespace xt
     template <class A, class B>
     inline auto range(A start_val, B stop_val)
     {
-        return xrange_adaptor<detail::cast_if_integer_t<A>, detail::cast_if_integer_t<B>, placeholders::xtuph>(
-            detail::cast_if_integer<A>{}(start_val), detail::cast_if_integer<B>{}(stop_val), placeholders::xtuph());
+        return xrange_adaptor<detail::cast_if_integer_t<A>,
+                              detail::cast_if_integer_t<B>,
+                              placeholders::xtuph>(detail::cast_if_integer<A>{}(start_val),
+                                                   detail::cast_if_integer<B>{}(stop_val),
+                                                   placeholders::xtuph());
     }
 
     /**
@@ -813,8 +839,11 @@ namespace xt
     template <class A, class B, class C>
     inline auto range(A start_val, B stop_val, C step)
     {
-        return xrange_adaptor<detail::cast_if_integer_t<A>, detail::cast_if_integer_t<B>, detail::cast_if_integer_t<C>>(
-            detail::cast_if_integer<A>{}(start_val), detail::cast_if_integer<B>{}(stop_val), detail::cast_if_integer<C>{}(step));
+        return xrange_adaptor<detail::cast_if_integer_t<A>,
+                              detail::cast_if_integer_t<B>,
+                              detail::cast_if_integer_t<C>>(detail::cast_if_integer<A>{}(start_val),
+                                                            detail::cast_if_integer<B>{}(stop_val),
+                                                            detail::cast_if_integer<C>{}(step));
     }
 
     /******************************************************
@@ -911,14 +940,12 @@ namespace xt
         };
 
         template <class T>
-        struct slice_implementation_getter<xkeep_slice<T>>
-            : keep_drop_getter
+        struct slice_implementation_getter<xkeep_slice<T>> : keep_drop_getter
         {
         };
 
         template <class T>
-        struct slice_implementation_getter<xdrop_slice<T>>
-            : keep_drop_getter
+        struct slice_implementation_getter<xdrop_slice<T>> : keep_drop_getter
         {
         };
 
@@ -992,7 +1019,8 @@ namespace xt
     }
 
     template <class E, class SL>
-    using get_slice_type = typename detail::get_slice_type_impl<E, std::remove_reference_t<SL>>::type;
+    using get_slice_type =
+        typename detail::get_slice_type_impl<E, std::remove_reference_t<SL>>::type;
 
     /*************************
      * xslice implementation *
@@ -1016,7 +1044,8 @@ namespace xt
 
     template <class T>
     inline xrange<T>::xrange(size_type start_val, size_type stop_val) noexcept
-        : m_start(start_val), m_size(stop_val > start_val ? stop_val - start_val: 0)
+        : m_start(start_val)
+        , m_size(stop_val > start_val ? stop_val - start_val : 0)
     {
     }
 
@@ -1090,8 +1119,12 @@ namespace xt
      ********************************/
 
     template <class T>
-    inline xstepped_range<T>::xstepped_range(size_type start_val, size_type stop_val, size_type step) noexcept
-        : m_start(start_val), m_size(size_type(0)), m_step(step)
+    inline xstepped_range<T>::xstepped_range(size_type start_val,
+                                             size_type stop_val,
+                                             size_type step) noexcept
+        : m_start(start_val)
+        , m_size(size_type(0))
+        , m_step(step)
     {
         size_type n = stop_val - start_val;
         m_size = n / step + (((n < 0) ^ (step > 0)) && (n % step));
@@ -1134,7 +1167,8 @@ namespace xt
     }
 
     template <class T>
-    inline auto xstepped_range<T>::step_size(std::size_t /*i*/, std::size_t n) const noexcept -> size_type
+    inline auto xstepped_range<T>::step_size(std::size_t /*i*/, std::size_t n) const noexcept
+        -> size_type
     {
         return m_step * static_cast<size_type>(n);
     }
@@ -1272,7 +1306,8 @@ namespace xt
     }
 
     template <class T>
-    inline auto xnewaxis<T>::step_size(std::size_t /*i*/, std::size_t /*n*/) const noexcept -> size_type
+    inline auto xnewaxis<T>::step_size(std::size_t /*i*/, std::size_t /*n*/) const noexcept
+        -> size_type
     {
         return 0;
     }
@@ -1323,8 +1358,9 @@ namespace xt
     inline xkeep_slice<T>::xkeep_slice(std::initializer_list<S> t)
         : m_raw_indices(t.size())
     {
-        std::transform(t.begin(), t.end(), m_raw_indices.begin(),
-            [](auto t) { return static_cast<size_type>(t); });
+        std::transform(t.begin(), t.end(), m_raw_indices.begin(), [](auto t) {
+            return static_cast<size_type>(t);
+        });
     }
 
     template <class T>
@@ -1336,9 +1372,13 @@ namespace xt
         us_type sz = static_cast<us_type>(size());
         ret.m_raw_indices.resize(sz);
         ret.m_indices.resize(sz);
-        std::transform(m_raw_indices.cbegin(), m_raw_indices.cend(), ret.m_raw_indices.begin(),
+        std::transform(m_raw_indices.cbegin(),
+                       m_raw_indices.cend(),
+                       ret.m_raw_indices.begin(),
                        [](const T& val) { return static_cast<S>(val); });
-        std::transform(m_indices.cbegin(), m_indices.cend(), ret.m_indices.begin(),
+        std::transform(m_indices.cbegin(),
+                       m_indices.cend(),
+                       ret.m_indices.begin(),
                        [](const T& val) { return static_cast<S>(val); });
         return ret;
     }
@@ -1357,7 +1397,9 @@ namespace xt
         std::size_t sz = m_indices.size();
         for (std::size_t i = 0; i < sz; ++i)
         {
-            m_indices[i] = m_raw_indices[i] < 0 ? static_cast<std::ptrdiff_t>(shape) + m_raw_indices[i] : m_raw_indices[i];
+            m_indices[i] = m_raw_indices[i] < 0
+                               ? static_cast<std::ptrdiff_t>(shape) + m_raw_indices[i]
+                               : m_raw_indices[i];
         }
     }
 
@@ -1396,7 +1438,8 @@ namespace xt
         }
         else
         {
-            throw std::runtime_error("Index i (" + std::to_string(i) + ") not in indices of islice.");
+            throw std::runtime_error("Index i (" + std::to_string(i)
+                                     + ") not in indices of islice.");
         }
     }
 
@@ -1440,8 +1483,9 @@ namespace xt
     inline xdrop_slice<T>::xdrop_slice(std::initializer_list<S> t)
         : m_raw_indices(t.size())
     {
-        std::transform(t.begin(), t.end(), m_raw_indices.begin(),
-            [](auto t) { return static_cast<size_type>(t); });
+        std::transform(t.begin(), t.end(), m_raw_indices.begin(), [](auto t) {
+            return static_cast<size_type>(t);
+        });
     }
 
     template <class T>
@@ -1451,12 +1495,21 @@ namespace xt
         xdrop_slice<S> ret;
         ret.m_raw_indices.resize(m_raw_indices.size());
         ret.m_indices.resize(m_indices.size());
-        std::transform(m_raw_indices.cbegin(), m_raw_indices.cend(), ret.m_raw_indices.begin(),
+        std::transform(m_raw_indices.cbegin(),
+                       m_raw_indices.cend(),
+                       ret.m_raw_indices.begin(),
                        [](const T& val) { return static_cast<S>(val); });
-        std::transform(m_indices.cbegin(), m_indices.cend(), ret.m_indices.begin(),
+        std::transform(m_indices.cbegin(),
+                       m_indices.cend(),
+                       ret.m_indices.begin(),
                        [](const T& val) { return static_cast<S>(val); });
-        std::transform(m_inc.cbegin(), m_inc.cend(), std::inserter(ret.m_inc, ret.m_inc.begin()),
-            [](const auto& val) { return std::make_pair(static_cast<S>(val.first), static_cast<S>(val.second)); });
+        std::transform(m_inc.cbegin(),
+                       m_inc.cend(),
+                       std::inserter(ret.m_inc, ret.m_inc.begin()),
+                       [](const auto& val) {
+                           return std::make_pair(static_cast<S>(val.first),
+                                                 static_cast<S>(val.second));
+                       });
         ret.m_size = static_cast<S>(m_size);
         return ret;
     }
@@ -1477,7 +1530,9 @@ namespace xt
         std::size_t sz = m_indices.size();
         for (std::size_t i = 0; i < sz; ++i)
         {
-            m_indices[i] = m_raw_indices[i] < 0 ? static_cast<std::ptrdiff_t>(shape) + m_raw_indices[i] : m_raw_indices[i];
+            m_indices[i] = m_raw_indices[i] < 0
+                               ? static_cast<std::ptrdiff_t>(shape) + m_raw_indices[i]
+                               : m_raw_indices[i];
         }
         size_type cum = size_type(0);
         size_type prev_cum = cum;
@@ -1520,7 +1575,8 @@ namespace xt
     {
         if (i + n >= static_cast<std::size_t>(m_size))
         {
-            return (*this)(static_cast<size_type>(m_size-1)) - (*this)(static_cast<size_type>(i)) + 1;
+            return (*this)(static_cast<size_type>(m_size - 1)) - (*this)(static_cast<size_type>(i))
+                   + 1;
         }
         else
         {

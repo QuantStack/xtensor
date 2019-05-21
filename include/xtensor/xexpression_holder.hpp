@@ -1,11 +1,11 @@
-/***************************************************************************
-* Copyright (c) 2017, Johan Mabille, Sylvain Corlay, Wolf Vollprecht and   *
-* Martin Renou                                                             *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2017, Johan Mabille, Sylvain Corlay, Wolf Vollprecht and   *
+ * Martin Renou                                                             *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_XEXPRESSION_HOLDER_HPP
 #define XTENSOR_XEXPRESSION_HOLDER_HPP
@@ -19,7 +19,6 @@
 
 namespace xt
 {
-
     namespace detail
     {
         class xexpression_holder_impl;
@@ -28,7 +27,7 @@ namespace xt
         class xexpression_wrapper;
     }
 
-    class xexpression_holder // Value semantic
+    class xexpression_holder  // Value semantic
     {
     public:
 
@@ -72,7 +71,7 @@ namespace xt
 
     namespace detail
     {
-        class xexpression_holder_impl // Entity semantic
+        class xexpression_holder_impl  // Entity semantic
         {
         public:
 
@@ -206,10 +205,12 @@ namespace xt
         if (j.is_string())
         {
             xt::xarray<std::string> empty_arr;
-            p_holder = new detail::xexpression_wrapper<xt::xarray<std::string>>(std::move(empty_arr));
+            p_holder
+                = new detail::xexpression_wrapper<xt::xarray<std::string>>(std::move(empty_arr));
         }
 
-        throw std::runtime_error("Received a JSON with a tensor that contains unsupported data type");
+        throw std::runtime_error(
+            "Received a JSON with a tensor that contains unsupported data type");
     }
 
     inline void xexpression_holder::check_holder() const
@@ -246,8 +247,8 @@ namespace xt
         template <class CTE>
         template <class E>
         inline xexpression_wrapper<CTE>::xexpression_wrapper(E&& expr)
-            : xexpression_holder_impl(),
-              m_expression(std::forward<E>(expr))
+            : xexpression_holder_impl()
+            , m_expression(std::forward<E>(expr))
         {
         }
 
@@ -271,8 +272,8 @@ namespace xt
 
         template <class CTE>
         inline xexpression_wrapper<CTE>::xexpression_wrapper(const xexpression_wrapper& wrapper)
-            : xexpression_holder_impl(),
-              m_expression(wrapper.m_expression)
+            : xexpression_holder_impl()
+            , m_expression(wrapper.m_expression)
         {
         }
     }

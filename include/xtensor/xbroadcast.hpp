@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_BROADCAST_HPP
 #define XTENSOR_BROADCAST_HPP
@@ -28,7 +28,6 @@
 
 namespace xt
 {
-
     /*************
      * broadcast *
      *************/
@@ -60,8 +59,7 @@ namespace xt
         };
 
         template <class CT, class X>
-        struct xbroadcast_base
-            : xbroadcast_base_impl<xexpression_tag_t<CT>, CT, X>
+        struct xbroadcast_base : xbroadcast_base_impl<xexpression_tag_t<CT>, CT, X>
         {
         };
 
@@ -136,10 +134,11 @@ namespace xt
      * @sa broadcast
      */
     template <class CT, class X>
-    class xbroadcast : public xexpression<xbroadcast<CT, X>>,
-                       public xconst_iterable<xbroadcast<CT, X>>,
-                       public xconst_accessible<xbroadcast<CT, X>>,
-                       public extension::xbroadcast_base_t<CT, X>
+    class xbroadcast
+        : public xexpression<xbroadcast<CT, X>>
+        , public xconst_iterable<xbroadcast<CT, X>>
+        , public xconst_accessible<xbroadcast<CT, X>>
+        , public extension::xbroadcast_base_t<CT, X>
     {
     public:
 
@@ -240,7 +239,8 @@ namespace xt
     {
         using broadcast_type = xbroadcast<const_xclosure_t<E>, std::vector<std::size_t>>;
         using shape_type = typename broadcast_type::shape_type;
-        return broadcast_type(std::forward<E>(e), xtl::forward_sequence<shape_type, decltype(s)>(s));
+        return broadcast_type(std::forward<E>(e),
+                              xtl::forward_sequence<shape_type, decltype(s)>(s));
     }
 #else
     template <class E, class I, std::size_t L>
@@ -248,7 +248,8 @@ namespace xt
     {
         using broadcast_type = xbroadcast<const_xclosure_t<E>, std::array<std::size_t, L>>;
         using shape_type = typename broadcast_type::shape_type;
-        return broadcast_type(std::forward<E>(e), xtl::forward_sequence<shape_type, decltype(s)>(s));
+        return broadcast_type(std::forward<E>(e),
+                              xtl::forward_sequence<shape_type, decltype(s)>(s));
     }
 #endif
 
@@ -274,7 +275,8 @@ namespace xt
     {
         if (s.size() < m_e.dimension())
         {
-            throw xt::broadcast_error("Broadcast shape has fewer elements than original expression.");
+            throw xt::broadcast_error(
+                "Broadcast shape has fewer elements than original expression.");
         }
         xt::resize_container(m_shape, s.size());
         std::copy(s.begin(), s.end(), m_shape.begin());
@@ -291,7 +293,8 @@ namespace xt
     template <class CT, class X>
     template <class CTA>
     inline xbroadcast<CT, X>::xbroadcast(CTA&& e, shape_type&& s)
-        : m_e(std::forward<CTA>(e)), m_shape(std::move(s))
+        : m_e(std::forward<CTA>(e))
+        , m_shape(std::move(s))
     {
         xt::broadcast_shape(m_e.shape(), m_shape);
     }
@@ -412,9 +415,9 @@ namespace xt
     template <class S>
     inline bool xbroadcast<CT, X>::has_linear_assign(const S& strides) const noexcept
     {
-        return this->dimension() == m_e.dimension() &&
-            std::equal(m_shape.cbegin(), m_shape.cend(), m_e.shape().cbegin()) &&
-            m_e.has_linear_assign(strides);
+        return this->dimension() == m_e.dimension()
+               && std::equal(m_shape.cbegin(), m_shape.cend(), m_e.shape().cbegin())
+               && m_e.has_linear_assign(strides);
     }
     //@}
 
@@ -428,7 +431,8 @@ namespace xt
 
     template <class CT, class X>
     template <class S>
-    inline auto xbroadcast<CT, X>::stepper_end(const S& shape, layout_type l) const noexcept -> const_stepper
+    inline auto xbroadcast<CT, X>::stepper_end(const S& shape, layout_type l) const noexcept
+        -> const_stepper
     {
         // Could check if (broadcastable(shape, m_shape)
         return m_e.stepper_end(shape, l);

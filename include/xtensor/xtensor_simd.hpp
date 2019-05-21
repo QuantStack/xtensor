@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_SIMD_HPP
 #define XTENSOR_SIMD_HPP
@@ -52,11 +52,11 @@ namespace xt_simd
     template <class T>
     using revert_simd_type = xsimd::revert_simd_type<T>;
 
-    using xsimd::set_simd;
-    using xsimd::load_simd;
-    using xsimd::store_simd;
-    using xsimd::select;
     using xsimd::get_alignment_offset;
+    using xsimd::load_simd;
+    using xsimd::select;
+    using xsimd::set_simd;
+    using xsimd::store_simd;
 
     template <class T1, class T2>
     using simd_return_type = xsimd::simd_return_type<T1, T2>;
@@ -163,7 +163,9 @@ namespace xt_simd
     }
 
     template <class T>
-    inline std::size_t get_alignment_offset(const T* /*p*/, std::size_t size, std::size_t /*block_size*/)
+    inline std::size_t get_alignment_offset(const T* /*p*/,
+                                            std::size_t size,
+                                            std::size_t /*block_size*/)
     {
         return size;
     }
@@ -198,7 +200,8 @@ namespace xt
         template <class A1, class A2>
         struct driven_align_mode_impl
         {
-            using type = std::conditional_t<std::is_same<A1, A2>::value, A1, ::xt_simd::unaligned_mode>;
+            using type
+                = std::conditional_t<std::is_same<A1, A2>::value, A1, ::xt_simd::unaligned_mode>;
         };
 
         template <class A>
@@ -223,14 +226,15 @@ namespace xt
     };
 
     template <class E>
-    struct test_simd_interface_impl<E, void_t<decltype(std::declval<E>().template load_simd<aligned_mode>(typename E::size_type(0)))>>
-        : std::true_type
+    struct test_simd_interface_impl<
+        E,
+        void_t<decltype(std::declval<E>().template load_simd<aligned_mode>(
+            typename E::size_type(0)))>> : std::true_type
     {
     };
 
     template <class E>
-    struct has_simd_interface
-        : test_simd_interface_impl<E>
+    struct has_simd_interface : test_simd_interface_impl<E>
     {
     };
 }

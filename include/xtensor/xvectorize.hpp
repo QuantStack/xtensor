@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_VECTORIZE_HPP
 #define XTENSOR_VECTORIZE_HPP
@@ -17,7 +17,6 @@
 
 namespace xt
 {
-
     /***************
      * xvectorizer *
      ***************/
@@ -30,7 +29,8 @@ namespace xt
         template <class... E>
         using xfunction_type = xfunction<F, xclosure_t<E>...>;
 
-        template <class Func, class = std::enable_if_t<!std::is_same<std::decay_t<Func>, xvectorizer>::value>>
+        template <class Func,
+                  class = std::enable_if_t<!std::is_same<std::decay_t<Func>, xvectorizer>::value>>
         xvectorizer(Func&& f);
 
         template <class... E>
@@ -58,7 +58,8 @@ namespace xt
 // for the definition of another overload.
 #ifndef _MSC_VER
     template <class F>
-    auto vectorize(F&& f) -> decltype(vectorize(std::forward<F>(f), std::declval<detail::get_function_type<F>*>()));
+    auto vectorize(F&& f)
+        -> decltype(vectorize(std::forward<F>(f), std::declval<detail::get_function_type<F>*>()));
 #endif
 
     /******************************
@@ -92,7 +93,8 @@ namespace xt
     }
 
     template <class F>
-    inline auto vectorize(F&& f) -> decltype(vectorize(std::forward<F>(f), std::declval<detail::get_function_type<F>*>()))
+    inline auto vectorize(F&& f)
+        -> decltype(vectorize(std::forward<F>(f), std::declval<detail::get_function_type<F>*>()))
     {
         return vectorize(std::forward<F>(f), static_cast<detail::get_function_type<F>*>(nullptr));
     }

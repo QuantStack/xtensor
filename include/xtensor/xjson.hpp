@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_JSON_HPP
 #define XTENSOR_JSON_HPP
@@ -65,7 +65,9 @@ namespace xt
         }
 
         template <class D>
-        inline void from_json_impl(const nlohmann::json& j, xexpression<D>& e, xstrided_slice_vector& slices)
+        inline void from_json_impl(const nlohmann::json& j,
+                                   xexpression<D>& e,
+                                   xstrided_slice_vector& slices)
         {
             auto view = strided_view(e.derived_cast(), slices);
 

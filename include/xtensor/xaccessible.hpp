@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_ACCESSIBLE_HPP
 #define XTENSOR_ACCESSIBLE_HPP
@@ -22,7 +22,7 @@ namespace xt
      * The xaccessible class implements constant access methods common to all expressions.
      *
      * @tparam D The derived type, i.e. the inheriting class for which xconst_accessible
-     *      
+     *
      *
      */
     template <class D>
@@ -125,7 +125,7 @@ namespace xt
     /************************************
      * xconst_accessible implementation *
      ************************************/
-    
+
     /**
      * Returns the size of the expression.
      */
@@ -159,8 +159,8 @@ namespace xt
      * @param args a list of indices specifying the position in the expression. Indices
      * must be unsigned integers, the number of indices should be equal to the number of dimensions
      * of the expression.
-     * @exception std::out_of_range if the number of argument is greater than the number of dimensions
-     * or if indices are out of bounds.
+     * @exception std::out_of_range if the number of argument is greater than the number of
+     * dimensions or if indices are out of bounds.
      */
     template <class D>
     template <class... Args>
@@ -186,7 +186,8 @@ namespace xt
 
     template <class D>
     template <class I>
-    inline auto xconst_accessible<D>::operator[](std::initializer_list<I> index) const -> const_reference
+    inline auto xconst_accessible<D>::operator[](std::initializer_list<I> index) const
+        -> const_reference
     {
         return derived_cast().element(index.begin(), index.end());
     }
@@ -211,7 +212,7 @@ namespace xt
         normalize_periodic(derived_cast().shape(), args...);
         return derived_cast()(static_cast<size_type>(args)...);
     }
-    
+
     /**
      * Returns ``true`` only if the the specified position is a valid entry in the expression.
      * @param args a list of indices specifying the position in the expression.
@@ -240,13 +241,13 @@ namespace xt
      * @param args a list of indices specifying the position in the expression. Indices
      * must be unsigned integers, the number of indices should be equal to the number of dimensions
      * of the expression.
-     * @exception std::out_of_range if the number of argument is greater than the number of dimensions
-     * or if indices are out of bounds.
+     * @exception std::out_of_range if the number of argument is greater than the number of
+     * dimensions or if indices are out of bounds.
      */
     template <class D>
     template <class... Args>
     inline auto xaccessible<D>::at(Args... args) -> reference
-    {   
+    {
         check_access(derived_cast().shape(), static_cast<size_type>(args)...);
         return derived_cast().operator()(args...);
     }
@@ -259,8 +260,7 @@ namespace xt
      */
     template <class D>
     template <class S>
-    inline auto xaccessible<D>::operator[](const S& index)
-        -> disable_integral_t<S, reference>
+    inline auto xaccessible<D>::operator[](const S& index) -> disable_integral_t<S, reference>
     {
         return derived_cast().element(index.cbegin(), index.cend());
     }
@@ -299,8 +299,6 @@ namespace xt
     {
         return *static_cast<derived_type*>(this);
     }
-
 }
 
 #endif
-

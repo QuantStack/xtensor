@@ -1,10 +1,10 @@
-/***************************************************************************
-* Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
-*                                                                          *
-* Distributed under the terms of the BSD 3-Clause License.                 *
-*                                                                          *
-* The full license is in the file LICENSE, distributed with this software. *
-****************************************************************************/
+/****************************************************************************
+ * Copyright (c) 2016, Johan Mabille, Sylvain Corlay and Wolf Vollprecht    *
+ *                                                                          *
+ * Distributed under the terms of the BSD 3-Clause License.                 *
+ *                                                                          *
+ * The full license is in the file LICENSE, distributed with this software. *
+ ****************************************************************************/
 
 #ifndef XTENSOR_VIEW_UTILS_HPP
 #define XTENSOR_VIEW_UTILS_HPP
@@ -15,7 +15,6 @@
 
 namespace xt
 {
-
     /********************************
      * helper functions declaration *
      ********************************/
@@ -89,18 +88,19 @@ namespace xt
 
 
     /************************
-    * count integral types *
-    ************************/
+     * count integral types *
+     ************************/
 
     namespace detail
     {
-
         template <class T, class... S>
         struct integral_count_impl
         {
             static constexpr std::size_t count(std::size_t i) noexcept
             {
-                return i ? (integral_count_impl<S...>::count(i - 1) + (std::is_integral<std::remove_reference_t<T>>::value ? 1 : 0)) : 0;
+                return i ? (integral_count_impl<S...>::count(i - 1)
+                            + (std::is_integral<std::remove_reference_t<T>>::value ? 1 : 0))
+                         : 0;
             }
         };
 
@@ -127,8 +127,8 @@ namespace xt
     }
 
     /***********************
-    * count newaxis types *
-    ***********************/
+     * count newaxis types *
+     ***********************/
 
     namespace detail
     {
@@ -147,7 +147,9 @@ namespace xt
         {
             static constexpr std::size_t count(std::size_t i) noexcept
             {
-                return i ? (newaxis_count_impl<S...>::count(i - 1) + (is_newaxis<std::remove_reference_t<T>>::value ? 1 : 0)) : 0;
+                return i ? (newaxis_count_impl<S...>::count(i - 1)
+                            + (is_newaxis<std::remove_reference_t<T>>::value ? 1 : 0))
+                         : 0;
             }
         };
 
@@ -174,12 +176,11 @@ namespace xt
     }
 
     /**********************************
-    * index of ith non-integral type *
-    **********************************/
+     * index of ith non-integral type *
+     **********************************/
 
     namespace detail
     {
-
         template <class T, class... S>
         struct integral_skip_impl
         {
@@ -192,16 +193,17 @@ namespace xt
 
             static constexpr std::size_t count_impl(std::size_t i) noexcept
             {
-                return 1 + (
-                    std::is_integral<std::remove_reference_t<T>>::value ?
-                    integral_skip_impl<S...>::count(i) :
-                    integral_skip_impl<S...>::count(i - 1)
-                    );
+                return 1
+                       + (std::is_integral<std::remove_reference_t<T>>::value
+                              ? integral_skip_impl<S...>::count(i)
+                              : integral_skip_impl<S...>::count(i - 1));
             }
 
             static constexpr std::size_t count_impl() noexcept
             {
-                return std::is_integral<std::remove_reference_t<T>>::value ? 1 + integral_skip_impl<S...>::count(0) : 0;
+                return std::is_integral<std::remove_reference_t<T>>::value
+                           ? 1 + integral_skip_impl<S...>::count(0)
+                           : 0;
             }
         };
 
@@ -222,12 +224,11 @@ namespace xt
     }
 
     /*********************************
-    * index of ith non-newaxis type *
-    *********************************/
+     * index of ith non-newaxis type *
+     *********************************/
 
     namespace detail
     {
-
         template <class T, class... S>
         struct newaxis_skip_impl
         {
@@ -240,16 +241,17 @@ namespace xt
 
             static constexpr std::size_t count_impl(std::size_t i) noexcept
             {
-                return 1 + (
-                    is_newaxis<std::remove_reference_t<T>>::value ?
-                    newaxis_skip_impl<S...>::count(i) :
-                    newaxis_skip_impl<S...>::count(i - 1)
-                    );
+                return 1
+                       + (is_newaxis<std::remove_reference_t<T>>::value
+                              ? newaxis_skip_impl<S...>::count(i)
+                              : newaxis_skip_impl<S...>::count(i - 1));
             }
 
             static constexpr std::size_t count_impl() noexcept
             {
-                return is_newaxis<std::remove_reference_t<T>>::value ? 1 + newaxis_skip_impl<S...>::count(0) : 0;
+                return is_newaxis<std::remove_reference_t<T>>::value
+                           ? 1 + newaxis_skip_impl<S...>::count(0)
+                           : 0;
             }
         };
 
