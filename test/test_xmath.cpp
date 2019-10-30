@@ -7,6 +7,8 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
+#include "xtensor/xmath.hpp"
+
 #include <complex>
 #include <limits>
 
@@ -14,7 +16,6 @@
 #include "xtensor/xarray.hpp"
 #include "xtensor/xadapt.hpp"
 #include "xtensor/xoptional_assembly.hpp"
-#include "xtensor/xmath.hpp"
 #include "xtensor/xrandom.hpp"
 
 namespace xt

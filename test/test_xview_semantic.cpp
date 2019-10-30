@@ -9,8 +9,10 @@
 
 #include "gtest/gtest.h"
 #include "xtensor/xview.hpp"
-#include "test_xsemantic.hpp"
 #include "xtensor/xnoalias.hpp"
+
+#include "test_xsemantic.hpp"
+#include "test_common_macros.hpp"
 
 namespace xt
 {

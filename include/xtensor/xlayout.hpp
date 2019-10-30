@@ -10,6 +10,8 @@
 #ifndef XTENSOR_LAYOUT_HPP
 #define XTENSOR_LAYOUT_HPP
 
+#include <type_traits>
+
 // Do not include anything else here.
 // xlayout.hpp is included in xtensor_forward.hpp
 // and we don't want to bring other headers to it.

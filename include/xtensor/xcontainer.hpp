@@ -24,6 +24,7 @@
 #include "xmath.hpp"
 #include "xoperation.hpp"
 #include "xstrides.hpp"
+#include "xtensor_config.hpp"
 #include "xtensor_forward.hpp"
 
 namespace xt

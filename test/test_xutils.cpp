@@ -7,19 +7,22 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#include "gtest/gtest.h"
+#include "xtensor/xutils.hpp"
+
 #include <initializer_list>
 #include <type_traits>
 #include <tuple>
 #include <complex>
 
+#include "gtest/gtest.h"
 #include "xtensor/xtensor.hpp"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xfixed.hpp"
 #include "xtensor/xstrided_view.hpp"
 #include "xtensor/xshape.hpp"
-#include "xtensor/xutils.hpp"
 #include "xtensor/xview.hpp"
+#include "test_common_macros.hpp"
+
 
 namespace xt
 {

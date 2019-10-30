@@ -7,10 +7,14 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
+#include "xtensor/xstorage.hpp"
+
+#include <numeric>
+
 #include "gtest/gtest.h"
 #include "xtensor/xtensor_config.hpp"
-#include "xtensor/xstorage.hpp"
-#include <numeric>
+#include "test_common_macros.hpp"
+
 
 namespace xt
 {

@@ -15,6 +15,7 @@
 #include <numeric>
 #include <type_traits>
 
+#include "xtensor_config.hpp"
 #include "xexpression.hpp"
 #include "xstrides.hpp"
 #include "xtensor_forward.hpp"

@@ -19,6 +19,7 @@
 #include <xtl/xclosure.hpp>
 
 #include "xstorage.hpp"
+#include "xtensor_config.hpp"
 
 namespace xt
 {

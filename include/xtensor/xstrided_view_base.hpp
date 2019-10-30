@@ -13,11 +13,13 @@
 #include <type_traits>
 
 #include <xtl/xsequence.hpp>
+#include <xtl/xvariant.hpp>
 
 #include "xaccessible.hpp"
-#include "xtensor_forward.hpp"
 #include "xslice.hpp"
 #include "xstrides.hpp"
+#include "xtensor_config.hpp"
+#include "xtensor_forward.hpp"
 #include "xutils.hpp"
 
 namespace xt

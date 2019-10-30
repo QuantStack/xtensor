@@ -7,11 +7,12 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
+#include "xtensor/xindex_view.hpp"
+
 #include "gtest/gtest.h"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xadapt.hpp"
 #include "xtensor/xrandom.hpp"
-#include "xtensor/xindex_view.hpp"
 #include "xtensor/xbroadcast.hpp"
 #include "xtensor/xview.hpp"
 #include "test_common.hpp"

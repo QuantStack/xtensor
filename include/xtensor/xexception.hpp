@@ -15,6 +15,8 @@
 #include <stdexcept>
 #include <string>
 
+#include "xtensor_config.hpp"
+
 namespace xt
 {
 

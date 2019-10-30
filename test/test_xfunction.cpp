@@ -10,10 +10,10 @@
 #include "gtest/gtest.h"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xview.hpp"
-#include "test_common.hpp"
 #include "xtensor/xtensor.hpp"
 #include "xtensor/xrandom.hpp"
 #include "xtensor/xfixed.hpp"
+#include "test_common.hpp"
 
 namespace xt
 {

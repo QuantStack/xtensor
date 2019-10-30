@@ -7,13 +7,14 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#include "gtest/gtest.h"
-
-#include "xtensor/xarray.hpp"
-#include "xtensor/xio.hpp"
 #include "xtensor/xoptional_assembly.hpp"
 
+#include "gtest/gtest.h"
+#include "xtensor/xarray.hpp"
+#include "xtensor/xio.hpp"
+
 #include "test_common.hpp"
+#include "test_common_macros.hpp"
 
 namespace xt
 {

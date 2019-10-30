@@ -29,8 +29,9 @@
 #include "xiterable.hpp"
 #include "xsemantic.hpp"
 #include "xslice.hpp"
-#include "xtensor_forward.hpp"
 #include "xtensor.hpp"
+#include "xtensor_config.hpp"
+#include "xtensor_forward.hpp"
 #include "xview_utils.hpp"
 
 

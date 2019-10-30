@@ -10,8 +10,11 @@
 #ifndef TEST_COMMON_HPP
 #define TEST_COMMON_HPP
 
+#include "gtest/gtest.h"
 #include "xtensor/xlayout.hpp"
 #include "xtensor/xmanipulation.hpp"
+#include "xtensor/xtensor_config.hpp"
+#include "test_common_macros.hpp"
 
 namespace xt
 {

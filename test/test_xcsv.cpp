@@ -7,12 +7,12 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#include "gtest/gtest.h"
+#include "xtensor/xcsv.hpp"
 
 #include <sstream>
 #include <iostream>
 
-#include "xtensor/xcsv.hpp"
+#include "gtest/gtest.h"
 #include "xtensor/xmath.hpp" 
 #include "xtensor/xio.hpp" 
 

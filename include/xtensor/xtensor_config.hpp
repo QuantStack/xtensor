@@ -14,6 +14,10 @@
 #define XTENSOR_VERSION_MINOR 20
 #define XTENSOR_VERSION_PATCH 10
 
+#include <cstdio>
+#include <cstdlib>
+
+
 // DETECT 3.6 <= clang < 3.8 for compiler bug workaround.
 #ifdef __clang__
     #if __clang_major__ == 3 && __clang_minor__ < 8

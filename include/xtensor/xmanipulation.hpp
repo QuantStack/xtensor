@@ -11,6 +11,7 @@
 #define XTENSOR_MANIPULATION_HPP
 
 #include "xstrided_view.hpp"
+#include "xtensor_config.hpp"
 #include "xutils.hpp"
 
 namespace xt

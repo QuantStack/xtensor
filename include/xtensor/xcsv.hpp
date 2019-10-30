@@ -18,6 +18,7 @@
 #include <utility>
 
 #include "xtensor.hpp"
+#include "xtensor_config.hpp"
 
 namespace xt
 {

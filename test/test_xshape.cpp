@@ -7,6 +7,8 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
+#include "xtensor/xshape.hpp"
+
 #include "gtest/gtest.h"
 #include "xtensor/xbroadcast.hpp"
 #include "xtensor/xarray.hpp"
@@ -14,7 +16,6 @@
 #include "xtensor/xarray.hpp"
 #include "xtensor/xtensor.hpp"
 #include "xtensor/xfixed.hpp"
-#include "xtensor/xshape.hpp"
 
 namespace xt
 {

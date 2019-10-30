@@ -21,6 +21,7 @@
 #include "xbuilder.hpp"
 #include "xgenerator.hpp"
 #include "xtensor.hpp"
+#include "xtensor_config.hpp"
 #include "xview.hpp"
 
 namespace xt

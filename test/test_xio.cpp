@@ -7,16 +7,16 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#include "gtest/gtest.h"
+#include "xtensor/xio.hpp"
 
 #include <vector>
 #include <algorithm>
 #include <sstream>
 #include <limits>
 
+#include "gtest/gtest.h"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xtensor.hpp"
-#include "xtensor/xio.hpp"
 #include "xtensor/xrandom.hpp"
 #include "xtensor/xbuilder.hpp"
 #include "xtensor/xdynamic_view.hpp"

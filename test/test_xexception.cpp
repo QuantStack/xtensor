@@ -11,10 +11,12 @@
 #define XTENSOR_ENABLE_ASSERT
 #endif
 
+#include "xtensor/xexception.hpp"
+
 #include <string>
 
 #include "gtest/gtest.h"
-#include "xtensor/xexception.hpp"
+#include "test_common_macros.hpp"
 
 namespace xt
 {

@@ -11,10 +11,10 @@
 
 #include "gtest/gtest.h"
 
-#include <xtensor/xarray.hpp>
-#include <xtensor/xio.hpp>
-#include <xtensor/xview.hpp>
-#include <xtensor/xsort.hpp>
+#include "xtensor/xarray.hpp"
+#include "xtensor/xio.hpp"
+#include "xtensor/xview.hpp"
+#include "xtensor/xsort.hpp"
 
 namespace xt
 {

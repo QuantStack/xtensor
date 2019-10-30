@@ -15,15 +15,16 @@
 // an easy way to prevent compilation
 #ifndef VS_SKIP_XFIXED
 
-#include "gtest/gtest.h"
+#include "xtensor/xfixed.hpp"
 
+#include "gtest/gtest.h"
 #include "xtensor/xadapt.hpp"
 #include "xtensor/xarray.hpp"
-#include "xtensor/xfixed.hpp"
 #include "xtensor/xio.hpp"
 #include "xtensor/xtensor.hpp"
 #include "xtensor/xnoalias.hpp"
 #include "xtensor/xmanipulation.hpp"
+#include "test_common_macros.hpp"
 
 // On VS2015, when compiling in x86 mode, alignas(T) leads to C2718
 // when used for a function parameter, even indirectly. This means that

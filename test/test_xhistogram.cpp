@@ -7,12 +7,13 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
+#include "xtensor/xhistogram.hpp"
+
 #include <complex>
 #include <limits>
 
 #include "gtest/gtest.h"
 #include "xtensor/xtensor.hpp"
-#include "xtensor/xhistogram.hpp"
 #include "xtensor/xrandom.hpp"
 
 namespace xt

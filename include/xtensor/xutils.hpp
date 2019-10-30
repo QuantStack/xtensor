@@ -391,7 +391,7 @@ namespace xt
     inline auto forward_normalize(E& expr, C&& axes)
         -> std::enable_if_t<std::is_signed<std::decay_t<decltype(*std::begin(axes))>>::value, R>
     {
-        R res;
+        R res{};
         xt::resize_container(res, xtl::sequence_size(axes));
         auto dim = expr.dimension();
         std::transform(std::begin(axes), std::end(axes), std::begin(res), [&dim](auto ax_el) {
@@ -409,7 +409,7 @@ namespace xt
     {
         static_cast<void>(expr);
 
-        R res;
+        R res{};
         xt::resize_container(res, xtl::sequence_size(axes));
         std::copy(std::begin(axes), std::end(axes), std::begin(res));
         XTENSOR_ASSERT(std::all_of(res.begin(), res.end(), [&expr](auto ax_el) { return ax_el < expr.dimension(); }));

@@ -7,10 +7,11 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
+#include "xtensor/xeval.hpp"
+
 #include "gtest/gtest.h"
 
 #include "xtensor/xtensor_config.hpp"
-#include "xtensor/xeval.hpp"
 #include "xtensor/xbuilder.hpp"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xtensor.hpp"

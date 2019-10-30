@@ -7,13 +7,13 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#include "gtest/gtest.h"
+#include "xtensor/xjson.hpp"
 
 #include <string>
 
+#include "gtest/gtest.h"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xtensor.hpp"
-#include "xtensor/xjson.hpp"
 #include "xtensor/xview.hpp"
 
 namespace xt

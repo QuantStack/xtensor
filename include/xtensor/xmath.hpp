@@ -24,11 +24,12 @@
 #include <xtl/xtype_traits.hpp>
 
 #include "xaccumulator.hpp"
+#include "xeval.hpp"
 #include "xoperation.hpp"
 #include "xreducer.hpp"
 #include "xslice.hpp"
 #include "xstrided_view.hpp"
-#include "xeval.hpp"
+#include "xtensor_config.hpp"
 
 namespace xt
 {

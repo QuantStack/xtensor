@@ -19,6 +19,7 @@
 #include <type_traits>
 
 #include "xexception.hpp"
+#include "xtensor_config.hpp"
 #include "xtensor_simd.hpp"
 #include "xutils.hpp"
 

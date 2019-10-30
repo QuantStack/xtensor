@@ -11,11 +11,11 @@
 #define XTENSOR_XEXPRESSION_HOLDER_HPP
 
 #include <nlohmann/json.hpp>
-
-#include "xtl/xany.hpp"
+#include <xtl/xany.hpp>
 
 #include "xarray.hpp"
 #include "xjson.hpp"
+#include "xtensor_config.hpp"
 
 namespace xt
 {

@@ -7,14 +7,15 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#include "gtest/gtest.h"
+#include "xtensor/xmime.hpp"
+
 
 #include <iostream>
 
 #include <nlohmann/json.hpp>
 
+#include "gtest/gtest.h"
 #include "xtensor/xarray.hpp"
-#include "xtensor/xmime.hpp"
 
 namespace xt
 {

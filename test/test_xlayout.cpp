@@ -7,6 +7,8 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
+#include "xtensor/xlayout.hpp"
+
 #include "gtest/gtest.h"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xio.hpp"

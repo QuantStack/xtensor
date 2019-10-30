@@ -17,9 +17,10 @@
 #include <vector>
 
 #include "xcontainer.hpp"
-#include "xstrides.hpp"
-#include "xstorage.hpp"
 #include "xsemantic.hpp"
+#include "xstorage.hpp"
+#include "xstrides.hpp"
+#include "xtensor_config.hpp"
 
 namespace xtl
 {

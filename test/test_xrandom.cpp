@@ -7,7 +7,7 @@
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
 
-#include "gtest/gtest.h"
+
 #if (defined(__GNUC__) && !defined(__clang__))
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
@@ -16,8 +16,11 @@
 #else
 #include "xtensor/xrandom.hpp"
 #endif
+
+#include "gtest/gtest.h"
 #include "xtensor/xarray.hpp"
 #include "xtensor/xview.hpp"
+#include "test_common_macros.hpp"
 
 namespace xt
 {

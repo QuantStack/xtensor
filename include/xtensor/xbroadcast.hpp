@@ -26,6 +26,7 @@
 #include "xscalar.hpp"
 #include "xstrides.hpp"
 #include "xutils.hpp"
+#include "xtensor_config.hpp"
 
 namespace xt
 {
