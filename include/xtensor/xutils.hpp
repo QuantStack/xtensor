@@ -277,6 +277,12 @@ namespace xt
             return static_cast<R>(func(std::get<I>(s)));
         }
 
+        template <class R, class F, std::size_t I, class S>
+        R apply_one(F&& func, const std::vector<S>& s) NOEXCEPT(noexcept(func(s[I])))
+        {
+            return static_cast<R>(func(s[I]));
+        }
+
         template <class R, class F, std::size_t... I, class... S>
         R apply(std::size_t index, F&& func, std::index_sequence<I...> /*seq*/, const std::tuple<S...>& s)
             NOEXCEPT(noexcept(func(std::get<0>(s))))
@@ -285,12 +291,27 @@ namespace xt
             static const std::array<FT, sizeof...(I)> ar = {{&apply_one<R, F, I, S...>...}};
             return ar[index](std::forward<F>(func), s);
         }
+
+        template <class R, class F, std::size_t... I, class S>
+        R apply(std::size_t index, F&& func, std::index_sequence<I...> /*seq*/, const std::vector<S>& s)
+            NOEXCEPT(noexcept(func(s[0])))
+        {
+            using FT = std::add_pointer_t<R(F&&, const std::vector<S>&)>;
+            static const std::array<FT, sizeof...(I)> ar = {{&apply_one<R, F, I, S>...}};
+            return ar[index](std::forward<F>(func), s);
+        }
     }
 
     template <class R, class F, class... S>
     inline R apply(std::size_t index, F&& func, const std::tuple<S...>& s) NOEXCEPT(noexcept(func(std::get<0>(s))))
     {
         return detail::apply<R>(index, std::forward<F>(func), std::make_index_sequence<sizeof...(S)>(), s);
+    }
+
+    template <class R, class F, class S>
+    inline R apply(std::size_t index, F&& func, const std::vector<S>& s) NOEXCEPT(noexcept(func(s[0])))
+    {
+        return detail::apply<R>(index, std::forward<F>(func), std::make_index_sequence<sizeof(S)>(), s);
     }
 
     /***************************

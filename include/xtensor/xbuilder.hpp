@@ -494,6 +494,45 @@ namespace xt
 
     namespace detail
     {
+        template <class CT>
+        class concatenate_access_same_type
+        {
+        public:
+
+            using vector_type = std::vector<CT>;
+            using size_type = std::size_t;
+            using value_type = xtl::promote_type_t<typename std::decay_t<CT>::value_type>;
+
+            template <class S>
+            inline value_type access(const vector_type& t, size_type axis, S index) const
+            {
+                auto match = [&index, axis](auto& arr)
+                {
+                    if (index[axis] >= arr.shape()[axis])
+                    {
+                        index[axis] -= arr.shape()[axis];
+                        return false;
+                    }
+                    return true;
+                };
+
+                auto get = [&index](auto& arr)
+                {
+                    return arr[index];
+                };
+
+                size_type i = 0;
+                for (; i < sizeof(CT); ++i)
+                {
+                    if (apply<bool>(i, match, t))
+                    {
+                        break;
+                    }
+                }
+                return apply<value_type>(i, get, t);
+            }
+        };
+
         template <class... CT>
         class concatenate_access
         {
@@ -582,6 +621,40 @@ namespace xt
             }
         };
 
+        template <template <class...> class F, class CT>
+        class concatenate_invoker_same_type : private F<CT>
+        {
+        public:
+
+            using vector_type = std::vector<CT>;
+            using size_type = std::size_t;
+            using value_type = typename CT::value_type;
+
+            inline concatenate_invoker_same_type(vector_type& t, size_type axis)
+                : m_t(t), m_axis(axis)
+            {
+            }
+
+            template <class... Args>
+            inline value_type operator()(Args... args) const
+            {
+                // TODO: avoid memory allocation
+                return this->access(m_t, m_axis, xindex({static_cast<size_type>(args)...}));
+            }
+
+            template <class It>
+            inline value_type element(It first, It last) const
+            {
+                // TODO: avoid memory allocation
+                return this->access(m_t, m_axis, xindex(first, last));
+            }
+
+        private:
+
+            vector_type m_t;
+            size_type m_axis;
+        };
+
         template <template <class...> class F, class... CT>
         class concatenate_invoker : private F<CT...>
         {
@@ -615,6 +688,9 @@ namespace xt
             tuple_type m_t;
             size_type m_axis;
         };
+
+        template <class CT>
+        using concatenate_same_type_impl = concatenate_invoker_same_type<concatenate_access_same_type, CT>;
 
         template <class... CT>
         using concatenate_impl = concatenate_invoker<concatenate_access, CT...>;
@@ -668,6 +744,12 @@ namespace xt
     inline auto xtuple(Types&&... args)
     {
         return std::tuple<xtl::const_closure_type_t<Types>...>(std::forward<Types>(args)...);
+    }
+
+    template <class Type>
+    inline auto xvector(Type&& args)
+    {
+        return std::vector<xtl::const_closure_type_t<Type>>(std::forward<Type>(args));
     }
 
     namespace detail {
@@ -756,6 +838,20 @@ namespace xt
 
                 return new_shape;
             }
+
+            template <class Args>
+            static auto build(const std::vector<Args>& t, std::size_t axis)
+            {
+                using shape_type = promote_shape_t<typename concat_shape<typename std::decay_t<Args>::shape_type>::type>;
+                using source_shape_type = decltype(t[0].shape());
+                shape_type new_shape = xtl::forward_sequence<shape_type, source_shape_type>(t[0].shape());
+
+                for (std::size_t i = 1; i < t.size(); i++) {
+                    new_shape[axis] += t[i].shape()[axis];
+                }
+
+                return new_shape;
+            }
         };
 
     } // namespace detail
@@ -779,6 +875,13 @@ namespace xt
      * xt::xarray<double> d = xt::concatenate(xt::xtuple(a, b), 1); // => {{1, 2, 3, 2, 3, 4}}
      * \endcode
      */
+    template <class CT>
+    inline auto concatenate(std::vector<CT>& t, std::size_t axis = 0)
+    {
+        const auto shape = detail::concat_shape_builder_t::build(t, axis);
+        return detail::make_xgenerator(detail::concatenate_same_type_impl<CT>(t, axis), shape);
+    }
+
     template <class... CT>
     inline auto concatenate(std::tuple<CT...>&& t, std::size_t axis = 0)
     {
