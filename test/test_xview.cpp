@@ -904,6 +904,33 @@ namespace xt
         EXPECT_EQ(s7, s7e);
     }
 
+    TEST(xview, strides_issue_2228)
+    {
+        {
+            xt::xtensor<uint8_t, 2> aTensor = xt::zeros<uint8_t>({4, 3});
+            auto aView = xt::view(aTensor, xt::newaxis(), xt::newaxis(), xt::newaxis(), xt::all(), xt::all());
+            uint8_t vIndex = 0;
+            for (size_t vRow = 0; vRow < 3; ++vRow) {
+                for (size_t vCol = 0; vCol < 3; ++vCol) {
+                    aView(size_t{0}, size_t{0}, size_t{0}, vRow, vCol) = vIndex;
+                    EXPECT_EQ(aTensor(vRow, vCol), vIndex);
+                    ++vIndex;
+                }
+            }
+        }
+
+        {
+            xt::xtensor<bool, 2> aTensor = xt::zeros<bool>({4, 3});
+            auto aView = xt::view(aTensor, xt::newaxis(), xt::newaxis(), xt::newaxis(), xt::all(), xt::all());
+            for (size_t vRow = 0; vRow < 4; ++vRow) {
+                for (size_t vCol = 0; vCol < 3; ++vCol) {
+                    aView(size_t{0}, size_t{0}, size_t{0}, vRow, vCol) = true;
+                }
+            }
+            EXPECT_EQ(aTensor, aView);
+        }
+    }
+
     TEST(xview, to_scalar)
     {
         std::array<std::size_t, 3> sh{2,2,2};
