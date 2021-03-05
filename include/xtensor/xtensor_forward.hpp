@@ -144,6 +144,37 @@ namespace xt
     template <std::size_t... N>
     class fixed_shape;
 
+    template <class EC, class Tag = xtensor_expression_tag>
+    class xvector_container;
+
+    /**
+     * @typedef xvector
+     * Alias template on vector_container with default parameters for data container
+     * type. This allows to write
+     *
+     * \code{.cpp}
+     * xt::xvector<double> a = {1., 2., 3., 4.};
+     * \endcode
+     *
+     * instead of the heavier syntax
+     *
+     * \code{.cpp}
+     * xt::vector_container<std::vector<double>> a = ...
+     * \endcode
+     *
+     * @tparam T The value type of the elements.
+     * @tparam A The allocator of the containers holding the elements.
+     */
+    template <class T,
+              class A = XTENSOR_DEFAULT_ALLOCATOR(T)>
+    using xvector = xvector_container<XTENSOR_DEFAULT_DATA_CONTAINER(T, A)>;
+
+    template <class EC, class Tag = xtensor_expression_tag>
+    class xvector_adaptor;
+
+    template <class EC, class Tag = xtensor_expression_tag>
+    class xvector_view;
+
     /**
      * @typedef xshape
      * Alias template for ``fixed_shape`` allows for a shorter template shape definition in ``xtensor_fixed``.
