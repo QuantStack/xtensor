@@ -403,6 +403,11 @@ namespace xt
         return adapt(std::forward<C>(ptr), xtl::forward_sequence<shape_type, decltype(shape)>(shape));
     }
 
+    template<class E, std::ptrdiff_t Start, std::ptrdiff_t End>
+    inline auto adapt(const xt::sequence_view<E, Start, End>& view) {
+        return adapt(&view.front(), {view.size()});
+    }
+
     /*****************************
      * smart_ptr adapter builder *
      *****************************/
