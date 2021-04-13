@@ -299,8 +299,41 @@ namespace xt
     {
         using fixed_tensor = xtensor_fixed<double, xshape<2>, layout_type::row_major, true>;
         using tiny_tensor = xtensor_fixed<double, xshape<2>, layout_type::row_major, false>;
-        EXPECT_GT(sizeof(fixed_tensor), sizeof(tiny_tensor)); 
+        EXPECT_GT(sizeof(fixed_tensor), sizeof(tiny_tensor));
     }
+
+    class FixedMember
+    {
+    public:
+        FixedMember(size_t bar, double foo)
+        {
+            m_bar = bar;
+            m_foo = foo;
+            m_I = xt::xtensor_fixed<double, xt::xshape<2, 2>>({{1.0, 0.0},
+                                                               {0.0, 1.0}});
+        }
+
+        xt::xtensor_fixed<double, xt::xshape<2, 2>> get() const
+        {
+            xt::xtensor_fixed<double, xt::xshape<2, 2>> ret = 2.0 * m_I;
+            return ret;
+        }
+
+    private:
+        size_t m_bar;
+        double m_foo;
+        xt::xtensor_fixed<double, xt::xshape<2, 2>> m_I;
+    };
+
+    TEST(xtensor_fixed, member)
+    {
+        FixedMember c(20, 1.2);
+        auto m = c.get();
+        auto r = xt::xtensor_fixed<double, xt::xshape<2, 2>>({{2.0, 0.0},
+                                                              {0.0, 2.0}});
+        EXPECT_TRUE(xt::all(xt::equal(m, r)));
+    }
+
 }
 
 #endif
