@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        xtensor – the ndimensional C++ container
+    </title>
+    <link href="https://fonts.googleapis.com/css?family=Overpass:900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="_static/css/stylesheet.css">
+</head>
+<body class="w-100 sans-serif landingpage">
+    <main class="">
+        <img src="_static/quantstack-white.svg" id="logo-qs" />
+        <header>
+            <div class="mw7-ns center ph4">
+                <img src="_images/xtensor.svg"/>
+            </div>
+            <div class="mw7-ns center lh-title pv4 tc b">
+                Fast n-dimensional arrays in C++, with a familiar API from NumPy, broadcasting and lazy evaluation.
+            </div>
+        </header>
+        <section class="mw8 center ph3-ns" id="cards">
+          <div class="flex flex-wrap">
+            <div class="card w-50-m w-third-ns w-100 pa2">
+              <div class="pa2">
+                <h4 class="mt0">🚀 N-Dimensional, C++ Native</h4>
+                xtensor has fast, SIMD enabled C++ containers that look and behave just like NumPy arrays.
+              </div>
+            </div>
+            <div class="card w-50-m w-third-ns w-100 pa2">
+              <div class="pa2">
+                <h4 class="mt0">🐍 Extend dynamic languages</h4>
+                xtensor allows you to extend dynamic languages such as Python, Julia and R with fast routines from C++.
+                The C++ code will operate on the <i>same</i> memory as in the dynamic language (e.g. the Python NumPy buffer).
+              </div>
+            </div>
+            <div class="card w-50-m w-third-ns w-100 pa2">
+              <div class="pa2">
+                <h4 class="mt0">Written by experts, trusted by academics</h4>
+                xtensor has a growing fan-base among industry professionals and academics alike.
+              </div>
+            </div>
+            <div class="card w-50-m w-third-ns w-100 pa2">
+              <div class="pa2">
+                <h4 class="mt0">As fast as Eigen, Armadillo or Blitz++</h4>
+                We regularly benchmark against the fastest C++ libraries out there. Thanks to our xsimd library, we measure up nicely against them.
+              </div>
+            </div>
+            <div class="card w-50-m w-third-ns w-100 pa2">
+              <div class="pa2">
+                <h4 class="mt0">Fully templated containers</h4>
+                Use your custom types, immediately with broadcasting enabled. Also available: 3 different containers with completely dynamic shape,
+                static number of dimensions or completely constexpr static shape!
+              </div>
+            </div>
+            <div class="card w-50-m w-third-ns w-100 pa2">
+              <div class="pa2">
+                <h4 class="mt0">Broadcasting, lazy expressions</h4>
+                The xtensor library implements broadcasting, and lazy expressions with expression templates for maximum efficiency when evaluating complex array expressions.
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="mw8 center tc pt5">
+            <a id="readmore" class="pv2 ph5" href="docindex.html">
+                Read More
+            </a>
+        </section>
+
+        <hr class="mv5" />
+
+        <section class="mw8 center flex flex-wrap">
+            <div class="highlight highlight-source-c++ w-70-ns w-100">
+                <pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>iostream<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">"</span>xtensor/xarray.hpp<span class="pl-pds">"</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">"</span>xtensor/xio.hpp<span class="pl-pds">"</span></span>
+
+xt::xarray&lt;<span class="pl-k">int</span>&gt; arr {<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">4</span>, <span class="pl-c1">5</span>, <span class="pl-c1">6</span>, <span class="pl-c1">7</span>, <span class="pl-c1">8</span>, <span class="pl-c1">9</span>};
+
+arr.reshape({<span class="pl-c1">3</span>, <span class="pl-c1">3</span>});
+
+std::cout &lt;&lt; arr;</pre></div>
+            <div class="w-100 w-30-ns ph4">
+                <h4>Features</h4>
+                <ul>
+                    <li>Use the NumPy syntax in C++.</li>
+                    <li>Reshape to any shape.</li>
+                    <li>Native printing.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    <footer class="p10 mt6">
+        The xtensor-stack team!
+    </footer>
+</body>
+</html>

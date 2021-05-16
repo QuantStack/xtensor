@@ -1,0 +1,105 @@
+/*!
+ * GitHub Dark v0.5.0
+ * Copyright (c) 2012 - 2017 GitHub, Inc.
+ * Licensed under MIT (https://github.com/primer/github-syntax-theme-generator/blob/master/LICENSE)
+ */
+.pl-c {
+  color: #959da5; }
+
+.pl-c1,
+.pl-s .pl-v {
+  color: #c8e1ff; }
+
+.pl-e,
+.pl-en {
+  color: #b392f0; }
+
+.pl-smi,
+.pl-s .pl-s1 {
+  color: #f6f8fa; }
+
+.pl-ent {
+  color: #7bcc72; }
+
+.pl-k {
+  color: #ea4a5a; }
+
+.pl-s,
+.pl-pds,
+.pl-s .pl-pse .pl-s1,
+.pl-sr,
+.pl-sr .pl-cce,
+.pl-sr .pl-sre,
+.pl-sr .pl-sra {
+  color: #79b8ff; }
+
+.pl-v,
+.pl-ml {
+  color: #fb8532; }
+
+.pl-bu {
+  color: #d73a49; }
+
+.pl-ii {
+  color: #fafbfc;
+  background-color: #d73a49; }
+
+.pl-c2 {
+  color: #fafbfc;
+  background-color: #d73a49; }
+
+.pl-c2::before {
+  content: "^M"; }
+
+.pl-sr .pl-cce {
+  font-weight: bold;
+  color: #7bcc72; }
+
+.pl-mh,
+.pl-mh .pl-en,
+.pl-ms {
+  font-weight: bold;
+  color: #0366d6; }
+
+.pl-mi {
+  font-style: italic;
+  color: #f6f8fa; }
+
+.pl-mb {
+  font-weight: bold;
+  color: #f6f8fa; }
+
+.pl-md {
+  color: #b31d28;
+  background-color: #ffeef0; }
+
+.pl-mi1 {
+  color: #176f2c;
+  background-color: #f0fff4; }
+
+.pl-mc {
+  color: #b08800;
+  background-color: #fffdef; }
+
+.pl-mi2 {
+  color: #2f363d;
+  background-color: #959da5; }
+
+.pl-mdr {
+  font-weight: bold;
+  color: #b392f0; }
+
+.pl-mo {
+  color: #0366d6; }
+
+.pl-ba {
+  color: #ffeef0; }
+
+.pl-sg {
+  color: #6a737d; }
+
+.pl-corl {
+  text-decoration: underline;
+  color: #79b8ff; }
+
+/*# sourceMappingURL=syntax_github.css.map */

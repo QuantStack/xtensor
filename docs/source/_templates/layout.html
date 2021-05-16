@@ -1,0 +1,38 @@
+{% extends "!layout.html" %}
+{% block extrahead %}
+	<link href="https://fonts.googleapis.com/css?family=Overpass:400,900&display=swap" rel="stylesheet">
+{% endblock %}
+{% block mobile_nav %}
+  <i data-toggle="wy-nav-top" class="">
+  	{{ _('Docs') }} >
+  	  {% for doc in parents %}
+	    {{ doc.title }} >
+  	  {% endfor %}
+	{{ title }}
+  </i>
+{% endblock %}
+
+{%- block content %}
+  <a href="{{ pathto(master_doc) }}" class="mobile_logo"><img src="{{ pathto('_static/' + logo, 1) }}" class="logo" alt="Logo"/></a>
+
+  {% if theme_style_external_links|tobool %}
+  <div class="rst-content style-external-links">
+  {% else %}
+  <div class="rst-content">
+  {% endif %}
+    {% include "breadcrumbs.html" %}
+    <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+    {%- block document %}
+     <div itemprop="articleBody">
+      {% block body %}{% endblock %}
+     </div>
+     {% if self.comments()|trim %}
+     <div class="articleComments">
+      {% block comments %}{% endblock %}
+     </div>
+     {% endif%}
+    </div>
+    {%- endblock %}
+    {% include "footer.html" %}
+  </div>
+{%- endblock %}
