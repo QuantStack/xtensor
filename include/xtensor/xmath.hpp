@@ -2671,8 +2671,8 @@ namespace detail {
               XTL_REQUIRES(is_reducer_options<EVS>)>
     inline auto nanvar(E&& e, EVS es = EVS())
     {
-        decltype(auto) sc = detail::shared_forward<E>(e);
-        return nanmean<T>(square(sc - nanmean<T>(sc)), es);
+        auto cached_mean = nanmean<T>(e, es)();
+        return nanmean<T>(square(std::forward<E>(e) - std::move(cached_mean)), es);
     }
 
     template <class T = void, class E, class EVS = DEFAULT_STRATEGY_REDUCERS,
@@ -2709,7 +2709,8 @@ namespace detail {
         // note: forcing copy of first axes argument -- is there a better solution?
         auto axes_copy = axes;
         using result_type = typename std::conditional_t<std::is_same<T, void>::value, double, T>;
-        auto inner_mean = nanmean<result_type>(sc, std::move(axes_copy));
+        // always eval to prevent repeated evaluations in the next calls
+        auto inner_mean = eval(nanmean<result_type>(sc, std::move(axes_copy)));
 
         // fake keep_dims = 1
         auto keep_dim_shape = e.shape();
@@ -2718,7 +2719,9 @@ namespace detail {
             keep_dim_shape[el] = 1;
         }
         auto mrv = reshape_view<XTENSOR_DEFAULT_LAYOUT>(std::move(inner_mean), std::move(keep_dim_shape));
-        return nanmean<result_type>(square(cast<result_type>(sc) - std::move(mrv)), std::forward<X>(axes), es);
+        // note: otherwise the result is wrong with 'immediate' evaluation strategy
+        auto sc_shifted = eval(cast<result_type>(sc) - std::move(mrv));
+        return nanmean<result_type>(square(sc_shifted), std::forward<X>(axes), es);
     }
 
     /**
