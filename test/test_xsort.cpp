@@ -250,28 +250,28 @@ namespace xt
         {
             xarray<double> a = xt::random::rand<double>({5, 4, 6, 7});
 
-            auto a_s0 = argmin<XTENSOR_DEFAULT_LAYOUT>(a, 0);
+            auto a_s0 = argmin(a, 0);
             auto va_s0 = view(a, xt::all(), 3, 2, 3);
             auto m0_idx = a_s0(3, 2, 3);
             auto it0 = std::min_element(va_s0.begin(), va_s0.end());
             auto c0_idx = std::distance(va_s0.begin(), it0);
             EXPECT_EQ(static_cast<size_t>(c0_idx), m0_idx);
 
-            auto a_s1 = argmin<XTENSOR_DEFAULT_LAYOUT>(a, 1);
+            auto a_s1 = argmin(a, 1);
             auto va_s1 = view(a, 3, xt::all(), 2, 3);
             auto m1_idx = a_s1(3, 2, 3);
             auto it1 = std::min_element(va_s1.begin(), va_s1.end());
             auto c1_idx = std::distance(va_s1.begin(), it1);
             EXPECT_EQ(static_cast<size_t>(c1_idx), m1_idx);
 
-            auto a_s2 = argmin<XTENSOR_DEFAULT_LAYOUT>(a, 2);
+            auto a_s2 = argmin(a, 2);
             auto va_s2 = view(a, 3, 2, xt::all(), 3);
             auto m2_idx = a_s2(3, 2, 3);
             auto it2 = std::min_element(va_s2.begin(), va_s2.end());
             auto c2_idx = std::distance(va_s2.begin(), it2);
             EXPECT_EQ(static_cast<size_t>(c2_idx), m2_idx);
 
-            auto a_s3 = argmin<XTENSOR_DEFAULT_LAYOUT>(a, 3);
+            auto a_s3 = argmin(a, 3);
             auto va_s3 = view(a, 3, 2, 3, xt::all());
             auto m3_idx = a_s3(3, 2, 3);
             auto it3 = std::min_element(va_s3.begin(), va_s3.end());
