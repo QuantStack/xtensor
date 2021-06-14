@@ -314,6 +314,18 @@ namespace xt
         EXPECT_EQ(a.layout(), c.layout());
     }
 
+    TEST(xarray, operator_brace)
+    {
+        xt::xarray<size_t> a = {{0,1,2}, {3,4,5}};
+        xt::xarray<size_t> b = {{0,1,2}, {30,40,50}};
+        a(1,3) = 30;
+        a(1,4) = 40;
+        a(1,5) = 50;
+        EXPECT_EQ(a, b);
+        EXPECT_THROW(a(2, 0));
+        EXPECT_THROW(a(0, 3));
+    }
+
     TEST(xarray, periodic)
     {
         xt::xarray<size_t> a = {{0,1,2}, {3,4,5}};
@@ -345,6 +357,7 @@ namespace xt
             a.flat(4) = 40;
             a.flat(5) = 50;
             EXPECT_EQ(a, b);
+            EXPECT_THROW(a.flat(6));
         }
         {
             xt::xarray<size_t, xt::layout_type::column_major> a = {{0,1,2}, {3,4,5}};
@@ -353,6 +366,7 @@ namespace xt
             a.flat(3) = 40;
             a.flat(5) = 50;
             EXPECT_EQ(a, b);
+            EXPECT_THROW(a.flat(6));
         }
     }
 

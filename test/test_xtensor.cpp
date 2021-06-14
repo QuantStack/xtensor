@@ -333,6 +333,18 @@ namespace xt
         EXPECT_TRUE(idx==jdx);
     }
 
+    TEST(xarray, operator_brace)
+    {
+        xt::xtensor<size_t,2> a = {{0,1,2}, {3,4,5}};
+        xt::xtensor<size_t,2> b = {{0,1,2}, {30,40,50}};
+        a(1,3) = 30;
+        a(1,4) = 40;
+        a(1,5) = 50;
+        EXPECT_EQ(a, b);
+        EXPECT_THROW(a(2, 0));
+        EXPECT_THROW(a(0, 3));
+    }
+
     TEST(xtensor, periodic)
     {
         xt::xtensor<size_t,2> a = {{0,1,2}, {3,4,5}};
@@ -352,6 +364,7 @@ namespace xt
             a.flat(4) = 40;
             a.flat(5) = 50;
             EXPECT_EQ(a, b);
+            EXPECT_THROW(a.flat(6));
         }
         {
             xt::xtensor<size_t, 2, xt::layout_type::column_major> a = {{0,1,2}, {3,4,5}};
@@ -360,6 +373,7 @@ namespace xt
             a.flat(3) = 40;
             a.flat(5) = 50;
             EXPECT_EQ(a, b);
+            EXPECT_THROW(a.flat(6));
         }
     }
 
