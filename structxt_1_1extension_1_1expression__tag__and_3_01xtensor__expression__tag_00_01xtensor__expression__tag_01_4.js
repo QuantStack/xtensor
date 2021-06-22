@@ -1,0 +1,4 @@
+var structxt_1_1extension_1_1expression__tag__and_3_01xtensor__expression__tag_00_01xtensor__expression__tag_01_4 =
+[
+    [ "type", "structxt_1_1extension_1_1expression__tag__and_3_01xtensor__expression__tag_00_01xtensor__expression__tag_01_4.html#af3ccef5ebbc0871ccba00848609a2129", null ]
+];

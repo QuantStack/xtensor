@@ -1,0 +1,4 @@
+var structxt_1_1const__xclosure_3_01_e_00_01disable__xexpression_3_01std_1_1decay__t_3_01_e_01_4_01_4_01_4 =
+[
+    [ "type", "structxt_1_1const__xclosure_3_01_e_00_01disable__xexpression_3_01std_1_1decay__t_3_01_e_01_4_01_4_01_4.html#a35b80e9b34b590d731992e48f046406b", null ]
+];

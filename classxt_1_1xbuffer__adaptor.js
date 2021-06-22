@@ -1,0 +1,27 @@
+var classxt_1_1xbuffer__adaptor =
+[
+    [ "allocator_type", "classxt_1_1xbuffer__adaptor.html#a94b46a35fdf51760bcb4146bf66a538c", null ],
+    [ "base_type", "classxt_1_1xbuffer__adaptor.html#a32be9a465bec64cea7769ea8e32fbaba", null ],
+    [ "buffer_base_type", "classxt_1_1xbuffer__adaptor.html#ae6a2e12d23855a2fe5569fe5a06533f5", null ],
+    [ "const_iterator", "classxt_1_1xbuffer__adaptor.html#a658c412119e8b17fb6a607f93a50bbc9", null ],
+    [ "const_pointer", "classxt_1_1xbuffer__adaptor.html#ad81d2f2ee2806aaa172641c14010bade", null ],
+    [ "const_reference", "classxt_1_1xbuffer__adaptor.html#aceded5c91780cff178a4c94e42471296", null ],
+    [ "const_reverse_iterator", "classxt_1_1xbuffer__adaptor.html#a3a22aa1c7539d15b1f582e34dd95d28e", null ],
+    [ "destructor_type", "classxt_1_1xbuffer__adaptor.html#a5fdef8f801eb1c24c492f5eaf16ff12d", null ],
+    [ "difference_type", "classxt_1_1xbuffer__adaptor.html#acc0f726e59a18d6527553967a93dfa00", null ],
+    [ "iterator", "classxt_1_1xbuffer__adaptor.html#a9d2ea07c09a6cae5e6cfda6c768d6401", null ],
+    [ "pointer", "classxt_1_1xbuffer__adaptor.html#a3b81237f1bccddff068cdc10e508ba51", null ],
+    [ "reference", "classxt_1_1xbuffer__adaptor.html#a21b6e4304aae5ac0b1713db5bac8caf5", null ],
+    [ "reverse_iterator", "classxt_1_1xbuffer__adaptor.html#a6cb919d596379e4345b31a51a7f189f2", null ],
+    [ "self_type", "classxt_1_1xbuffer__adaptor.html#a0a98119e8748b68fd7c182ab350e52f6", null ],
+    [ "size_type", "classxt_1_1xbuffer__adaptor.html#a3ffeef4fec8881e2ec273788105962f9", null ],
+    [ "temporary_type", "classxt_1_1xbuffer__adaptor.html#a6bccd6c45a0465886ef2f6d7a4ddb9e4", null ],
+    [ "value_type", "classxt_1_1xbuffer__adaptor.html#a770ffc90e4fb2634877855f20ec38e75", null ],
+    [ "xbuffer_adaptor", "classxt_1_1xbuffer__adaptor.html#a7537269f98e62de247191710b8951fcb", null ],
+    [ "~xbuffer_adaptor", "classxt_1_1xbuffer__adaptor.html#ab1da740007ff9fa2b9e5014a700fa215", null ],
+    [ "xbuffer_adaptor", "classxt_1_1xbuffer__adaptor.html#a071f53b0ec03b1671dddfd3a6f6c9cb0", null ],
+    [ "xbuffer_adaptor", "classxt_1_1xbuffer__adaptor.html#ac5b82c64887693588c8bcacb234eb407", null ],
+    [ "operator=", "classxt_1_1xbuffer__adaptor.html#a186fd6c59818c85e84be5bf6c02a3faa", null ],
+    [ "operator=", "classxt_1_1xbuffer__adaptor.html#a5d3f3f647bd49e484fc54d106c147bd2", null ],
+    [ "operator=", "classxt_1_1xbuffer__adaptor.html#a32c9e7479af3b581628027d4ea4fa33c", null ]
+];

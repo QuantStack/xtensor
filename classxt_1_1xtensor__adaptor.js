@@ -1,0 +1,28 @@
+var classxt_1_1xtensor__adaptor =
+[
+    [ "allocator_type", "classxt_1_1xtensor__adaptor.html#a9c67e60926151765671a92b1cf58d990", null ],
+    [ "backstrides_type", "classxt_1_1xtensor__adaptor.html#a99ee630f5915a8bc91d26fd21cbefc2d", null ],
+    [ "base_type", "classxt_1_1xtensor__adaptor.html#aec51333325c90c2b04ca54e68b846b30", null ],
+    [ "container_closure_type", "classxt_1_1xtensor__adaptor.html#ad7aced249e87ccad5a4e5214148c75f0", null ],
+    [ "expression_tag", "classxt_1_1xtensor__adaptor.html#a7fcac7d6df2ed3454226863489d635ea", null ],
+    [ "extension_base", "classxt_1_1xtensor__adaptor.html#a9cdeec8b3cabaae110e0ac96a40d9712", null ],
+    [ "self_type", "classxt_1_1xtensor__adaptor.html#a5db416eaa6cc23b7ed1e9fd43a1d60f8", null ],
+    [ "semantic_base", "classxt_1_1xtensor__adaptor.html#a8fcbd0e9ad393c01d4ca55da2a8c40c8", null ],
+    [ "shape_type", "classxt_1_1xtensor__adaptor.html#a2f9ed743849970e14eb71f86a23fc7ba", null ],
+    [ "storage_type", "classxt_1_1xtensor__adaptor.html#acd5dd4424dc0e353dd6c745d8e5ec723", null ],
+    [ "strides_type", "classxt_1_1xtensor__adaptor.html#a29e2539226daa1de808f09bcfc4e5417", null ],
+    [ "temporary_type", "classxt_1_1xtensor__adaptor.html#a2591a5158257e9743f17f0650b288d72", null ],
+    [ "xtensor_adaptor", "classxt_1_1xtensor__adaptor.html#aecf238db1fe9fda0797db5c10ced651b", null ],
+    [ "xtensor_adaptor", "classxt_1_1xtensor__adaptor.html#ada04f10997a9bf3cb9d41ad0a57a071b", null ],
+    [ "xtensor_adaptor", "classxt_1_1xtensor__adaptor.html#a08d8af6b5afb2cf0fdd0fa05ac254066", null ],
+    [ "xtensor_adaptor", "classxt_1_1xtensor__adaptor.html#adf38d3f009485bbd13e05a33f3e126ed", null ],
+    [ "~xtensor_adaptor", "classxt_1_1xtensor__adaptor.html#a38a5702cf5bda05d4f5e80aef6d8a96e", null ],
+    [ "xtensor_adaptor", "classxt_1_1xtensor__adaptor.html#afa731a1984e0561c58a6e39ee132013a", null ],
+    [ "xtensor_adaptor", "classxt_1_1xtensor__adaptor.html#a3d03039180a5f20904d63af793229a1e", null ],
+    [ "operator=", "classxt_1_1xtensor__adaptor.html#a7167bb1a1bf13fd8b7a18af652d25b90", null ],
+    [ "operator=", "classxt_1_1xtensor__adaptor.html#af034feb75cd6690b25a4c6b7b4a20bc5", null ],
+    [ "operator=", "classxt_1_1xtensor__adaptor.html#aeee7040bdd4f903e0eb586f21cc45306", null ],
+    [ "operator=", "classxt_1_1xtensor__adaptor.html#a773ee1e751c3020ad33e84c8e98bfe81", null ],
+    [ "operator=", "classxt_1_1xtensor__adaptor.html#a774ab029cbebd50454efaec0ce8ea5b5", null ],
+    [ "xcontainer< xtensor_adaptor< EC, N, L, Tag > >", "classxt_1_1xtensor__adaptor.html#a69dced51b85e817d52ad4ae8e641bb41", null ]
+];

@@ -1,0 +1,5 @@
+var structxt_1_1traits__detail_1_1norm__of__array__elements__impl_3_01long_01double_00_01false_00_01true_01_4 =
+[
+    [ "norm_type", "structxt_1_1traits__detail_1_1norm__of__array__elements__impl_3_01long_01double_00_01false_00_01true_01_4.html#a908948004dfd17c4ae04bce104b7c999", null ],
+    [ "squared_norm_type", "structxt_1_1traits__detail_1_1norm__of__array__elements__impl_3_01long_01double_00_01false_00_01true_01_4.html#a9586a8f9d87f46ccc8e66788a0f28fa9", null ]
+];

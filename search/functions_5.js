@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['fabs_1635',['fabs',['../group__basic__functions.html#ga6548f786920ac988f0e655576b3a3c82',1,'xt']]],
+  ['fdim_1636',['fdim',['../group__basic__functions.html#gaa68f33844e1bb457b87880b7433506d3',1,'xt']]],
+  ['fill_1637',['fill',['../classxt_1_1xindex__view.html#aeecb2ec9572eac54def9d4f9934a86fd',1,'xt::xindex_view::fill()'],['../classxt_1_1xcontainer.html#af6898b9f125926922986af040eb90240',1,'xt::xcontainer::fill()'],['../classxt_1_1xview.html#a76141e6f7f637ae7e070d860a08fc678',1,'xt::xview::fill()'],['../classxt_1_1xmasked__view.html#a4c949ee680c72512a1d9f02b60536428',1,'xt::xmasked_view::fill()'],['../classxt_1_1xoptional__assembly__base.html#a6b2d66863b5c7e149d54f75d3911d34d',1,'xt::xoptional_assembly_base::fill()'],['../classxt_1_1xstrided__view.html#a2e8596cc0e323e5d8e884c5f88b00b8b',1,'xt::xstrided_view::fill()']]],
+  ['filter_1638',['filter',['../namespacext.html#ae36e1cf727c1a3ea6c7889f149c0737b',1,'xt']]],
+  ['filtration_1639',['filtration',['../namespacext.html#a588bc1e3b2c1f7c9b8238dddaf05a9df',1,'xt']]],
+  ['flat_1640',['flat',['../classxt_1_1xfunction.html#a8313f6caaa7e9229c10e3d221a8ab77b',1,'xt::xfunction::flat()'],['../classxt_1_1xoptional__assembly__base.html#abdea1fd8c021f170b2b34fbfae36f2db',1,'xt::xoptional_assembly_base::flat(size_type args)'],['../classxt_1_1xoptional__assembly__base.html#a2ab81721e7b9e8986206742c4baddf71',1,'xt::xoptional_assembly_base::flat(size_type args) const']]],
+  ['flatnonzero_1641',['flatnonzero',['../namespacext.html#afe8bacc1aed492dc936c80bc58730463',1,'xt']]],
+  ['flatten_1642',['flatten',['../namespacext.html#a10a975d3b718bfaf8ecf1db8072a0a0c',1,'xt']]],
+  ['flatten_5findices_1643',['flatten_indices',['../namespacext.html#a5c1acf7068270be8ab0ef904dd0f5a54',1,'xt']]],
+  ['flip_1644',['flip',['../namespacext.html#a4bf31ad3a5950024a3825118f9f6a4e7',1,'xt::flip(E &amp;&amp;e, std::size_t axis)'],['../namespacext.html#ad4b24c51356470db0a22b0c6c7d7611d',1,'xt::flip(E &amp;&amp;e)']]],
+  ['floor_1645',['floor',['../group__nearint__functions.html#ga651ff45bf2ffda746e6602773925ca5c',1,'xt']]],
+  ['fma_1646',['fma',['../group__basic__functions.html#ga0f88cbfba7ddc6b5e8a1c74e422a0409',1,'xt']]],
+  ['fmax_1647',['fmax',['../group__basic__functions.html#ga782cdb54181f69e99679e1045cb53323',1,'xt']]],
+  ['fmin_1648',['fmin',['../group__basic__functions.html#gab8eb77690d6d7b651f61a961b0b4e472',1,'xt']]],
+  ['fmod_1649',['fmod',['../group__basic__functions.html#ga51fa6991b9bc8878a763212346d6449b',1,'xt']]],
+  ['from_5findices_1650',['from_indices',['../namespacext.html#ade2d67c70b0ec6af8294f4b7f201a722',1,'xt']]],
+  ['from_5fjson_1651',['from_json',['../namespacext.html#a3d553d1a9a0e27ad8c9054389c1e2c59',1,'xt']]],
+  ['from_5fshape_1652',['from_shape',['../classxt_1_1xoptional__assembly.html#a7f29229b6d7afc06920fc4ce90841473',1,'xt::xoptional_assembly::from_shape()'],['../classxt_1_1xarray__container.html#afc96474b1358acaf0d3565a02dd91ad3',1,'xt::xarray_container::from_shape()']]],
+  ['front_1653',['front',['../classxt_1_1xfunctor__applier__base.html#a06f3bb2ce9e0c3081ef0ce0ae40d1fe8',1,'xt::xfunctor_applier_base::front()'],['../classxt_1_1xscalar.html#a06f3bb2ce9e0c3081ef0ce0ae40d1fe8',1,'xt::xscalar::front() const'],['../classxt_1_1xscalar.html#ad36ac2c194e7e6f470548dad89e88ca2',1,'xt::xscalar::front()'],['../classxt_1_1xmasked__view.html#a06f3bb2ce9e0c3081ef0ce0ae40d1fe8',1,'xt::xmasked_view::front() const'],['../classxt_1_1xmasked__view.html#ad36ac2c194e7e6f470548dad89e88ca2',1,'xt::xmasked_view::front()'],['../classxt_1_1xfunctor__applier__base.html#ad36ac2c194e7e6f470548dad89e88ca2',1,'xt::xfunctor_applier_base::front()'],['../classxt_1_1xfunction.html#a06f3bb2ce9e0c3081ef0ce0ae40d1fe8',1,'xt::xfunction::front()'],['../classxt_1_1xdynamic__view.html#a06f3bb2ce9e0c3081ef0ce0ae40d1fe8',1,'xt::xdynamic_view::front()'],['../classxt_1_1xcontainer.html#a06f3bb2ce9e0c3081ef0ce0ae40d1fe8',1,'xt::xcontainer::front() const'],['../classxt_1_1xcontainer.html#ad36ac2c194e7e6f470548dad89e88ca2',1,'xt::xcontainer::front()'],['../classxt_1_1xaccessible.html#a06f3bb2ce9e0c3081ef0ce0ae40d1fe8',1,'xt::xaccessible::front()'],['../classxt_1_1xoptional__assembly__base.html#aacfa0f794bd3a92bf3ad57833861f73e',1,'xt::xoptional_assembly_base::front() const'],['../classxt_1_1xoptional__assembly__base.html#a0e191af3d00801e0018161ab739fc6d2',1,'xt::xoptional_assembly_base::front()'],['../classxt_1_1xaccessible.html#ad36ac2c194e7e6f470548dad89e88ca2',1,'xt::xaccessible::front()'],['../classxt_1_1xconst__accessible.html#a06f3bb2ce9e0c3081ef0ce0ae40d1fe8',1,'xt::xconst_accessible::front()']]],
+  ['full_5flike_1654',['full_like',['../namespacext.html#a682f65e5eb55b03cbef5fbd25bbdc349',1,'xt']]]
+];

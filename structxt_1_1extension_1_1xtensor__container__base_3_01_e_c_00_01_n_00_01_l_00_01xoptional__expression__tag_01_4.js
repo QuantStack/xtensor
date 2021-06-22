@@ -1,0 +1,5 @@
+var structxt_1_1extension_1_1xtensor__container__base_3_01_e_c_00_01_n_00_01_l_00_01xoptional__expression__tag_01_4 =
+[
+    [ "traits", "structxt_1_1extension_1_1xtensor__container__base_3_01_e_c_00_01_n_00_01_l_00_01xoptional__expression__tag_01_4.html#a903e85172c2205a37fb1899c47b27369", null ],
+    [ "type", "structxt_1_1extension_1_1xtensor__container__base_3_01_e_c_00_01_n_00_01_l_00_01xoptional__expression__tag_01_4.html#ab9684325a69d6ae9a344f4f1a56bfce0", null ]
+];

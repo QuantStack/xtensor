@@ -1,0 +1,4 @@
+var structxt_1_1extension_1_1xindex__view__base__impl_3_01xtensor__expression__tag_00_01_c_t_00_01_i_01_4 =
+[
+    [ "type", "structxt_1_1extension_1_1xindex__view__base__impl_3_01xtensor__expression__tag_00_01_c_t_00_01_i_01_4.html#a0ce7cc5dfa302f82091fb285f3872e43", null ]
+];

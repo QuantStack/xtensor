@@ -1,0 +1,4 @@
+var structxt_1_1temporary__type_3_01_t_00_01void__t_3_01typename_01std_1_1decay__t_3_01_t_01_4_1_1temporary__type_01_4_01_4 =
+[
+    [ "type", "structxt_1_1temporary__type_3_01_t_00_01void__t_3_01typename_01std_1_1decay__t_3_01_t_01_4_1_1temporary__type_01_4_01_4.html#a2d395e88c5c41e6540081952616e732a", null ]
+];

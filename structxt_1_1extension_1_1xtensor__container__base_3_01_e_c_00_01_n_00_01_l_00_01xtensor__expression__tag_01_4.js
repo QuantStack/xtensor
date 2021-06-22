@@ -1,0 +1,4 @@
+var structxt_1_1extension_1_1xtensor__container__base_3_01_e_c_00_01_n_00_01_l_00_01xtensor__expression__tag_01_4 =
+[
+    [ "type", "structxt_1_1extension_1_1xtensor__container__base_3_01_e_c_00_01_n_00_01_l_00_01xtensor__expression__tag_01_4.html#aab1dcac6b98f255a885ce5a8b08bfe9b", null ]
+];

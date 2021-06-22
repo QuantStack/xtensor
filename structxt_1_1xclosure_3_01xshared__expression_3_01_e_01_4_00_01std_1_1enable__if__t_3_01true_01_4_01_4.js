@@ -1,0 +1,4 @@
+var structxt_1_1xclosure_3_01xshared__expression_3_01_e_01_4_00_01std_1_1enable__if__t_3_01true_01_4_01_4 =
+[
+    [ "type", "structxt_1_1xclosure_3_01xshared__expression_3_01_e_01_4_00_01std_1_1enable__if__t_3_01true_01_4_01_4.html#ab4fe80f4b393746cd47ead2ae7c3fd47", null ]
+];

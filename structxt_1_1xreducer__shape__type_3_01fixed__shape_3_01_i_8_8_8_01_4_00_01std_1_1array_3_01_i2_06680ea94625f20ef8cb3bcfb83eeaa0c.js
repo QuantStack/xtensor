@@ -1,0 +1,4 @@
+var structxt_1_1xreducer__shape__type_3_01fixed__shape_3_01_i_8_8_8_01_4_00_01std_1_1array_3_01_i2_06680ea94625f20ef8cb3bcfb83eeaa0c =
+[
+    [ "type", "structxt_1_1xreducer__shape__type_3_01fixed__shape_3_01_i_8_8_8_01_4_00_01std_1_1array_3_01_i2_06680ea94625f20ef8cb3bcfb83eeaa0c.html#afe923cc6d0aef722cfb6b9b8c49132c9", null ]
+];
