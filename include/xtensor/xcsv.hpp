@@ -16,6 +16,8 @@
 #include <sstream>
 #include <string>
 #include <utility>
+#include <sstream>
+#include <limits>
 
 #include "xtensor.hpp"
 #include "xtensor_config.hpp"
@@ -32,6 +34,9 @@ namespace xt
 
     template <class T, class A = std::allocator<T>>
     xcsv_tensor<T, A> load_csv(std::istream& stream, const char delimiter = ',', const std::size_t skip_rows = 0, const std::ptrdiff_t max_rows = -1, const std::string comments = "#");
+
+    template <class T, class A = std::allocator<T>>
+    xcsv_tensor<T, A> read_csv(std::istream& stream);
 
     template <class E>
     void dump_csv(std::ostream& stream, const xexpression<E>& e);
@@ -100,6 +105,108 @@ namespace xt
             }
             return length;
         }
+    }
+
+    /**
+     * @brief Load tensor from CSV.
+     * 
+     * Returns an \ref xexpression for the parsed CSV
+     * NOTE: WIP function
+     * @param stream the input stream containing the CSV encoded values
+     */
+    template <class T, class A>
+    xcsv_tensor<T, A> read_csv(std::istream& stream)
+    {
+        bool in_quote = false;
+        bool last_quote = false;
+
+        using tensor_type = xcsv_tensor<T, A>;
+        using storage_type = typename tensor_type::storage_type;
+        using size_type = typename tensor_type::size_type;
+        using inner_shape_type = typename tensor_type::inner_shape_type;
+        using inner_strides_type = typename tensor_type::inner_strides_type;
+
+        storage_type data;
+        std::string cell;
+
+        size_type nbrow = 0, nbcol = std::numeric_limits<size_type>::max();
+        size_type current_nbcol = 0;
+
+        while (!stream.eof())
+        {
+            char ch;
+            stream.read(&ch, 1);
+
+            if (in_quote == false)
+            {
+                if (ch == '\n')
+                {
+                    if (current_nbcol == 0 && cell.empty()) // Ignore enpty lines
+                        continue;
+
+                    ++nbrow;
+                    ++current_nbcol;
+                    data.push_back(detail::lexical_cast<T>(cell));
+                    cell.clear();
+
+                    if (nbcol == std::numeric_limits<size_type>::max())
+                    {
+                        nbcol = current_nbcol;
+                    }
+                    else if (current_nbcol != nbcol) 
+                    {
+                        throw std::runtime_error("Inconsistent row lengths in CSV at row "
+                            + std::to_string(nbrow) + ". Expecting " + std::to_string(nbcol)
+                            + " but get " + std::to_string(current_nbcol));
+                    }
+
+                    current_nbcol = 0;
+                }
+                else if (ch == ',')
+                {
+                    ++current_nbcol;
+                    data.push_back(detail::lexical_cast<T>(cell));
+                    cell.clear();
+                }
+                else if (ch == '\"')
+                {
+                   in_quote = true;
+                }
+                else
+                {
+                    cell.push_back(ch);
+                }
+            }
+            else
+            {
+                if (ch == '\"')
+                {
+                    if (last_quote == true)
+                    {
+                        cell.push_back('\"');
+                    }
+                    in_quote = false;
+                    
+                }
+                else
+                {
+                    cell.push_back(ch);
+                }
+            }
+
+            last_quote = in_quote;
+        }
+
+        if (in_quote == true)
+        {
+            throw std::runtime_error("Quote not closed in CSV.");
+        }
+
+
+        inner_shape_type shape = {nbrow, nbcol};
+        inner_strides_type strides;  // no need for initializer list for stack-allocated strides_type
+        size_type data_size = compute_strides(shape, layout_type::row_major, strides);
+        return tensor_type(std::move(data), std::move(shape), std::move(strides));
     }
 
     /**
@@ -229,3 +336,4 @@ namespace xt
 }
 
 #endif
+
