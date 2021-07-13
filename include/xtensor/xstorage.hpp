@@ -1692,6 +1692,19 @@ namespace xt
             return sizeof...(X) == 0;
         }
 
+        template <std::size_t... Y>
+        XTENSOR_FIXED_SHAPE_CONSTEXPR bool operator==(const fixed_shape<Y...>& b) const {
+            if (size() != b.size()) {
+                return false;
+            }
+            for (std::size_t i = 0; i < size(); ++i) {
+                if ((*this)[i] != b[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
     private:
 
          XTENSOR_CONSTEXPR_ENHANCED_STATIC cast_type m_array = cast_type({X...});
@@ -1701,6 +1714,7 @@ namespace xt
     template <std::size_t... X>
     constexpr typename fixed_shape<X...>::cast_type fixed_shape<X...>::m_array;
 #endif
+
 
 #undef XTENSOR_FIXED_SHAPE_CONSTEXPR
 

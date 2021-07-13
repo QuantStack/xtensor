@@ -207,7 +207,7 @@ namespace xt
         svector_type e(src);
         EXPECT_EQ(size_t(10), d.size());
         EXPECT_EQ(size_t(1), d[2]);
-        
+
         svector_type f = { 1, 2, 3, 4 };
         EXPECT_EQ(size_t(4), f.size());
         EXPECT_EQ(size_t(3), f[2]);
@@ -221,7 +221,7 @@ namespace xt
     TEST(svector, assign)
     {
         svector_type a = { 1, 2, 3, 4 };
-        
+
         svector_type src1(10, 2);
         a = src1;
         EXPECT_EQ(size_t(10), a.size());
@@ -332,7 +332,7 @@ namespace xt
             EXPECT_EQ(i, a[i]);
         }
     }
-    
+
     TEST(fixed_shape, fixed_shape)
     {
         fixed_shape<3, 4, 5> af;
@@ -343,5 +343,15 @@ namespace xt
         EXPECT_EQ(a.back(), size_t(5));
         EXPECT_EQ(a.front(), size_t(3));
         EXPECT_EQ(a.size(), size_t(3));
+    }
+
+    TEST(fixed_shape, operator_eq)
+    {
+        fixed_shape<2, 3> a, b;
+        fixed_shape<5> c;
+        fixed_shape<2, 4> d;
+        EXPECT_TRUE(a == b);
+        EXPECT_FALSE(a == c);
+        EXPECT_FALSE(a == d);
     }
 }
