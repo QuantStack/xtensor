@@ -419,6 +419,23 @@ namespace xt
         }
     }
 
+    TEST(xtensor_fixed_adaptor, array)
+    {
+        std::array<int, 8> a({1,2,3,4,5,6,7,8});
+        auto xa = adapt(a);
+        xa(0) = 100;
+        xa(3) = 1000;
+        EXPECT_EQ(a[0], 100);
+        EXPECT_EQ(a[3], 1000);
+        bool truthy = std::is_same<decltype(xa)::shape_type, xshape<8>>::value;
+        EXPECT_TRUE(truthy);
+
+        const std::array<int, 4> b({5,5,19,5});
+        auto xb = adapt(b);
+        EXPECT_EQ(xb(2), 19);
+        EXPECT_EQ(xb(0), 5);
+    }
+
     namespace xadapt_test
     {
         struct Buffer {

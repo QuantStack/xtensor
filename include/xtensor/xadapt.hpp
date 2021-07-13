@@ -35,6 +35,12 @@ namespace xt
             static constexpr std::size_t value = N;
         };
 
+        template <class T, std::size_t N>
+        struct array_size_impl<const_array<T, N>>
+        {
+            static constexpr std::size_t value = N;
+        };
+
         template <class C>
         using array_size = array_size_impl<std::decay_t<C>>;
 
@@ -209,13 +215,30 @@ namespace xt
      * @param container the container to adapt
      * @param l the layout_type of the xtensor_adaptor
      */
-    template <layout_type L = XTENSOR_DEFAULT_LAYOUT, class C>
+    template <layout_type L = XTENSOR_DEFAULT_LAYOUT, class C,
+              XTL_REQUIRES(detail::not_an_array<std::decay_t<C>>)>
     inline xtensor_adaptor<C, 1, L>
     adapt(C&& container, layout_type l = L)
     {
         const std::array<typename std::decay_t<C>::size_type, 1> shape{container.size()};
         using return_type = xtensor_adaptor<xtl::closure_type_t<C>, 1, L>;
         return return_type(std::forward<C>(container), shape, l);
+    }
+
+    /**
+     * Constructs a 1-D xtensor_adaptor of the given stl-like container,
+     * with the specified layout_type.
+     * @param container the container to adapt
+     * @param l the layout_type of the xtensor_adaptor
+     */
+    template <layout_type L = XTENSOR_DEFAULT_LAYOUT, class C,
+              XTL_REQUIRES(detail::is_array<std::decay_t<C>>)>
+    inline auto
+    adapt(C&& container)
+    {
+        // const std::array<typename std::decay_t<C>::size_type, 1> shape{container.size()};
+        using return_type = xfixed_adaptor<xtl::closure_type_t<C>, fixed_shape<std::tuple_size<std::decay_t<C>>::value>, L>;
+        return return_type(std::forward<C>(container));
     }
 
     /**

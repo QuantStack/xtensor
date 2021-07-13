@@ -351,6 +351,12 @@ namespace xt
         {
             static constexpr bool value = true;
         };
+        
+        template <class T, std::size_t N>
+        struct is_array<const_array<T, N>>
+        {
+            static constexpr bool value = true;
+        };
 
         template <class S>
         struct is_fixed : std::false_type
