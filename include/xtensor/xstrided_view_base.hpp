@@ -166,8 +166,9 @@ namespace xt
         template <class It>
         const_reference element(It first, It last) const;
 
-        storage_type& storage() noexcept;
-        const storage_type& storage() const noexcept;
+        storage_type& storage() & noexcept;
+        const storage_type& storage() const & noexcept;
+        storage_type&& storage() && noexcept;
 
         template <class E = xexpression_type, class ST = storage_type>
         std::enable_if_t<detail::provides_data_interface<E, ST>::value, pointer>
@@ -550,7 +551,7 @@ namespace xt
      * Returns a reference to the buffer containing the elements of the view.
      */
     template <class D>
-    inline auto xstrided_view_base<D>::storage() noexcept -> storage_type&
+    inline auto xstrided_view_base<D>::storage() & noexcept -> storage_type&
     {
         return m_storage;
     }
@@ -559,10 +560,20 @@ namespace xt
      * Returns a constant reference to the buffer containing the elements of the view.
      */
     template <class D>
-    inline auto xstrided_view_base<D>::storage() const noexcept -> const storage_type&
+    inline auto xstrided_view_base<D>::storage() const & noexcept -> const storage_type&
     {
         return m_storage;
     }
+
+    /**
+     * Returns a rvalue reference to the buffer containing the elements of the view.
+     */
+    template <class D>
+    inline auto xstrided_view_base<D>::storage() && noexcept -> storage_type&&
+    {
+        return std::move(m_storage);
+    }
+
 
     /**
      * Returns a pointer to the underlying array serving as element storage.
