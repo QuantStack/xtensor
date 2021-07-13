@@ -1702,6 +1702,18 @@ namespace xt
     constexpr typename fixed_shape<X...>::cast_type fixed_shape<X...>::m_array;
 #endif
 
+    template <std::size_t... X1, std::size_t... X2>
+    XTENSOR_FIXED_SHAPE_CONSTEXPR bool operator==(const fixed_shape<X1...>&, const fixed_shape<X2...>&)
+    {
+        return std::is_same<fixed_shape<X1...>, fixed_shape<X2...>>::value;
+    }
+
+    template <std::size_t... X1, std::size_t... X2>
+    XTENSOR_FIXED_SHAPE_CONSTEXPR bool operator!=(const fixed_shape<X1...>& lhs, const fixed_shape<X2...>& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
 #undef XTENSOR_FIXED_SHAPE_CONSTEXPR
 
     template <class E, std::ptrdiff_t Start, std::ptrdiff_t End = -1>

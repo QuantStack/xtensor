@@ -939,14 +939,6 @@ namespace xt
         EXPECT_EQ(b.dimension(), 0u);
         EXPECT_EQ(minmax(b)(), (A{1.2, 1.2}));
     }
-    
-    template <std::size_t... I, std::size_t... J>
-    bool operator==(fixed_shape<I...>, fixed_shape<J...>)
-    {
-        std::array<std::size_t, sizeof...(I)> ix = {I...};
-        std::array<std::size_t, sizeof...(J)> jx = {J...};
-        return sizeof...(J) == sizeof...(I) && std::equal(ix.begin(), ix.end(), jx.begin());
-    }
 
     TEST(xreducer, keep_dims)
     {

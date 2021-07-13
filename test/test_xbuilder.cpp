@@ -379,14 +379,6 @@ namespace xt
         XT_EXPECT_ANY_THROW(xt::concatenate(xt::xtuple(fa, ta)));
     }
 
-    template <std::size_t... I, std::size_t... J>
-    bool operator==(fixed_shape<I...>, fixed_shape<J...>)
-    {
-        std::array<std::size_t, sizeof...(I)> ix = {I...};
-        std::array<std::size_t, sizeof...(J)> jx = {J...};
-        return sizeof...(J) == sizeof...(I) && std::equal(ix.begin(), ix.end(), jx.begin());
-    }
-
 #ifndef VS_SKIP_CONCATENATE_FIXED
     // This test mimics the relevant parts of `TEST(xbuilder, concatenate)`
     TEST(xbuilder, concatenate_fixed)
